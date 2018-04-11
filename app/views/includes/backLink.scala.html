@@ -14,16 +14,23 @@
  * limitations under the License.
  *@
 
-@import config.FrontendAppConfig
-@import uk.gov.hmrc.renderer.TemplateRenderer
+@(gaEventAction: Option[String] = None)(implicit m: Messages)
 
-@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+@import uk.gov.hmrc.urls.Link
 
-@main_template(
-    title = messages("unauthorised.title"),
-    appConfig = appConfig,
-    bodyClasses = None) {
-
-    @components.heading("unauthorised.heading")
-
+@stagePromptAttributes = @{
+    gaEventAction match {
+        case Some(actionString) => Some(Map("journey-click" -> s"link - click:${actionString}:${Messages("back")}"))
+        case _=> None
+    }
 }
+
+<noscript><style> .displayIfJsEnabled { display: none } </style></noscript>
+
+<p >@Link.toInternalPage(
+    id=Some("backLink"),
+    value=Some(Messages("back")),
+    url = "#",
+    cssClasses=Some("displayIfJsEnabled link-back"),
+    dataAttributes = stagePromptAttributes
+).toHtml</p>
