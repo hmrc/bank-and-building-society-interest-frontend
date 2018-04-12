@@ -17,6 +17,7 @@
 package base
 
 import config.FrontendAppConfig
+import mocks.MockTemplateRenderer
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
 import play.api.i18n.{Messages, MessagesApi}
@@ -34,4 +35,6 @@ trait SpecBase extends PlaySpec with GuiceOneAppPerSuite {
   def fakeRequest = FakeRequest("", "")
 
   def messages: Messages = messagesApi.preferred(fakeRequest)
+
+  implicit val templateRenderer = MockTemplateRenderer
 }

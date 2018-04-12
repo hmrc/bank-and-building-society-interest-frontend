@@ -23,7 +23,7 @@
 @header = @{
     ptaHeader(
         displayBackLink = true,
-        mainHeadingText = "BBSI frontend spike header",
+        mainHeadingText = messages("index.title"),
         preHeadingText = "BBSI frontend spike pre-header"
     )
 }
@@ -34,8 +34,6 @@
     appConfig = appConfig,
     pageHeader = Some(header),
     bodyClasses = None) {
-
-    @components.heading("index.heading")
 
     <p>@messages("index.guidance")</p>
     <p>@externalId</p>

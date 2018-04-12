@@ -29,7 +29,7 @@ class UnauthorisedControllerSpec extends ControllerSpecBase {
 
     "return the correct view for a GET" in {
       val result = new UnauthorisedController(frontendAppConfig, messagesApi).onPageLoad()(fakeRequest)
-      contentAsString(result) mustBe unauthorised(frontendAppConfig)(fakeRequest, messages).toString
+      contentAsString(result) mustBe unauthorised(frontendAppConfig)(fakeRequest, messages,templateRenderer).toString
     }
   }
 }
