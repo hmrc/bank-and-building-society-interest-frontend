@@ -24,12 +24,14 @@ import viewmodels.AnswerSection
 import views.html.check_your_answers
 import config.FrontendAppConfig
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.renderer.TemplateRenderer
 
 class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
                                            override val messagesApi: MessagesApi,
                                            authenticate: AuthAction,
                                            getData: DataRetrievalAction,
-                                           requireData: DataRequiredAction) extends FrontendController with I18nSupport {
+                                           requireData: DataRequiredAction)
+                                          (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
 
   def onPageLoad() = (authenticate andThen getData andThen requireData) {
     implicit request =>

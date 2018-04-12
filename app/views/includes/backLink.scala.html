@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package views
+@(gaEventAction: Option[String] = None)(implicit m: Messages)
 
-import views.behaviours.ViewBehaviours
-import views.html.session_expired
+@import uk.gov.hmrc.urls.Link
 
-class SessionExpiredViewSpec extends ViewBehaviours {
-
-  def view = () => session_expired(frontendAppConfig)(fakeRequest, messages,templateRenderer)
-
-  "Session Expired view" must {
-
-    behave like normalPage(view, "session_expired", "guidance")
-  }
+@stagePromptAttributes = @{
+    gaEventAction match {
+        case Some(actionString) => Some(Map("journey-click" -> s"link - click:${actionString}:${Messages("back")}"))
+        case _=> None
+    }
 }
+
+<noscript><style> .displayIfJsEnabled { display: none } </style></noscript>
+
+<p >@Link.toInternalPage(
+    id=Some("backLink"),
+    value=Some(Messages("back")),
+    url = "#",
+    cssClasses=Some("displayIfJsEnabled link-back"),
+    dataAttributes = stagePromptAttributes
+).toHtml</p>

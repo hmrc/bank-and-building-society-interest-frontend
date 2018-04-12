@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package controllers
+package mocks
 
-import javax.inject.Inject
-
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import config.FrontendAppConfig
+import play.api.i18n.Messages
+import play.twirl.api.Html
 import uk.gov.hmrc.renderer.TemplateRenderer
-import views.html.session_expired
 
 import scala.concurrent.Future
+import scala.concurrent.duration._
 
-class SessionExpiredController @Inject()(val appConfig: FrontendAppConfig,
-                                         val messagesApi: MessagesApi)
-                                        (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
+import scala.language.postfixOps
 
-  def onPageLoad: Action[AnyContent] = Action { implicit request =>
-    Ok(session_expired(appConfig))
+object MockTemplateRenderer extends TemplateRenderer {
+
+  override lazy val templateServiceBaseUrl: String = ???
+  override val refreshAfter: FiniteDuration = 10 minutes
+  override def fetchTemplate(path: String): Future[String] = ???
+
+  override def renderDefaultTemplate(content: Html, extraArgs: Map[String, Any])(implicit messages: Messages) = {
+    val pageHeader = extraArgs.getOrElse("mainContentHeader", Html(""))
+    Html("<title>" + extraArgs("pageTitle") + "</title>" + pageHeader + content)
   }
 }

@@ -14,17 +14,11 @@
  * limitations under the License.
  */
 
-package views
+package config.wiring
 
-import views.behaviours.ViewBehaviours
-import views.html.session_expired
+import uk.gov.hmrc.play.audit.http.connector.AuditConnector
+import uk.gov.hmrc.play.frontend.config.LoadAuditingConfig
 
-class SessionExpiredViewSpec extends ViewBehaviours {
-
-  def view = () => session_expired(frontendAppConfig)(fakeRequest, messages,templateRenderer)
-
-  "Session Expired view" must {
-
-    behave like normalPage(view, "session_expired", "guidance")
-  }
+object BBSIAuditConnector extends AuditConnector {
+  override lazy val auditingConfig = LoadAuditingConfig("dev.auditing")
 }

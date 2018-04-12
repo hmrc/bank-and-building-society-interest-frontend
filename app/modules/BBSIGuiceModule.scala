@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package views
+package modules
 
-import views.behaviours.ViewBehaviours
-import views.html.session_expired
+import com.google.inject.AbstractModule
+import connectors.LocalTemplateRenderer
+import uk.gov.hmrc.renderer.TemplateRenderer
 
-class SessionExpiredViewSpec extends ViewBehaviours {
+class BBSIGuiceModule extends AbstractModule {
 
-  def view = () => session_expired(frontendAppConfig)(fakeRequest, messages,templateRenderer)
+  def configure() = {
 
-  "Session Expired view" must {
+    bind(classOf[TemplateRenderer]).to(classOf[LocalTemplateRenderer])
 
-    behave like normalPage(view, "session_expired", "guidance")
   }
 }
