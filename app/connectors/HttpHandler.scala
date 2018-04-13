@@ -15,24 +15,22 @@
  */
 
 package connectors
-
-import config.wiring.WSHttp
+import com.google.inject.{ImplementedBy, Inject, Singleton}
 import play.Logger
 import play.api.http.Status._
 import play.api.libs.json.{JsValue, Writes}
 import uk.gov.hmrc.http._
-
-import scala.concurrent.ExecutionContext.Implicits.global
+import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import scala.concurrent.Future
 import scala.language.postfixOps
+import uk.gov.hmrc.play.http.logging.MdcLoggingExecutionContext._
 
-trait HttpHandler {
-
-  def http: CoreGet with CorePut with CorePost with CoreDelete
+@Singleton
+class HttpHandlerImpl @Inject()(val httpClient: HttpClient) extends HttpHandler{
 
   def getFromApi(url: String)(implicit hc: HeaderCarrier): Future[JsValue] = {
 
-    val futureResponse = http.GET[HttpResponse](url)
+    val futureResponse = httpClient.GET[HttpResponse](url)
 
     futureResponse.flatMap {
       httpResponse =>
@@ -65,7 +63,7 @@ trait HttpHandler {
   }
 
   def putToApi[I](url: String, data: I)(implicit hc: HeaderCarrier, rds: HttpReads[I], writes: Writes[I]): Future[HttpResponse] = {
-    http.PUT[I, HttpResponse](url, data).flatMap { httpResponse =>
+    httpClient.PUT[I, HttpResponse](url, data).flatMap { httpResponse =>
       httpResponse.status match {
 
         case OK =>
@@ -91,7 +89,7 @@ trait HttpHandler {
   }
 
   def postToApi[I](url: String, data: I)(implicit hc: HeaderCarrier, rds: HttpReads[I], writes: Writes[I]): Future[HttpResponse] = {
-    http.POST[I, HttpResponse](url, data) flatMap { httpResponse =>
+    httpClient.POST[I, HttpResponse](url, data) flatMap { httpResponse =>
       httpResponse status match {
         case OK | CREATED =>
           Future.successful(httpResponse)
@@ -104,7 +102,7 @@ trait HttpHandler {
   }
 
   def deleteFromApi(url: String)(implicit hc: HeaderCarrier, rds: HttpReads[HttpResponse]): Future[HttpResponse] = {
-    http.DELETE[HttpResponse](url) flatMap { httpResponse =>
+    httpClient.DELETE[HttpResponse](url) flatMap { httpResponse =>
       httpResponse status match {
         case OK | NO_CONTENT | ACCEPTED =>
           Future.successful(httpResponse)
@@ -115,10 +113,12 @@ trait HttpHandler {
       }
     }
   }
-
 }
 
-object HttpHandler extends HttpHandler {
-  override val http = WSHttp
+@ImplementedBy(classOf[HttpHandlerImpl])
+trait HttpHandler{
+  def getFromApi(url: String)(implicit hc: HeaderCarrier): Future[JsValue]
+  def putToApi[I](url: String, data: I)(implicit hc: HeaderCarrier, rds: HttpReads[I], writes: Writes[I]): Future[HttpResponse]
+  def postToApi[I](url: String, data: I)(implicit hc: HeaderCarrier, rds: HttpReads[I], writes: Writes[I]): Future[HttpResponse]
+  def deleteFromApi(url: String)(implicit hc: HeaderCarrier, rds: HttpReads[HttpResponse]): Future[HttpResponse]
 }
-
