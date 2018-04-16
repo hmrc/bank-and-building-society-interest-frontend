@@ -39,7 +39,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
 
       "api doesn't return a bank account" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         when(mockFrontEndConfig.baseUrl(any())).thenReturn("http://")
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
@@ -62,7 +62,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
 
       "api returns single bank account" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         when(mockFrontEndConfig.baseUrl(any())).thenReturn("http://")
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
@@ -82,7 +82,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
 
       "api returns multiple bank accounts" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         when(mockFrontEndConfig.baseUrl(any())).thenReturn("http://")
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
@@ -105,7 +105,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
     "return untaxed interest" when {
 
       "api returns untaxed interest json" in {
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         when(mockFrontEndConfig.baseUrl(any())).thenReturn("http://")
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
@@ -125,7 +125,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
     "return None" when {
 
       "api does not return untaxed interest" in {
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         when(mockFrontEndConfig.baseUrl(any())).thenReturn("http://")
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
@@ -147,7 +147,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
     "return empty sequence of bank accounts" when {
       "api returns invalid json" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
 
@@ -162,7 +162,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
 
       "api throws exception" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
 
@@ -178,7 +178,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
   "bankAccount" should {
     "returns individual bank account" when {
       "a valid id is passed" in {
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
 
@@ -194,7 +194,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
 
     "returns None" when {
       "an invalid id is passed" in {
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
 
@@ -206,7 +206,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
 
       }
       "an unknown json object is returned" in {
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
 
@@ -225,7 +225,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
     "return an envelope id" when {
       "we send a PUT request to backend" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
 
@@ -242,7 +242,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
     "return an exception" when {
       "json is invalid" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
 
@@ -259,7 +259,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
 
   "removeBankAccount" should {
     "return envelope id" in {
-      val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
       val mockFrontEndConfig = mock[FrontendAppConfig]
       val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
       val json = Json.obj("data"-> "123-456-789")
@@ -272,7 +272,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
 
     "return None" when {
       "json is  invalid" in {
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
         val json = Json.obj("test"-> "123-456-789")
@@ -287,7 +287,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
 
   "updateBankAccount" should {
     "return envelope id" in {
-      val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
       val mockFrontEndConfig = mock[FrontendAppConfig]
       val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
       val json = Json.obj("data"-> "123-456-789")
@@ -300,7 +300,7 @@ class BBSIConnectorImplSpec extends PlaySpec with MockitoSugar {
 
     "return None" when {
       "json is  invalid" in {
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
         val sut = new BBSIConnectorImpl(mockFrontEndConfig, mockHttpHandler)
         val json = Json.obj("test"-> "123-456-789")

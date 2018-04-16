@@ -47,7 +47,7 @@ import scala.util.control.NonFatal
 
 @Singleton
 class BBSIConnectorImpl @Inject()(val appConfig: FrontendAppConfig,
-                                  val httpHandler: HttpHandlerImpl) extends BBSIConnector {
+                                  val httpHandler: HttpHandler) extends BBSIConnector {
 
   def serviceUrl: String = appConfig.baseUrl("tai")
 

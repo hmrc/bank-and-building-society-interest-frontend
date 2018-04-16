@@ -17,7 +17,7 @@
 package service
 
 import config.FrontendAppConfig
-import connectors.{BBSIConnectorImpl, HttpHandlerImpl}
+import connectors.{BBSIConnector, BBSIConnectorImpl, HttpHandler, HttpHandlerImpl}
 import models.bbsi.TaxYear
 import models.domain.{AmountRequest, BankAccount, CloseAccountRequest, UntaxedInterest}
 import org.joda.time.{DateTime, LocalDate}
@@ -38,10 +38,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
     "return nil" when {
       "connector returns nil" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
-        val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+        val mockBBSIConnector = mock[BBSIConnector]
+        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
 
         when(sut.connector.bankAccounts(any())(any())).thenReturn(Future.successful(Nil))
 
@@ -54,10 +54,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
     "return one bank account" when {
       "connector returns one bank account" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
-        val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+        val mockBBSIConnector = mock[BBSIConnector]
+        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
 
         when(sut.connector.bankAccounts(any())(any())).thenReturn(Future.successful(oneBankAccount))
 
@@ -70,10 +70,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
     "return multiple bank accounts" when {
       "connector returns multiple bank accounts" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+        val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
-        val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+        val mockBBSIConnector = mock[BBSIConnector]
+        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
 
         when(sut.connector.bankAccounts(any())(any())).thenReturn(Future.successful(multipleBankAccounts))
 
@@ -89,10 +89,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
     "return none" when {
       "connector returns none" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
-        val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+        val mockBBSIConnector = mock[BBSIConnector]
+        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
 
         when(sut.connector.bankAccount(any(), org.mockito.Matchers.eq(1))(any())).thenReturn(Future.successful(None))
 
@@ -105,10 +105,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
     "return one bank account" when {
       "connector returns one bank account" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
-        val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+        val mockBBSIConnector = mock[BBSIConnector]
+        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
 
         when(sut.connector.bankAccount(any(), org.mockito.Matchers.eq(2))(any())).thenReturn(Future.successful(Some(bankAccount2)))
 
@@ -121,10 +121,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
 
   "bankAccounts - closeBankAccount" should {
     "return envelope id" in {
-      val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
       val mockFrontEndConfig = mock[FrontendAppConfig]
-      val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-      val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+      val mockBBSIConnector = mock[BBSIConnector]
+      val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
       when(sut.connector.closeBankAccount(any(), any(), any())(any())).thenReturn(Future.successful(Some("123-456-789")))
 
       val data = Await.result(sut.closeBankAccount(nino, 1, CloseAccountRequest(new LocalDate(2017, 1, 1), None)), 5.seconds)
@@ -134,10 +134,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
 
     "throw exception" when {
       "envelope id is none" in {
-        val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
-        val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+        val mockBBSIConnector = mock[BBSIConnector]
+        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
         when(sut.connector.closeBankAccount(any(), any(), any())(any())).thenReturn(Future.successful(None))
 
         val ex = the[RuntimeException] thrownBy Await.result(sut.closeBankAccount(nino, 1, CloseAccountRequest(new LocalDate(2017, 1, 1), None)), 5.seconds)
@@ -152,10 +152,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
     "throw an exception" when {
       "connector returns none" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
-        val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+        val mockBBSIConnector = mock[BBSIConnector]
+        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
 
         when(sut.connector.untaxedInterest(any())(any())).thenReturn(Future.successful(None))
 
@@ -169,10 +169,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
     "return untaxed interest" when {
       "connector returns untaxed interest" in {
 
-        val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
-        val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+        val mockBBSIConnector = mock[BBSIConnector]
+        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
 
         when(sut.connector.untaxedInterest(any())(any())).thenReturn(Future.successful(Some(untaxedInterest)))
 
@@ -185,10 +185,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
 
   "remove bank account" should {
     "return envelope id" in {
-      val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
       val mockFrontEndConfig = mock[FrontendAppConfig]
-      val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-      val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+      val mockBBSIConnector = mock[BBSIConnector]
+      val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
       when(sut.connector.removeBankAccount(any(), any())(any())).thenReturn(Future.successful(Some("123-456-789")))
 
       val data = Await.result(sut.removeBankAccount(nino, 1), 5.seconds)
@@ -198,10 +198,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
 
     "throw exception" when {
       "envelope id is none" in {
-        val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
-        val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+        val mockBBSIConnector = mock[BBSIConnector]
+        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
         when(sut.connector.removeBankAccount(any(), any())(any())).thenReturn(Future.successful(None))
 
         val ex = the[RuntimeException] thrownBy Await.result(sut.removeBankAccount(nino, 1), 5.seconds)
@@ -213,10 +213,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
 
   "update bank account" should {
     "return envelope id" in {
-      val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
       val mockFrontEndConfig = mock[FrontendAppConfig]
-      val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-      val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+      val mockBBSIConnector = mock[BBSIConnector]
+      val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
       when(sut.connector.updateBankAccountInterest(any(), any(), any())(any())).thenReturn(Future.successful(Some("123-456-789")))
 
       val data = Await.result(sut.updateBankAccountInterest(nino, 1, amountRequest), 5.seconds)
@@ -226,10 +226,10 @@ class BBSIServiceImplSpec extends PlaySpec with MockitoSugar {
 
     "throw exception" when {
       "envelope id is none" in {
-        val mockHttpHandler = mock[HttpHandlerImpl]
+      val mockHttpHandler = mock[HttpHandler]
         val mockFrontEndConfig = mock[FrontendAppConfig]
-        val mockBBSIConnectorImpl = mock[BBSIConnectorImpl]
-        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnectorImpl)
+        val mockBBSIConnector = mock[BBSIConnector]
+        val sut = new BBSIServiceImpl(mockFrontEndConfig, mockHttpHandler, mockBBSIConnector)
         when(sut.connector.updateBankAccountInterest(any(), any(), any())(any())).thenReturn(Future.successful(None))
 
         val ex = the[RuntimeException] thrownBy Await.result(sut.updateBankAccountInterest(nino, 1, amountRequest), 5.seconds)

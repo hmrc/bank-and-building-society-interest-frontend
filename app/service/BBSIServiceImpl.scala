@@ -19,7 +19,7 @@ package service
 
 import com.google.inject.Inject
 import config.FrontendAppConfig
-import connectors.{BBSIConnectorImpl, HttpHandlerImpl}
+import connectors.{BBSIConnector, HttpHandler}
 import models.domain.{AmountRequest, BankAccount, CloseAccountRequest, UntaxedInterest}
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,8 +28,8 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class BBSIServiceImpl @Inject()(val appConfig: FrontendAppConfig,
-                                val httpHandler: HttpHandlerImpl,
-                                val connector: BBSIConnectorImpl) extends BBSIService {
+                                val httpHandler: HttpHandler,
+                                val connector: BBSIConnector) extends BBSIService {
 
 
   def bankAccounts(nino:Nino)(implicit hc: HeaderCarrier): Future[Seq[BankAccount]] = {
