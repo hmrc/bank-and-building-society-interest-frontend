@@ -55,7 +55,6 @@ class BBSIUserSpec extends UnitSpec with MockitoSugar {
         when(authContext.principal).thenReturn(principal)
         when(principal.name).thenReturn(Option("Test"))
         bBSIUser.getDisplayName shouldBe "Test"
-
       }
 
       "return attorney name" in {
