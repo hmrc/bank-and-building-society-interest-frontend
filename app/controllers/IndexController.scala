@@ -34,8 +34,8 @@ class IndexController @Inject()(val appConfig: FrontendAppConfig,
                                (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = authenticate.async {
-   implicit request =>
-      bbsiService.untaxedInterest(Nino( "TM342715C" /*user.getNino*/)) map { untaxedInterest =>
+    implicit request =>
+      bbsiService.untaxedInterest(Nino(request.externalId)) map { untaxedInterest =>
         Ok(overview(untaxedInterest, appConfig))
       }
   }

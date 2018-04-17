@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import includes._
 @import uk.gov.hmrc.urls.Link
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.time.TaxYearResolver._
@@ -23,46 +24,55 @@
 
 @(untaxedInterest: models.domain.UntaxedInterest, appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
 
+@header = @{
+    ptaHeader(
+        displayBackLink = true,
+        mainHeadingText = messages("bbsi.overview.heading"),
+        preHeadingText = messages("bbsi.account.preHeading")
+    )
+}
+
 @main_template(
-title = messages("bbsi.overview.heading"),
-appConfig = appConfig,
-bodyClasses = None
-){
-@defining("d MMMM yyyy") { dateFormatPattern =>
-<div class="section flush--bottom">
-    <p>@Messages("bbsi.overview.para1")</p>
-    <p class="flush--bottom">@Messages("bbsi.overview.para2")</p>
-    <p>
-        <span class="display-block bold-large">@pounds(untaxedInterest.amount)</span>
-        @Messages("bbsi.overview.interest.year.desc", TaxYear().start.toString(dateFormatPattern), TaxYear().end.toString(dateFormatPattern))
-    </p>
-    <p>@Messages("bbsi.overview.interest.estimate.desc", TaxYear().prev.start.toString(dateFormatPattern), TaxYear().prev.end.toString(dateFormatPattern))</p>
-</div>
+    title = messages("bbsi.overview.heading"),
+    pageHeader = Some(header),
+    appConfig = appConfig,
+    bodyClasses = None
+    ){
+    @defining("d MMMM yyyy") { dateFormatPattern =>
+    <div class="section flush--bottom">
+        <p>@Messages("bbsi.overview.para1")</p>
+        <p class="flush--bottom">@Messages("bbsi.overview.para2")</p>
+        <p>
+            <span class="display-block bold-large">@pounds(untaxedInterest.amount)</span>
+            @Messages("bbsi.overview.interest.year.desc", TaxYear().start.toString(dateFormatPattern), TaxYear().end.toString(dateFormatPattern))
+        </p>
+        <p>@Messages("bbsi.overview.interest.estimate.desc", TaxYear().prev.start.toString(dateFormatPattern), TaxYear().prev.end.toString(dateFormatPattern))</p>
+    </div>
 
-<div class="section flush--bottom">
-    <h2 class="heading-medium">@Messages("bbsi.overview.whatYouMustDo.title")</h2>
-    <p>@Messages("bbsi.overview.whatYouMustDo.desc")</p>
-    <ul class="list-bullet">
-        <li>@Messages("bbsi.overview.whatYouMustDo.point1", TaxYear().start.toString(dateFormatPattern), TaxYear().end.toString(dateFormatPattern))</li>
-        <li>@Messages("bbsi.overview.whatYouMustDo.point2")</li>
-    </ul>
-</div>
+    <div class="section flush--bottom">
+        <h2 class="heading-medium">@Messages("bbsi.overview.whatYouMustDo.title")</h2>
+        <p>@Messages("bbsi.overview.whatYouMustDo.desc")</p>
+        <ul class="list-bullet">
+            <li>@Messages("bbsi.overview.whatYouMustDo.point1", TaxYear().start.toString(dateFormatPattern), TaxYear().end.toString(dateFormatPattern))</li>
+            <li>@Messages("bbsi.overview.whatYouMustDo.point2")</li>
+        </ul>
+    </div>
 
-<div class="section flush--bottom">
-    <h2 class="heading-medium">@Messages("bbsi.overview.whyThisIsImp.title")</h2>
-    <p>@Messages("bbsi.overview.whyThisIsImp.desc")</p>
-    <ul class="list-bullet">
-        <li>@Messages("bbsi.overview.whyThisIsImp.point1")</li>
-        <li>@Messages("bbsi.overview.whyThisIsImp.point2")</li>
-        <li>@Messages("bbsi.overview.whyThisIsImp.point3")</li>
-    </ul>
-</div>
+    <div class="section flush--bottom">
+        <h2 class="heading-medium">@Messages("bbsi.overview.whyThisIsImp.title")</h2>
+        <p>@Messages("bbsi.overview.whyThisIsImp.desc")</p>
+        <ul class="list-bullet">
+            <li>@Messages("bbsi.overview.whyThisIsImp.point1")</li>
+            <li>@Messages("bbsi.overview.whyThisIsImp.point2")</li>
+            <li>@Messages("bbsi.overview.whyThisIsImp.point3")</li>
+        </ul>
+    </div>
 
-@includes.link(
-id=Some("checkYourAccounts"),
-copy=Messages("bbsi.checkYouAccount"),
-url = Messages("bbsiDetailsBankData.buttonLink"),
-isButton=true
-)
+    @includes.link(
+    id=Some("checkYourAccounts"),
+    copy=Messages("bbsi.checkYouAccount"),
+    url = Messages("bbsiDetailsBankData.buttonLink"),
+    isButton=true
+    )
 }
 }

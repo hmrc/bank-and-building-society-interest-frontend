@@ -42,3 +42,23 @@ site.textarea.char_limit = (Limit is {0} characters)
 
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
+
+##BBSI account
+bbsi.account.preHeading=Savings and investments
+
+##BBSI overview
+bbsi.overview.heading=Interest earned from your accounts: overview
+bbsi.overview.para1=Once a year banks and building societies tell us about interest they paid you in the last tax year.
+bbsi.overview.para2=That interest is part of your income so you may have to pay Income Tax on it.
+bbsi.overview.interest.year.desc=Your estimated interest for the tax year {0} to {1}
+bbsi.overview.interest.estimate.desc=This estimate is based on the interest you received in the last tax year {0} to {1}.
+bbsi.overview.whatYouMustDo.title=What you must do
+bbsi.overview.whatYouMustDo.desc=Check the bank and building society account details we have and tell us if:
+bbsi.overview.whatYouMustDo.point1=your estimated interest for {0} to {1} is wrong
+bbsi.overview.whatYouMustDo.point2=you have closed any of the accounts
+bbsi.overview.whyThisIsImp.title=Why this is important
+bbsi.overview.whyThisIsImp.desc=It is important to check and update your details because:
+bbsi.overview.whyThisIsImp.point1=the interest you received in the last tax year is used to estimate the interest you will get in the current tax year
+bbsi.overview.whyThisIsImp.point2=the estimate is used to calculate how much Income Tax you will pay
+bbsi.overview.whyThisIsImp.point3=checking and updating your details helps you to pay the right amount of tax.
+bbsi.checkYouAccount=Check your account details and estimated interest

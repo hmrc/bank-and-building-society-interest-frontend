@@ -17,20 +17,34 @@
 package controllers
 
 import controllers.actions.FakeAuthAction
+import models.domain.UntaxedInterest
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
-import views.html.index
+import service.BBSIService
+import views.html.overview
 
-class IndexControllerSpec extends ControllerSpecBase {
+import scala.concurrent.Future
+
+class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
 
   "Index Controller" must {
     "return 200 for a GET" in {
-      val result = new IndexController(frontendAppConfig, messagesApi, FakeAuthAction).onPageLoad()(fakeRequest)
+
+      when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
+
+      val result = new IndexController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
       status(result) mustBe OK
     }
 
     "return the correct view for a GET" in {
-      val result = new IndexController(frontendAppConfig, messagesApi, FakeAuthAction).onPageLoad()(fakeRequest)
-      contentAsString(result) mustBe index("id",frontendAppConfig)(fakeRequest, messages, templateRenderer).toString
+      when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
+      val result = new IndexController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
+      contentAsString(result) mustBe overview(untaxedInterest,frontendAppConfig)(fakeRequest, messages, templateRenderer).toString
     }
   }
+
+  private val untaxedInterest = UntaxedInterest(0, Seq.empty)
+  private val bbsiService = mock[BBSIService]
 }

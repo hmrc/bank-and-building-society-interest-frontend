@@ -36,10 +36,10 @@ class AuthActionImpl @Inject()(override val authConnector: AuthConnector, config
   override def invokeBlock[A](request: Request[A], block: (AuthenticatedRequest[A]) => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    authorised().retrieve(Retrievals.externalId) {
+    authorised(ConfidenceLevel.L200 and CredentialStrength(CredentialStrength.strong) and AffinityGroup.Individual).retrieve(Retrievals.nino) {
       _.map {
-        externalId => block(AuthenticatedRequest(request, externalId))
-      }.getOrElse(throw new UnauthorizedException("Unable to retrieve external Id"))
+        nino => block(AuthenticatedRequest(request, nino))
+      }.getOrElse(throw new UnauthorizedException("Unable to retrieve nino"))
     } recover {
       case ex: NoActiveSession =>
         Redirect(config.loginUrl, Map("continue" -> Seq(config.loginContinueUrl)))
@@ -59,3 +59,7 @@ class AuthActionImpl @Inject()(override val authConnector: AuthConnector, config
 
 @ImplementedBy(classOf[AuthActionImpl])
 trait AuthAction extends ActionBuilder[AuthenticatedRequest] with ActionFunction[Request, AuthenticatedRequest]
+
+
+
+
