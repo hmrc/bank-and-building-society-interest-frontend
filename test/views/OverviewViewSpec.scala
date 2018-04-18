@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.bbsi.views.html
+package views
 
-import base.SpecBase
-import com.google.inject.Inject
 import config.FrontendAppConfig
 import mocks.MockTemplateRenderer
 import models.bbsi.TaxYear
 import models.domain.UntaxedInterest
-import play.api.i18n.Messages
 import play.api.inject.Injector
 import play.twirl.api.Html
 import uk.gov.hmrc.renderer.TemplateRenderer
@@ -64,7 +61,7 @@ class OverviewViewSpec extends BBSIViewSpec with BBSIApp {
     }
 
     "display details link" in {
-      page must haveLinkWithUrlWithID("checkYourAccounts", messages("bbsiDetailsBankData.buttonLink"))
+      page must haveLinkWithUrlWithID("checkYourAccounts", controllers.routes.AccountDetailsController.onPageLoad().url)
     }
 
   }

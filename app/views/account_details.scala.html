@@ -1,0 +1,94 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import includes._
+@import models.bbsi.TaxYear
+@import uk.gov.hmrc.urls.Link
+@import config.FrontendAppConfig
+@import models.domain.{UntaxedInterest, BankAccount}
+@import uk.gov.hmrc.play.views.formatting.Money._
+@import uk.gov.hmrc.renderer.TemplateRenderer
+
+@(untaxedInterest: UntaxedInterest, appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+
+@header = @{
+ptaHeader(
+displayBackLink = true,
+mainHeadingText = messages("bbsi.accountDetails.heading"),
+preHeadingText = messages("bbsi.account.preHeading")
+)
+}
+
+@main_template(
+title = messages("bbsi.accountDetails.heading"),
+pageHeader = Some(header),
+appConfig = appConfig,
+bodyClasses = None
+) {
+<p>@messages("bbsi.account.desc1")</p>
+<p>@messages("bbsi.account.desc2")</p>
+
+<h2 class="heading-medium">@messages("bbsi.account.table.heading", TaxYear().year.toString, TaxYear().next.year.toString)</h2>
+
+<div class="govuk-check-your-answers govuk-check-your-answers--tax-summary section">
+    @for(bankAccount <- untaxedInterest.bankAccounts.sortBy(- _.grossInterest)) {
+    <div>
+        @if(bankAccount.accountNumber.forall(_.endsWith("0000")) && bankAccount.sortCode.forall(_.equals("000000"))){
+        <div class="cya-question">
+            <h3 class="heading-small">@messages("bbsi.account.accountDetailsUnavailable")</h3>
+        </div>
+        <div class="cya-answer">@messages("bbsi.account.youToldUsTheAmount")</div>
+        <div class="cya-change">@pounds(bankAccount.grossInterest, 2)</div>
+        }else{
+        <div class="cya-question">
+            <h3 class="heading-small break-word">@bankAccount.bankName.getOrElse("")</h3>
+            <div>
+                <span class="visually-hidden">@Messages("bbsi.account.accountNumber") </span>
+                @bankAccount.accountNumber.getOrElse("")
+            </div>
+            <div>
+                <span class="visually-hidden">@Messages("bbsi.account.sortCode") </span>
+                @bankAccount.formattedSortCode.getOrElse("")
+            </div>
+        </div>
+        <div class="cya-answer">@messages("bbsi.account.table.amount") @pounds(bankAccount.grossInterest, 2)</div>
+        }
+    </div>
+    }
+    <div class="highlight">
+        <div class="cya-question"><h3 class="heading-small">@messages("bbsi.account.table.total")</h3></div>
+        <div class="cya-answer">@pounds(untaxedInterest.amount, 2)</div>
+        <div class="cya-change"></div>
+    </div>
+</div>
+
+
+
+
+
+
+<div class="panel-indent">
+    <p>@messages("bbsi.account.totalEstimatedInterest.desc1")</p>
+    <p>@messages("bbsi.account.totalEstimatedInterest.desc2", untaxedInterest.amount, TaxYear().year.toString, TaxYear().next.year.toString)</p>
+</div>
+
+<div>
+    <h3>@messages("bbsi.account.whatHappensNext.title")</h3>
+    <p>@messages("bbsi.account.whatHappensNext.desc1")</p>
+    <p>@messages("bbsi.account.whatHappensNext.desc2", TaxYear().year.toString, TaxYear().next.year.toString)</p>
+</div>
+
+}

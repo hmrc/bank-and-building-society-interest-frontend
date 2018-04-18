@@ -71,7 +71,7 @@
     @includes.link(
     id=Some("checkYourAccounts"),
     copy=Messages("bbsi.checkYouAccount"),
-    url = Messages("bbsiDetailsBankData.buttonLink"),
+    url = controllers.routes.AccountDetailsController.onPageLoad().url.toString,
     isButton=true
     )
 }
