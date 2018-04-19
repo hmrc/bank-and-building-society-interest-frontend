@@ -20,14 +20,13 @@ import controllers.actions.FakeAuthAction
 import models.domain.UntaxedInterest
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers._
 import service.BBSIService
 import views.html.overview
 
 import scala.concurrent.Future
 
-class IndexControllerSpec extends ControllerSpecBase with MockitoSugar {
+class IndexControllerSpec extends ControllerSpecBase {
 
   "Index Controller" must {
     "return 200 for a GET" in {

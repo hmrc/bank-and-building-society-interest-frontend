@@ -21,14 +21,13 @@ import models.domain.UntaxedInterest
 import org.jsoup.Jsoup
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
-import org.scalatest.mockito.MockitoSugar
 import play.api.test.Helpers.{contentAsString, status, _}
 import service.BBSIService
 import views.html.account_details
 
 import scala.concurrent.Future
 
-class AccountDetailsControllerSpec extends ControllerSpecBase with MockitoSugar {
+class AccountDetailsControllerSpec extends ControllerSpecBase {
 
   "Account Details Controller" must {
     "return 200 for a GET" in {
