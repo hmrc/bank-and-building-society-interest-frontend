@@ -18,13 +18,14 @@ package base
 
 import config.FrontendAppConfig
 import mocks.MockTemplateRenderer
+import org.scalatest.mockito.MockitoSugar
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice._
 import play.api.i18n.{Messages, MessagesApi}
 import play.api.inject.Injector
 import play.api.test.FakeRequest
 
-trait SpecBase extends PlaySpec with GuiceOneAppPerSuite {
+trait SpecBase extends PlaySpec with MockitoSugar with GuiceOneAppPerSuite {
 
   def injector: Injector = app.injector
 

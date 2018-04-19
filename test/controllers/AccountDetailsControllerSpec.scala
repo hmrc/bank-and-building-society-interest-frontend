@@ -18,29 +18,35 @@ package controllers
 
 import controllers.actions.FakeAuthAction
 import models.domain.UntaxedInterest
+import org.jsoup.Jsoup
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
-import play.api.test.Helpers._
+import play.api.test.Helpers.{contentAsString, status, _}
 import service.BBSIService
-import views.html.overview
+import views.html.account_details
 
 import scala.concurrent.Future
 
-class IndexControllerSpec extends ControllerSpecBase {
+class AccountDetailsControllerSpec extends ControllerSpecBase {
 
-  "Index Controller" must {
+  "Account Details Controller" must {
     "return 200 for a GET" in {
 
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
 
-      val result = new IndexController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
+      val result = new AccountDetailsController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
       status(result) mustBe OK
+
+
     }
 
     "return the correct view for a GET" in {
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
-      val result = new IndexController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
-      contentAsString(result) mustBe overview(untaxedInterest,frontendAppConfig)(fakeRequest, messages, templateRenderer).toString
+      val result = new AccountDetailsController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
+      contentAsString(result) mustBe account_details(untaxedInterest,frontendAppConfig)(fakeRequest, messages, templateRenderer).toString
+
+      val doc = Jsoup.parse(contentAsString(result))
+      doc.title() must include(messages("accountDetails.heading"))
     }
   }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package utils
+package controllers
 
 /*
  * Copyright 2018 HM Revenue & Customs
@@ -32,16 +32,29 @@ package utils
  * limitations under the License.
  */
 
-import org.scalatest.TestSuite
-import org.scalatest.concurrent.PatienceConfiguration
-import org.scalatestplus.play.OneServerPerSuite
-import play.api.Application
-import play.api.inject.guice.GuiceApplicationBuilder
 
-trait BBSIApp extends OneServerPerSuite with PatienceConfiguration {
-  this: TestSuite =>
+import config.FrontendAppConfig
+import controllers.actions.AuthAction
+import javax.inject.Inject
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent}
+import service.BBSIService
+import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.renderer.TemplateRenderer
+import views.html.account_details
 
-  implicit override lazy val app: Application = new GuiceApplicationBuilder().build()
+class AccountDetailsController @Inject()(val appConfig: FrontendAppConfig,
+                                         val messagesApi: MessagesApi,
+                                         authenticate: AuthAction,
+                                         bbsiService: BBSIService)
+                                        (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
+
+  def onPageLoad: Action[AnyContent] = authenticate.async {
+    implicit request =>
+      bbsiService.untaxedInterest(Nino(request.externalId)) map { untaxedInterest =>
+        Ok(account_details(untaxedInterest, appConfig))
+      }
+  }
 }
-
 

@@ -14,68 +14,56 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.bbsi.views.html
+package views
 
-import base.SpecBase
-import com.google.inject.Inject
-import config.FrontendAppConfig
-import mocks.MockTemplateRenderer
 import models.bbsi.TaxYear
 import models.domain.UntaxedInterest
-import play.api.i18n.Messages
-import play.api.inject.Injector
 import play.twirl.api.Html
-import uk.gov.hmrc.renderer.TemplateRenderer
-import utils.{BBSIApp, BBSIViewSpec}
+import utils.BBSIViewSpec
 import views.html.overview
 
 
 
-class OverviewViewSpec extends BBSIViewSpec with BBSIApp {
+class OverviewViewSpec extends BBSIViewSpec {
 
   "BankBuildingSociety Overview page" should {
-    behave like pageWithTitle(messages("bbsi.overview.heading"))
-    // TODO TAAS behave like pageWithBackLink
-    //TODO TAAS behave like pageWithHeader(messages("bbsi.overview.heading"))
+    behave like pageWithTitle(messages("overview.heading"))
+    behave like pageWithHeader(messages("overview.heading"))
 
     "display first section" in {
-      page must haveParagraphWithText(messages("bbsi.overview.para1"))
-      page must haveParagraphWithText(messages("bbsi.overview.para2"))
-      page must haveParagraphWithText("£2,000 " + messages("bbsi.overview.interest.year.desc",
+      page must haveParagraphWithText(messages("overview.para1"))
+      page must haveParagraphWithText(messages("overview.para2"))
+      page must haveParagraphWithText("£2,000 " + messages("overview.interest.year.desc",
         TaxYear().start.toString(dateFormatPattern), TaxYear().end.toString(dateFormatPattern)))
-      page must haveParagraphWithText(messages("bbsi.overview.interest.estimate.desc",
+      page must haveParagraphWithText(messages("overview.interest.estimate.desc",
         TaxYear().prev.start.toString(dateFormatPattern), TaxYear().prev.end.toString(dateFormatPattern)))
     }
 
     "display second section" in {
-      page must haveHeadingH2WithText(messages("bbsi.overview.whatYouMustDo.title"))
-      page must haveParagraphWithText(messages("bbsi.overview.whatYouMustDo.desc"))
-      page must haveBulletPointWithText(messages("bbsi.overview.whatYouMustDo.point1",
+      page must haveHeadingH2WithText(messages("overview.whatYouMustDo.title"))
+      page must haveParagraphWithText(messages("overview.whatYouMustDo.desc"))
+      page must haveBulletPointWithText(messages("overview.whatYouMustDo.point1",
         TaxYear().start.toString(dateFormatPattern), TaxYear().end.toString(dateFormatPattern)))
-      page must haveBulletPointWithText(messages("bbsi.overview.whatYouMustDo.point2"))
+      page must haveBulletPointWithText(messages("overview.whatYouMustDo.point2"))
     }
 
     "display third section" in {
-      page must haveHeadingH2WithText(messages("bbsi.overview.whyThisIsImp.title"))
-      page must haveParagraphWithText(messages("bbsi.overview.whyThisIsImp.desc"))
-      page must haveBulletPointWithText(messages("bbsi.overview.whyThisIsImp.point1"))
-      page must haveBulletPointWithText(messages("bbsi.overview.whyThisIsImp.point2"))
-      page must haveBulletPointWithText(messages("bbsi.overview.whyThisIsImp.point3"))
+      page must haveHeadingH2WithText(messages("overview.whyThisIsImp.title"))
+      page must haveParagraphWithText(messages("overview.whyThisIsImp.desc"))
+      page must haveBulletPointWithText(messages("overview.whyThisIsImp.point1"))
+      page must haveBulletPointWithText(messages("overview.whyThisIsImp.point2"))
+      page must haveBulletPointWithText(messages("overview.whyThisIsImp.point3"))
     }
 
     "display details link" in {
-      page must haveLinkWithUrlWithID("checkYourAccounts", messages("bbsiDetailsBankData.buttonLink"))
+      page must haveLinkWithUrlWithID("checkYourAccounts", controllers.routes.AccountDetailsController.onPageLoad().url)
     }
 
   }
 
   private val dateFormatPattern = "d MMMM yyy"
   private lazy val page = doc(view)
-  def injector: Injector = app.injector
-
-  val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-  val templateRenderer: TemplateRenderer = MockTemplateRenderer
 
   val untaxedInterest = UntaxedInterest(2000,Seq.empty)
-  override def view: Html = overview(untaxedInterest, appConfig)(request ,messages, templateRenderer)
+  override def view: Html = overview(untaxedInterest, frontendAppConfig)(request ,messages, templateRenderer)
 }
