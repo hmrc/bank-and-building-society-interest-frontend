@@ -87,13 +87,13 @@ class AccountDetailsViewSpec extends BBSIViewSpec {
   }
 
   private val accountNumber1 = "test account no 1"
-  private val sortCode1 = "123456"
+  private val sortCode1 = "testsortcode1"
   private val bankName1 = "test bank name 1"
   private val grossInterest1 = 123.45
   private val source1 = "Customer1"
 
   private val accountNumber2 = "test account no 2"
-  private val sortCode2 = "321654"
+  private val sortCode2 = "testsortcode2"
   private val bankName2 = "test bank name 2"
   private val grossInterest2 = 456.78
   private val source2 = "Customer2"
