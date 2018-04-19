@@ -47,7 +47,7 @@ class AccountDetailsControllerSpec extends ControllerSpecBase with MockitoSugar 
       contentAsString(result) mustBe account_details(untaxedInterest,frontendAppConfig)(fakeRequest, messages, templateRenderer).toString
 
       val doc = Jsoup.parse(contentAsString(result))
-      doc.title() must include(messages("bbsi.accountDetails.heading"))
+      doc.title() must include(messages("accountDetails.heading"))
     }
   }
 

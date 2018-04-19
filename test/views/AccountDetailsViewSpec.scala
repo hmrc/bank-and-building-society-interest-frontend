@@ -42,50 +42,50 @@ import uk.gov.hmrc.renderer.TemplateRenderer
 import utils.{BBSIApp, BBSIViewSpec}
 import views.html.account_details
 
-class AccountDetailsSpec extends BBSIViewSpec with BBSIApp {
+class AccountDetailsViewSpec extends BBSIViewSpec with BBSIApp {
 
   "bbsi accounts view" should {
-    behave like pageWithTitle(messages("bbsi.accountDetails.heading"))
+    behave like pageWithTitle(messages("accountDetails.heading"))
     behave like pageWithBackLink
 
     "display heading" in {
-      doc(view) must haveElementAtPathWithText("h2", messages("bbsi.account.table.heading", TaxYear().year.toString, TaxYear().next.year.toString))
+      doc(view) must haveElementAtPathWithText("h2", messages("account.table.heading", TaxYear().year.toString, TaxYear().next.year.toString))
     }
 
     "display descriptions" in {
-      doc(view) must haveParagraphWithText(messages("bbsi.account.desc1"))
-      doc(view) must haveParagraphWithText(messages("bbsi.account.desc2"))
+      doc(view) must haveParagraphWithText(messages("account.desc1"))
+      doc(view) must haveParagraphWithText(messages("account.desc2"))
     }
 
     "display account information" in {
       doc(view) must haveElementAtPathWithText(".cya-question h3", bankName1)
-      doc(view) must haveElementAtPathWithText(".cya-question > div", messages("bbsi.account.accountNumber") + " " + accountNumber1)
-      doc(view) must haveElementAtPathWithText(".cya-question > div + div", messages("bbsi.account.sortCode") + " " + bankAccount1.formattedSortCode.getOrElse(""))
+      doc(view) must haveElementAtPathWithText(".cya-question > div", messages("account.accountNumber") + " " + accountNumber1)
+      doc(view) must haveElementAtPathWithText(".cya-question > div + div", messages("account.sortCode") + " " + bankAccount1.formattedSortCode.getOrElse(""))
 
       doc(view) must haveElementAtPathWithText(".cya-question h3", bankName2)
-      doc(view) must haveElementAtPathWithText(".cya-question > div", messages("bbsi.account.accountNumber") + " " + accountNumber2)
-      doc(view) must haveElementAtPathWithText(".cya-question > div + div", messages("bbsi.account.sortCode") + " " + bankAccount2.formattedSortCode.getOrElse(""))
+      doc(view) must haveElementAtPathWithText(".cya-question > div", messages("account.accountNumber") + " " + accountNumber2)
+      doc(view) must haveElementAtPathWithText(".cya-question > div + div", messages("account.sortCode") + " " + bankAccount2.formattedSortCode.getOrElse(""))
 
-      doc(view) must haveElementAtPathWithText(".cya-answer", messages("bbsi.account.table.amount") + " " + "£123.45")
-      doc(view) must haveElementAtPathWithText(".cya-answer", messages("bbsi.account.table.amount") + " " + "£456.78")
+      doc(view) must haveElementAtPathWithText(".cya-answer", messages("account.table.amount") + " " + "£123.45")
+      doc(view) must haveElementAtPathWithText(".cya-answer", messages("account.table.amount") + " " + "£456.78")
 
     }
 
     "display estimated interest total" in {
-      doc(view) must haveElementAtPathWithText(".highlight h3", messages("bbsi.account.table.total"))
+      doc(view) must haveElementAtPathWithText(".highlight h3", messages("account.table.total"))
       doc(view) must haveElementAtPathWithText(".highlight .cya-answer", "£2,000.00")
     }
 
     "display total estimated interest in description" in {
-      doc(view) must haveParagraphWithText(messages("bbsi.account.totalEstimatedInterest.desc2", untaxedInterest.amount, TaxYear().year.toString, TaxYear().next.year.toString))
+      doc(view) must haveParagraphWithText(messages("account.totalEstimatedInterest.desc2", untaxedInterest.amount, TaxYear().year.toString, TaxYear().next.year.toString))
     }
 
     "not display account details" when{
       "account number and sort code has all zeroes" in {
         val view = views.html.account_details(UntaxedInterest(100,List(bankAccount1, bankAccount3, bankAccount2)), appConfig)(request ,messages, templateRenderer)
 
-        doc(view) must haveElementAtPathWithText(".cya-question h3", messages("bbsi.account.accountDetailsUnavailable"))
-        doc(view) must haveElementAtPathWithText(".cya-answer", messages("bbsi.account.youToldUsTheAmount"))
+        doc(view) must haveElementAtPathWithText(".cya-question h3", messages("account.accountDetailsUnavailable"))
+        doc(view) must haveElementAtPathWithText(".cya-answer", messages("account.youToldUsTheAmount"))
       }
     }
   }

@@ -44,45 +44,45 @@ unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
 
 ##BBSI account
-bbsi.account.preHeading=Savings and investments
+account.preHeading=Savings and investments
 
 ##BBSI overview
-bbsi.overview.heading=Interest earned from your accounts: overview
-bbsi.overview.para1=Once a year banks and building societies tell us about interest they paid you in the last tax year.
-bbsi.overview.para2=That interest is part of your income so you may have to pay Income Tax on it.
-bbsi.overview.interest.year.desc=Your estimated interest for the tax year {0} to {1}
-bbsi.overview.interest.estimate.desc=This estimate is based on the interest you received in the last tax year {0} to {1}.
-bbsi.overview.whatYouMustDo.title=What you must do
-bbsi.overview.whatYouMustDo.desc=Check the bank and building society account details we have and tell us if:
-bbsi.overview.whatYouMustDo.point1=your estimated interest for {0} to {1} is wrong
-bbsi.overview.whatYouMustDo.point2=you have closed any of the accounts
-bbsi.overview.whyThisIsImp.title=Why this is important
-bbsi.overview.whyThisIsImp.desc=It is important to check and update your details because:
-bbsi.overview.whyThisIsImp.point1=the interest you received in the last tax year is used to estimate the interest you will get in the current tax year
-bbsi.overview.whyThisIsImp.point2=the estimate is used to calculate how much Income Tax you will pay
-bbsi.overview.whyThisIsImp.point3=checking and updating your details helps you to pay the right amount of tax.
-bbsi.checkYouAccount=Check your account details and estimated interest
+overview.heading=Interest earned from your accounts: overview
+overview.para1=Once a year banks and building societies tell us about interest they paid you in the last tax year.
+overview.para2=That interest is part of your income so you may have to pay Income Tax on it.
+overview.interest.year.desc=Your estimated interest for the tax year {0} to {1}
+overview.interest.estimate.desc=This estimate is based on the interest you received in the last tax year {0} to {1}.
+overview.whatYouMustDo.title=What you must do
+overview.whatYouMustDo.desc=Check the bank and building society account details we have and tell us if:
+overview.whatYouMustDo.point1=your estimated interest for {0} to {1} is wrong
+overview.whatYouMustDo.point2=you have closed any of the accounts
+overview.whyThisIsImp.title=Why this is important
+overview.whyThisIsImp.desc=It is important to check and update your details because:
+overview.whyThisIsImp.point1=the interest you received in the last tax year is used to estimate the interest you will get in the current tax year
+overview.whyThisIsImp.point2=the estimate is used to calculate how much Income Tax you will pay
+overview.whyThisIsImp.point3=checking and updating your details helps you to pay the right amount of tax.
+checkYouAccount=Check your account details and estimated interest
 
 
 ##BBSI account
-bbsi.account.preHeading=Savings and investments
-bbsi.accountDetails.heading=Interest earned from your accounts: details
-bbsi.account.desc1=We are told only about the amount of interest. We do not know how much you have in your accounts.
-bbsi.account.desc2=You should update these details if they are wrong or you may pay the wrong amount of tax.
-bbsi.account.table.heading=Estimated interest on savings between 6 April {0} and 5 April {1}
-bbsi.account.table.accountDetails=Account details
-bbsi.account.sortCode=Sort-code
-bbsi.account.accountNumber=Account number
-bbsi.account.table.amount=Interest amount
-bbsi.account.table.action=Action
-bbsi.account.table.total=Total estimated interest
-bbsi.account.updateOrRemoveLink=Update or Remove
-bbsi.account.accountDetailsUnavailable=Account detail unavailable
-bbsi.account.youToldUsTheAmount=You told us the amount
-bbsi.viewDetails=View details
-bbsi.account.totalEstimatedInterest.desc1=Total estimated interest is rounded down to the nearest whole pound when calculating any tax due.
-bbsi.account.totalEstimatedInterest.desc2=£{0} will be used to calculate any tax due for the tax year from 6 April {1} to 5 April {2}.
-bbsi.account.whatHappensNext.title=What happens next
-bbsi.account.whatHappensNext.desc1=The figures shown, or any update you send, will be used to estimate your Income Tax for the current year.
-bbsi.account.whatHappensNext.desc2=Details of the interest you actually received for April {0} to April {1} will be sent to us after 5 April {1}. We will use the actual figures to calculate how much Income Tax you should have paid in that year.
+account.preHeading=Savings and investments
+accountDetails.heading=Interest earned from your accounts: details
+account.desc1=We are told only about the amount of interest. We do not know how much you have in your accounts.
+account.desc2=You should update these details if they are wrong or you may pay the wrong amount of tax.
+account.table.heading=Estimated interest on savings between 6 April {0} and 5 April {1}
+account.table.accountDetails=Account details
+account.sortCode=Sort-code
+account.accountNumber=Account number
+account.table.amount=Interest amount
+account.table.action=Action
+account.table.total=Total estimated interest
+account.updateOrRemoveLink=Update or Remove
+account.accountDetailsUnavailable=Account detail unavailable
+account.youToldUsTheAmount=You told us the amount
+viewDetails=View details
+account.totalEstimatedInterest.desc1=Total estimated interest is rounded down to the nearest whole pound when calculating any tax due.
+account.totalEstimatedInterest.desc2=£{0} will be used to calculate any tax due for the tax year from 6 April {1} to 5 April {2}.
+account.whatHappensNext.title=What happens next
+account.whatHappensNext.desc1=The figures shown, or any update you send, will be used to estimate your Income Tax for the current year.
+account.whatHappensNext.desc2=Details of the interest you actually received for April {0} to April {1} will be sent to us after 5 April {1}. We will use the actual figures to calculate how much Income Tax you should have paid in that year.
 

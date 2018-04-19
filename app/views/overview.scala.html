@@ -27,50 +27,50 @@
 @header = @{
     ptaHeader(
         displayBackLink = false,
-        mainHeadingText = messages("bbsi.overview.heading"),
-        preHeadingText = messages("bbsi.account.preHeading")
+        mainHeadingText = messages("overview.heading"),
+        preHeadingText = messages("account.preHeading")
     )
 }
 
 @main_template(
-    title = messages("bbsi.overview.heading"),
+    title = messages("overview.heading"),
     pageHeader = Some(header),
     appConfig = appConfig,
     bodyClasses = None
     ){
     @defining("d MMMM yyyy") { dateFormatPattern =>
     <div class="section flush--bottom">
-        <p>@Messages("bbsi.overview.para1")</p>
-        <p class="flush--bottom">@Messages("bbsi.overview.para2")</p>
+        <p>@Messages("overview.para1")</p>
+        <p class="flush--bottom">@Messages("overview.para2")</p>
         <p>
             <span class="display-block bold-large">@pounds(untaxedInterest.amount)</span>
-            @Messages("bbsi.overview.interest.year.desc", TaxYear().start.toString(dateFormatPattern), TaxYear().end.toString(dateFormatPattern))
+            @Messages("overview.interest.year.desc", TaxYear().start.toString(dateFormatPattern), TaxYear().end.toString(dateFormatPattern))
         </p>
-        <p>@Messages("bbsi.overview.interest.estimate.desc", TaxYear().prev.start.toString(dateFormatPattern), TaxYear().prev.end.toString(dateFormatPattern))</p>
+        <p>@Messages("overview.interest.estimate.desc", TaxYear().prev.start.toString(dateFormatPattern), TaxYear().prev.end.toString(dateFormatPattern))</p>
     </div>
 
     <div class="section flush--bottom">
-        <h2 class="heading-medium">@Messages("bbsi.overview.whatYouMustDo.title")</h2>
-        <p>@Messages("bbsi.overview.whatYouMustDo.desc")</p>
+        <h2 class="heading-medium">@Messages("overview.whatYouMustDo.title")</h2>
+        <p>@Messages("overview.whatYouMustDo.desc")</p>
         <ul class="list-bullet">
-            <li>@Messages("bbsi.overview.whatYouMustDo.point1", TaxYear().start.toString(dateFormatPattern), TaxYear().end.toString(dateFormatPattern))</li>
-            <li>@Messages("bbsi.overview.whatYouMustDo.point2")</li>
+            <li>@Messages("overview.whatYouMustDo.point1", TaxYear().start.toString(dateFormatPattern), TaxYear().end.toString(dateFormatPattern))</li>
+            <li>@Messages("overview.whatYouMustDo.point2")</li>
         </ul>
     </div>
 
     <div class="section flush--bottom">
-        <h2 class="heading-medium">@Messages("bbsi.overview.whyThisIsImp.title")</h2>
-        <p>@Messages("bbsi.overview.whyThisIsImp.desc")</p>
+        <h2 class="heading-medium">@Messages("overview.whyThisIsImp.title")</h2>
+        <p>@Messages("overview.whyThisIsImp.desc")</p>
         <ul class="list-bullet">
-            <li>@Messages("bbsi.overview.whyThisIsImp.point1")</li>
-            <li>@Messages("bbsi.overview.whyThisIsImp.point2")</li>
-            <li>@Messages("bbsi.overview.whyThisIsImp.point3")</li>
+            <li>@Messages("overview.whyThisIsImp.point1")</li>
+            <li>@Messages("overview.whyThisIsImp.point2")</li>
+            <li>@Messages("overview.whyThisIsImp.point3")</li>
         </ul>
     </div>
 
     @includes.link(
     id=Some("checkYourAccounts"),
-    copy=Messages("bbsi.checkYouAccount"),
+    copy=Messages("checkYouAccount"),
     url = controllers.routes.AccountDetailsController.onPageLoad().url.toString,
     isButton=true
     )
