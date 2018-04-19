@@ -14,19 +14,26 @@
  * limitations under the License.
  */
 
-package controllers.actions
+package model.domain
 
-import play.api.mvc.{Request, Result}
-import models.requests.AuthenticatedRequest
-import uk.gov.hmrc.domain.{Generator, Nino}
+import play.api.libs.json.Json
+import uk.gov.hmrc.domain.Nino
 
-import scala.concurrent.Future
-import scala.util.Random
 
-object FakeAuthAction extends AuthAction {
-  override def invokeBlock[A](request: Request[A], block: (AuthenticatedRequest[A]) => Future[Result]): Future[Result] =
-    block(AuthenticatedRequest(request, generateNino.nino))
-
-  def generateNino: Nino = new Generator(new Random).nextNino
+object Person {
+  implicit val formats = Json.format[Person]
 }
 
+case class Person(
+                   firstName: Option[String] = None,
+                   lastName: Option[String] = None,
+                   nino: String = ""
+                 )
+
+object PersonDetails {
+  implicit val formats = Json.format[PersonDetails]
+}
+
+case class PersonDetails(
+                          person: Person
+                        )

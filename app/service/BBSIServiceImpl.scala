@@ -17,7 +17,7 @@
 package service
 
 
-import com.google.inject.Inject
+import com.google.inject.{ImplementedBy, Inject}
 import config.FrontendAppConfig
 import connectors.{BBSIConnector, HttpHandler}
 import models.domain.{AmountRequest, BankAccount, CloseAccountRequest, UntaxedInterest}
@@ -69,6 +69,7 @@ class BBSIServiceImpl @Inject()(val appConfig: FrontendAppConfig,
   }
 }
 
+@ImplementedBy(classOf[BBSIServiceImpl])
 trait BBSIService {
   def bankAccounts(nino:Nino)(implicit hc: HeaderCarrier): Future[Seq[BankAccount]]
   def bankAccount(nino:Nino, id: Int)(implicit hc: HeaderCarrier): Future[Option[BankAccount]]

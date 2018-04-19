@@ -16,22 +16,27 @@
 
 package controllers
 
-import javax.inject.Inject
-
-import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.{Action, AnyContent}
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import config.FrontendAppConfig
 import controllers.actions.AuthAction
+import javax.inject.Inject
+import play.api.i18n.{I18nSupport, MessagesApi}
+import play.api.mvc.{Action, AnyContent}
+import service.BBSIService
+import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.renderer.TemplateRenderer
-import views.html.index
+import views.html.overview
 
 class IndexController @Inject()(val appConfig: FrontendAppConfig,
                                 val messagesApi: MessagesApi,
-                                authenticate: AuthAction)
+                                authenticate: AuthAction,
+                                bbsiService: BBSIService)
                                (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
 
-  def onPageLoad: Action[AnyContent] = authenticate { implicit request =>
-    Ok(index(request.externalId,appConfig))
+  def onPageLoad: Action[AnyContent] = authenticate.async {
+    implicit request =>
+      bbsiService.untaxedInterest(Nino(request.externalId)) map { untaxedInterest =>
+        Ok(overview(untaxedInterest, appConfig))
+      }
   }
 }
