@@ -16,19 +16,15 @@
 
 package views
 
-import config.FrontendAppConfig
-import mocks.MockTemplateRenderer
 import models.bbsi.TaxYear
 import models.domain.UntaxedInterest
-import play.api.inject.Injector
 import play.twirl.api.Html
-import uk.gov.hmrc.renderer.TemplateRenderer
-import utils.{BBSIApp, BBSIViewSpec}
+import utils.BBSIViewSpec
 import views.html.overview
 
 
 
-class OverviewViewSpec extends BBSIViewSpec with BBSIApp {
+class OverviewViewSpec extends BBSIViewSpec {
 
   "BankBuildingSociety Overview page" should {
     behave like pageWithTitle(messages("overview.heading"))
@@ -67,11 +63,7 @@ class OverviewViewSpec extends BBSIViewSpec with BBSIApp {
 
   private val dateFormatPattern = "d MMMM yyy"
   private lazy val page = doc(view)
-  def injector: Injector = app.injector
-
-  val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-  val templateRenderer: TemplateRenderer = MockTemplateRenderer
 
   val untaxedInterest = UntaxedInterest(2000,Seq.empty)
-  override def view: Html = overview(untaxedInterest, appConfig)(request ,messages, templateRenderer)
+  override def view: Html = overview(untaxedInterest, frontendAppConfig)(request ,messages, templateRenderer)
 }

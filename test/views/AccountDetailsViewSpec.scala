@@ -32,17 +32,13 @@ package views
  * limitations under the License.
  */
 
-import config.FrontendAppConfig
-import mocks.MockTemplateRenderer
 import models.bbsi.TaxYear
 import models.domain.{BankAccount, UntaxedInterest}
-import play.api.inject.Injector
 import play.twirl.api.Html
-import uk.gov.hmrc.renderer.TemplateRenderer
-import utils.{BBSIApp, BBSIViewSpec}
+import utils.BBSIViewSpec
 import views.html.account_details
 
-class AccountDetailsViewSpec extends BBSIViewSpec with BBSIApp {
+class AccountDetailsViewSpec extends BBSIViewSpec {
 
   "bbsi accounts view" should {
     behave like pageWithTitle(messages("accountDetails.heading"))
@@ -82,7 +78,7 @@ class AccountDetailsViewSpec extends BBSIViewSpec with BBSIApp {
 
     "not display account details" when{
       "account number and sort code has all zeroes" in {
-        val view = views.html.account_details(UntaxedInterest(100,List(bankAccount1, bankAccount3, bankAccount2)), appConfig)(request ,messages, templateRenderer)
+        val view = views.html.account_details(UntaxedInterest(100,List(bankAccount1, bankAccount3, bankAccount2)), frontendAppConfig)(request ,messages, templateRenderer)
 
         doc(view) must haveElementAtPathWithText(".cya-question h3", messages("account.accountDetailsUnavailable"))
         doc(view) must haveElementAtPathWithText(".cya-answer", messages("account.youToldUsTheAmount"))
@@ -113,11 +109,8 @@ class AccountDetailsViewSpec extends BBSIViewSpec with BBSIApp {
   private val accounts: Seq[BankAccount] = List(bankAccount1, bankAccount2)
 
   private val untaxedInterest = UntaxedInterest(2000,accounts)
-  def injector: Injector = app.injector
 
-  val appConfig: FrontendAppConfig = injector.instanceOf[FrontendAppConfig]
-  val templateRenderer: TemplateRenderer = MockTemplateRenderer
 
-  override def view: Html = account_details(untaxedInterest, appConfig)(request ,messages, templateRenderer)
+  override def view: Html = account_details(untaxedInterest, frontendAppConfig)(request ,messages, templateRenderer)
 }
 

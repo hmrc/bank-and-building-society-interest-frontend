@@ -42,10 +42,9 @@ import play.api.mvc.Call
 import play.api.test.FakeRequest
 import play.twirl.api.Html
 
-trait BBSIViewSpec extends PlaySpec with JsoupMatchers with BBSIApp {
+trait BBSIViewSpec extends PlaySpec with JsoupMatchers with SpecBase {
 
   implicit val request = FakeRequest()
-  implicit val messages: Messages = play.api.i18n.Messages.Implicits.applicationMessages
   implicit val user = UserBuilder()
 
   def view: Html
