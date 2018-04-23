@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package utils
+package forms
 
-import uk.gov.hmrc.http.cache.client.CacheMap
-import identifiers._
-import models._
+import javax.inject.Inject
 
-class UserAnswers(val cacheMap: CacheMap) extends Enumerable.Implicits {
-  def decision: Option[Decision] = cacheMap.getEntry[Decision](DecisionId.toString)
+import forms.mappings.Mappings
+import play.api.data.Form
+import models.Decision
 
+class DecisionFormProvider @Inject() extends FormErrorHelper with Mappings {
+
+  def apply(): Form[Decision] =
+    Form(
+      "value" -> enumerable[Decision]("decision.error.required")
+    )
 }

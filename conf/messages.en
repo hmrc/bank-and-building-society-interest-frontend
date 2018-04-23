@@ -86,3 +86,10 @@ account.whatHappensNext.title=What happens next
 account.whatHappensNext.desc1=The figures shown, or any update you send, will be used to estimate your Income Tax for the current year.
 account.whatHappensNext.desc2=Details of the interest you actually received for April {0} to April {1} will be sent to us after 5 April {1}. We will use the actual figures to calculate how much Income Tax you should have paid in that year.
 
+
+decision.title = decision
+decision.heading = decision
+decision.update = update estimated interest
+decision.close = close account
+decision.checkYourAnswersLabel = decision
+decision.error.required = Please give an answer for decision

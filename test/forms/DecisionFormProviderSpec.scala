@@ -14,15 +14,32 @@
  * limitations under the License.
  */
 
-package utils
+package forms
 
-import controllers.routes
-import models.CheckMode
-import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
+import forms.behaviours.OptionFieldBehaviours
+import models.Decision
+import play.api.data.FormError
 
-class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+class DecisionFormProviderSpec extends OptionFieldBehaviours {
 
-  def decision: Option[AnswerRow] = userAnswers.decision map {
-    x => AnswerRow("decision.checkYourAnswersLabel", s"decision.$x", true, routes.DecisionController.onPageLoad(CheckMode).url)
+  val form = new DecisionFormProvider()()
+
+  ".value" must {
+
+    val fieldName = "value"
+    val requiredKey = "decision.error.required"
+
+    behave like optionsField[Decision](
+      form,
+      fieldName,
+      validValues  = Decision.values,
+      invalidError = FormError(fieldName, "error.invalid")
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }

@@ -53,6 +53,8 @@ class AuthActionImpl @Inject()(override val authConnector: AuthConnector, config
         Redirect(routes.UnauthorisedController.onPageLoad)
       case ex: UnsupportedCredentialRole =>
         Redirect(routes.UnauthorisedController.onPageLoad)
+      case ex: UnauthorizedException => val x = ex.getMessage()
+        Redirect(routes.UnauthorisedController.onPageLoad)
     }
   }
 }

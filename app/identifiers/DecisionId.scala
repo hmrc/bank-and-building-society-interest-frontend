@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-package utils
+package identifiers
 
-import uk.gov.hmrc.http.cache.client.CacheMap
-import identifiers._
-import models._
-
-class UserAnswers(val cacheMap: CacheMap) extends Enumerable.Implicits {
-  def decision: Option[Decision] = cacheMap.getEntry[Decision](DecisionId.toString)
-
+case object DecisionId extends Identifier {
+  override def toString: String = "decision"
 }

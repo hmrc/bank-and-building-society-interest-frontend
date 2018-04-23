@@ -13,3 +13,8 @@ GET        /check-your-answers                          controllers.CheckYourAns
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
 GET        /account-details                             controllers.AccountDetailsController.onPageLoad
+
+GET        /decision               controllers.DecisionController.onPageLoad(mode: Mode = NormalMode)
+POST       /decision               controllers.DecisionController.onSubmit(mode: Mode = NormalMode)
+GET        /changeDecision               controllers.DecisionController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeDecision               controllers.DecisionController.onSubmit(mode: Mode = CheckMode)

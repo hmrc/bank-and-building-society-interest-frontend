@@ -14,13 +14,27 @@
  * limitations under the License.
  */
 
-package utils
+package models
 
-import uk.gov.hmrc.http.cache.client.CacheMap
-import identifiers._
-import models._
+import utils.{Enumerable, RadioOption, WithName}
 
-class UserAnswers(val cacheMap: CacheMap) extends Enumerable.Implicits {
-  def decision: Option[Decision] = cacheMap.getEntry[Decision](DecisionId.toString)
+sealed trait Decision
 
+object Decision {
+
+  case object Update extends WithName("update") with Decision
+  case object Close extends WithName("close") with Decision
+  case object Remove extends WithName("remove") with Decision
+
+  val values: Set[Decision] = Set(
+    Update, Close, Remove
+  )
+
+  val options: Set[RadioOption] = values.map {
+    value =>
+      RadioOption("decision", value.toString)
+  }
+
+  implicit val enumerable: Enumerable[Decision] =
+    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
 }
