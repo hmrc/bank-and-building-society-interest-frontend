@@ -22,12 +22,12 @@
 @import uk.gov.hmrc.renderer.TemplateRenderer
 @import includes._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, bankName: String)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
 
 @header = @{
     ptaHeader(
         displayBackLink = true,
-        mainHeadingText = messages("decision.heading"),
+        mainHeadingText = messages("decision.heading", bankName),
         preHeadingText = messages("decision.preHeading")
     )
 }

@@ -28,6 +28,9 @@ import forms.DecisionFormProvider
 import identifiers.DecisionId
 import models.Mode
 import models.Decision
+import models.domain.BankAccount
+import service.BBSIService
+import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.renderer.TemplateRenderer
 import utils.{Enumerable, Navigator, UserAnswers}
 import views.html.decision
@@ -35,31 +38,36 @@ import views.html.decision
 import scala.concurrent.Future
 
 class DecisionController @Inject()(
-                                        appConfig: FrontendAppConfig,
-                                        override val messagesApi: MessagesApi,
-                                        dataCacheConnector: DataCacheConnector,
-                                        navigator: Navigator,
-                                        authenticate: AuthAction,
-                                        getData: DataRetrievalAction,
-                                        requireData: DataRequiredAction,
-                                        formProvider: DecisionFormProvider)(implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                    appConfig: FrontendAppConfig,
+                                    override val messagesApi: MessagesApi,
+                                    dataCacheConnector: DataCacheConnector,
+                                    navigator: Navigator,
+                                    authenticate: AuthAction,
+                                    getData: DataRetrievalAction,
+                                    requireData: DataRequiredAction,
+                                    formProvider: DecisionFormProvider,
+                                    bbsiService: BBSIService)(implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (authenticate andThen getData) {
+  def onPageLoad(mode: Mode, id: Int) = (authenticate andThen getData).async {
     implicit request =>
-      val preparedForm = request.userAnswers.flatMap(_.decision) match {
-        case None => form
-        case Some(value) => form.fill(value)
+      bbsiService.bankAccount(Nino(request.externalId), id) map {
+        case Some(BankAccount(_, Some(_), Some(_), Some(bankName), _, _)) =>
+          val preparedForm = request.userAnswers.flatMap(_.decision) match {
+            case None => form
+            case Some(value) => form.fill(value)
+          }
+          Ok(decision(appConfig, preparedForm, mode, bankName))
+        case _ => NotFound
       }
-      Ok(decision(appConfig, preparedForm, mode))
   }
 
   def onSubmit(mode: Mode) = (authenticate andThen getData).async {
     implicit request =>
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(decision(appConfig, formWithErrors, mode))),
+          Future.successful(BadRequest(decision(appConfig, formWithErrors, mode, "Todo"))),
         (value) =>
           dataCacheConnector.save[Decision](request.externalId, DecisionId.toString, value).map(cacheMap =>
             Redirect(navigator.nextPage(DecisionId, mode)(new UserAnswers(cacheMap))))

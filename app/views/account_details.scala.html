@@ -72,7 +72,7 @@
               <div class="cya-change">
                   @includes.link(
                   id=Some(s"bbsiAccountDecision${bankAccount.id}"),
-                  url=controllers.routes.DecisionController.onPageLoad(NormalMode).url,
+                  url=controllers.routes.DecisionController.onPageLoad(NormalMode, bankAccount.id).url,
                   copy=Messages("account.updateOrRemoveLink"),
                   altCopy=Some(Messages("account.updateOrRemoveLink") + " " + bankAccount.bankName.getOrElse(""))
                   )
