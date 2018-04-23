@@ -20,19 +20,28 @@
 @import models.Decision
 @import models.Mode
 @import uk.gov.hmrc.renderer.TemplateRenderer
+@import includes._
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
 
+@header = @{
+    ptaHeader(
+        displayBackLink = true,
+        mainHeadingText = messages("decision.heading"),
+        preHeadingText = messages("decision.preHeading")
+    )
+}
+
 @main_template(
     title = messages("decision.title"),
+    pageHeader = Some(header),
     appConfig = appConfig,
-    bodyClasses = None) {
+    bodyClasses = None
+) {
 
     @helpers.form(action = DecisionController.onSubmit(mode), 'autoComplete -> "off") {
 
         @components.error_summary(form.errors)
-
-        @components.heading("decision.heading")
 
         @components.input_radio(
             field = form("value"),

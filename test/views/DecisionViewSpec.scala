@@ -59,5 +59,8 @@ class DecisionViewSpec extends ViewBehaviours {
         }
       }
     }
+    "Decision view" must {
+      behave like pageWithBackLink(createView)
+    }
   }
 }
