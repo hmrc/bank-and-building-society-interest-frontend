@@ -42,7 +42,15 @@
     @pageHeader.getOrElse(Html(""))
 }
 
-
 @{
-    templateRenderer.renderDefaultTemplate(layouts.article(mainContent, includeGridWrapper, articleClasses), Map("pageTitle" -> title, "mainContentHeader" -> mainContentHeader))
+    templateRenderer.renderDefaultTemplate(
+      layouts.article(mainContent, includeGridWrapper, articleClasses),
+        Map(
+            "pageTitle" -> title,
+            "mainContentHeader" -> mainContentHeader
+        )
+      )
 }
+
+<script src='@routes.Assets.versioned("javascripts/bankandbuildingsocietyinterestfrontend-app.min.js")'> </script>
+
