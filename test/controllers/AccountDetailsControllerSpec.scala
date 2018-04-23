@@ -31,20 +31,15 @@ class AccountDetailsControllerSpec extends ControllerSpecBase {
 
   "Account Details Controller" must {
     "return 200 for a GET" in {
-
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
-
       val result = new AccountDetailsController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
       status(result) mustBe OK
-
-
     }
 
     "return the correct view for a GET" in {
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
       val result = new AccountDetailsController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
       contentAsString(result) mustBe account_details(untaxedInterest,frontendAppConfig)(fakeRequest, messages, templateRenderer).toString
-
       val doc = Jsoup.parse(contentAsString(result))
       doc.title() must include(messages("accountDetails.heading"))
     }
