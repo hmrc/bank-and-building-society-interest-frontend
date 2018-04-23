@@ -69,6 +69,14 @@
                   </div>
               </div>
               <div class="cya-answer">@messages("account.table.amount") @pounds(bankAccount.grossInterest, 2)</div>
+              <div class="cya-change">
+                  @includes.link(
+                  id=Some(s"bbsiAccountDecision${bankAccount.id}"),
+                  url=controllers.routes.DecisionController.onPageLoad(NormalMode).url,
+                  copy=Messages("account.updateOrRemoveLink"),
+                  altCopy=Some(Messages("account.updateOrRemoveLink") + " " + bankAccount.bankName.getOrElse(""))
+                  )
+              </div>
               }
           </div>
           }

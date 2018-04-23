@@ -32,6 +32,7 @@ package views
  * limitations under the License.
  */
 
+import models.NormalMode
 import models.bbsi.TaxYear
 import models.domain.{BankAccount, UntaxedInterest}
 import play.twirl.api.Html
@@ -64,6 +65,9 @@ class AccountDetailsViewSpec extends BBSIViewSpec {
 
       doc(view) must haveElementAtPathWithText(".cya-answer", messages("account.table.amount") + " " + "£123.45")
       doc(view) must haveElementAtPathWithText(".cya-answer", messages("account.table.amount") + " " + "£456.78")
+
+      doc(view) must haveElementAtPathWithText(".cya-change a span", messages("account.updateOrRemoveLink"))
+      doc(view) must haveLinkWithUrlWithID("bbsiAccountDecision1", controllers.routes.DecisionController.onPageLoad(NormalMode).url)
 
     }
 
