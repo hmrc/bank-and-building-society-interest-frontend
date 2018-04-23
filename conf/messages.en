@@ -40,11 +40,10 @@ site.save_and_continue = Save and continue
 site.service_name = bank-and-building-society-interest-frontend
 site.textarea.char_limit = (Limit is {0} characters)
 
+ptaHeader.accessible.preHeading=This section is
+
 unauthorised.title = You can’t access this service with this account
 unauthorised.heading = You can’t access this service with this account
-
-##BBSI account
-account.preHeading=Savings and investments
 
 ##BBSI overview
 overview.heading=Interest earned from your accounts: overview
@@ -62,7 +61,6 @@ overview.whyThisIsImp.point1=the interest you received in the last tax year is u
 overview.whyThisIsImp.point2=the estimate is used to calculate how much Income Tax you will pay
 overview.whyThisIsImp.point3=checking and updating your details helps you to pay the right amount of tax.
 checkYouAccount=Check your account details and estimated interest
-
 
 ##BBSI account
 account.preHeading=Savings and investments

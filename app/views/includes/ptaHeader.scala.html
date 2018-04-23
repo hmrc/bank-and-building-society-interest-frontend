@@ -15,7 +15,7 @@
  *@
 
 @import includes.forms.errorSummary
-@import includes.backLink
+@import components.back_link
 
 @(formForErrorSummary: Option[Form[_]] = None,
   displayBackLink: Boolean = false,
@@ -25,14 +25,13 @@
   preHeadingAccessibleAnnouncement: String = "")(implicit m: Messages)
 
 @preHeadingHidden = @{
-    if(preHeadingAccessibleAnnouncement=="") Messages("tai.ptaHeader.accessible.preHeading") else preHeadingAccessibleAnnouncement
+    if(preHeadingAccessibleAnnouncement=="") Messages("ptaHeader.accessible.preHeading") else preHeadingAccessibleAnnouncement
 }
 
 @if(displayBackLink) {
-    @backLink(
-        gaEventAction = backLinkGaEventAction
-    )
+    @back_link()
 }
+
 <div class="grid-row">
   <div class="column-two-thirds">
 
