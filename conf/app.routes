@@ -18,3 +18,5 @@ GET        /decision/:id               controllers.DecisionController.onPageLoad
 POST       /decision/:id              controllers.DecisionController.onSubmit(mode: Mode = NormalMode, id: Int)
 GET        /changeDecision/:id               controllers.DecisionController.onPageLoad(mode: Mode = CheckMode, id: Int)
 POST       /changeDecision/:id               controllers.DecisionController.onSubmit(mode: Mode = CheckMode, id: Int)
+
+GET        /removeAccount                       controllers.RemoveAccountController.onPageLoad()

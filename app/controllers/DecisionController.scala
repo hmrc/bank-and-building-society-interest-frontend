@@ -46,7 +46,8 @@ class DecisionController @Inject()(
                                     getData: DataRetrievalAction,
                                     requireData: DataRequiredAction,
                                     formProvider: DecisionFormProvider,
-                                    bbsiService: BBSIService)(implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                    bbsiService: BBSIService)
+                                    (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport with Enumerable.Implicits {
 
   val form = formProvider()
 

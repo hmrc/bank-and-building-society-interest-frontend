@@ -98,3 +98,6 @@ decision.error.selectOption=There’s been a problem
 decision.update=I want to update the estimated amount of interest
 decision.close=This account is now closed
 decision.remove=I never had this account
+
+removeAccount.title = removeAccount
+removeAccount.heading = removeAccount
