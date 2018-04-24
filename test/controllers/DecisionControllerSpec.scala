@@ -38,7 +38,7 @@ import scala.concurrent.Future
 
 class DecisionControllerSpec extends ControllerSpecBase {
 
-  def onwardRoute = routes.IndexController.onPageLoad()
+  def onwardRoute = routes.RemoveAccountController.onPageLoad()
 
   val formProvider = new DecisionFormProvider()
   val form = formProvider()
@@ -52,9 +52,19 @@ class DecisionControllerSpec extends ControllerSpecBase {
     0,
     Some("source"))
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, bbsiService: BBSIService) =
-    new DecisionController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(desiredRoute = onwardRoute), FakeAuthAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, bbsiService)
+  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap,
+                 bbsiService: BBSIService,
+                 fakeNavigator: FakeNavigator = new FakeNavigator(desiredRoute = onwardRoute)) =
+    new DecisionController(
+      frontendAppConfig,
+      messagesApi,
+      FakeDataCacheConnector,
+      fakeNavigator,
+      FakeAuthAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl,
+      formProvider,
+      bbsiService)
 
   def viewAsString(form: Form[_] = form) = decision(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer).toString
 
