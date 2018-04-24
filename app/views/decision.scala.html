@@ -22,12 +22,12 @@
 @import uk.gov.hmrc.renderer.TemplateRenderer
 @import includes._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, bankName: String)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, viewModel: viewmodels.DecisionViewModel)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
 
 @header = @{
     ptaHeader(
         displayBackLink = true,
-        mainHeadingText = messages("decision.heading", bankName),
+        mainHeadingText = messages("decision.heading", viewModel.bankName),
         preHeadingText = messages("decision.preHeading")
     )
 }
@@ -39,7 +39,7 @@
     bodyClasses = None
 ) {
 
-    @helpers.form(action = DecisionController.onSubmit(mode), 'autoComplete -> "off") {
+    @helpers.form(action = DecisionController.onSubmit(mode, viewModel.id), 'autoComplete -> "off") {
 
         @components.error_summary(form.errors)
 

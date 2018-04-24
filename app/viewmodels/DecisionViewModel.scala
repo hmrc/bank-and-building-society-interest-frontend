@@ -14,17 +14,6 @@
  * limitations under the License.
  */
 
-package views
+package viewmodels
 
-import views.behaviours.ViewBehaviours
-import views.html.session_expired
-
-class SessionExpiredViewSpec extends ViewBehaviours {
-
-  def view = () => session_expired(frontendAppConfig)(fakeRequest, messages,templateRenderer)
-
-  "Session Expired view" must {
-
-    behave like normalPage(view, "session_expired", expectedGuidanceKeys = List("guidance"))
-  }
-}
+case class DecisionViewModel(id:Int, bankName:String)

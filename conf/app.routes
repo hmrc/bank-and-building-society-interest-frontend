@@ -15,6 +15,6 @@ GET        /unauthorised                                controllers.Unauthorised
 GET        /account-details                             controllers.AccountDetailsController.onPageLoad
 
 GET        /decision/:id               controllers.DecisionController.onPageLoad(mode: Mode = NormalMode, id: Int)
-POST       /decision              controllers.DecisionController.onSubmit(mode: Mode = NormalMode)
+POST       /decision/:id              controllers.DecisionController.onSubmit(mode: Mode = NormalMode, id: Int)
 GET        /changeDecision/:id               controllers.DecisionController.onPageLoad(mode: Mode = CheckMode, id: Int)
-POST       /changeDecision               controllers.DecisionController.onSubmit(mode: Mode = CheckMode)
+POST       /changeDecision/:id               controllers.DecisionController.onSubmit(mode: Mode = CheckMode, id: Int)

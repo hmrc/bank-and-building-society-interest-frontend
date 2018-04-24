@@ -27,7 +27,14 @@ import forms.DecisionFormProvider
 import identifiers.DecisionId
 import models.NormalMode
 import models.Decision
+import models.domain.BankAccount
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import service.BBSIService
+import viewmodels.DecisionViewModel
 import views.html.decision
+
+import scala.concurrent.Future
 
 class DecisionControllerSpec extends ControllerSpecBase {
 
@@ -35,45 +42,61 @@ class DecisionControllerSpec extends ControllerSpecBase {
 
   val formProvider = new DecisionFormProvider()
   val form = formProvider()
+  private val id = 1
+  private val bankName = "TestName"
+  val viewModel = DecisionViewModel(id, bankName)
+  val bankAccount = BankAccount(id,
+    Some("accountnumber"),
+    Some("sortcode"),
+    Some(bankName),
+    0,
+    Some("source"))
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
+  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, bbsiService: BBSIService) =
     new DecisionController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(desiredRoute = onwardRoute), FakeAuthAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider, bbsiService)
 
-  def viewAsString(form: Form[_] = form) = decision(frontendAppConfig, form, NormalMode)(fakeRequest, messages, templateRenderer).toString
+  def viewAsString(form: Form[_] = form) = decision(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer).toString
 
   "Decision Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(NormalMode)(fakeRequest)
+      val bbsiService = mock[BBSIService]
+      when(bbsiService.bankAccount(any(), any())(any())).thenReturn(Future.successful(Some(bankAccount)))
+      val result = controller(bbsiService = bbsiService).onPageLoad(NormalMode, id)(fakeRequest)
 
       status(result) mustBe OK
       contentAsString(result) mustBe viewAsString()
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
+      val bbsiService = mock[BBSIService]
       val validData = Map(DecisionId.toString -> JsString(Decision.values.head.toString))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      when(bbsiService.bankAccount(any(), any())(any())).thenReturn(Future.successful(Some(bankAccount)))
 
-      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(getRelevantData, bbsiService).onPageLoad(NormalMode, id)(fakeRequest)
 
       contentAsString(result) mustBe viewAsString(form.fill(Decision.values.head))
     }
 
     "redirect to the next page when valid data is submitted" in {
+      val bbsiService = mock[BBSIService]
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", Decision.options.head.value))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      val result = controller(bbsiService = bbsiService).onSubmit(NormalMode, id)(postRequest)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(onwardRoute.url)
     }
 
     "return a Bad Request and errors when invalid data is submitted" in {
+      val bbsiService = mock[BBSIService]
       val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
       val boundForm = form.bind(Map("value" -> "invalid value"))
 
-      val result = controller().onSubmit(NormalMode)(postRequest)
+      when(bbsiService.bankAccount(any(), any())(any())).thenReturn(Future.successful(Some(bankAccount)))
+      val result = controller(bbsiService = bbsiService).onSubmit(NormalMode, id)(postRequest)
 
       status(result) mustBe BAD_REQUEST
       contentAsString(result) mustBe viewAsString(boundForm)

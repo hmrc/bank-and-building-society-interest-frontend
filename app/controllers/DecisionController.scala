@@ -17,7 +17,6 @@
 package controllers
 
 import javax.inject.Inject
-
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -33,6 +32,7 @@ import service.BBSIService
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.renderer.TemplateRenderer
 import utils.{Enumerable, Navigator, UserAnswers}
+import viewmodels.DecisionViewModel
 import views.html.decision
 
 import scala.concurrent.Future
@@ -52,22 +52,35 @@ class DecisionController @Inject()(
 
   def onPageLoad(mode: Mode, id: Int) = (authenticate andThen getData).async {
     implicit request =>
-      bbsiService.bankAccount(Nino(request.externalId), id) map {
+
+      val nino = request.externalId
+
+      bbsiService.bankAccount(Nino(nino), id) map {
         case Some(BankAccount(_, Some(_), Some(_), Some(bankName), _, _)) =>
+          val viewModel = DecisionViewModel(id, bankName)
           val preparedForm = request.userAnswers.flatMap(_.decision) match {
             case None => form
             case Some(value) => form.fill(value)
           }
-          Ok(decision(appConfig, preparedForm, mode, bankName))
+          Ok(decision(appConfig, preparedForm, mode, viewModel))
+        case Some(_) => throw new RuntimeException(s"Bank account does not contain name, number or sortcode for nino: [${nino}] and id: [$id]")
         case _ => NotFound
       }
   }
 
-  def onSubmit(mode: Mode) = (authenticate andThen getData).async {
+  def onSubmit(mode: Mode, id: Int) = (authenticate andThen getData).async {
     implicit request =>
+      val nino = request.externalId
       form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(decision(appConfig, formWithErrors, mode, "Todo"))),
+        (formWithErrors: Form[_]) => {
+          bbsiService.bankAccount(Nino(nino), id) flatMap {
+            case Some(BankAccount(_, Some(_), Some(_), Some(bankName), _, _)) =>
+              val viewModel = DecisionViewModel(id, bankName)
+              Future.successful(BadRequest(decision(appConfig, formWithErrors, mode, viewModel)))
+            case Some(_) => throw new RuntimeException(s"Bank account does not contain name, number or sortcode for nino: [${nino}] and id: [$id]")
+            case _ => Future.successful(NotFound)
+          }
+        },
         (value) =>
           dataCacheConnector.save[Decision](request.externalId, DecisionId.toString, value).map(cacheMap =>
             Redirect(navigator.nextPage(DecisionId, mode)(new UserAnswers(cacheMap))))

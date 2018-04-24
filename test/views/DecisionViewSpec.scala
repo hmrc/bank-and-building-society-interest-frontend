@@ -16,10 +16,10 @@
 
 package views
 
-import play.api.data.Form
 import forms.DecisionFormProvider
-import models.NormalMode
-import models.Decision
+import models.{Decision, NormalMode}
+import play.api.data.Form
+import viewmodels.DecisionViewModel
 import views.behaviours.ViewBehaviours
 import views.html.decision
 
@@ -29,12 +29,16 @@ class DecisionViewSpec extends ViewBehaviours {
 
   val form = new DecisionFormProvider()()
 
-  def createView = () => decision(frontendAppConfig, form, NormalMode)(fakeRequest, messages, templateRenderer)
+  private val id = 1
+  private val bankName = "TestName"
+  val viewModel = DecisionViewModel(id, bankName)
 
-  def createViewUsingForm = (form: Form[_]) => decision(frontendAppConfig, form, NormalMode)(fakeRequest, messages, templateRenderer)
+  def createView = () => decision(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer)
+
+  def createViewUsingForm = (form: Form[_]) => decision(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer)
 
   "Decision view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix, heading = Some(messages("decision.heading",bankName)))
   }
 
   "Decision view" when {

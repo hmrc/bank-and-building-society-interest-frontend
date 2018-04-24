@@ -67,7 +67,7 @@ class AccountDetailsViewSpec extends BBSIViewSpec {
       doc(view) must haveElementAtPathWithText(".cya-answer", messages("account.table.amount") + " " + "£456.78")
 
       doc(view) must haveElementAtPathWithText(".cya-change a span", messages("account.updateOrRemoveLink"))
-      doc(view) must haveLinkWithUrlWithID("bbsiAccountDecision1", controllers.routes.DecisionController.onPageLoad(NormalMode).url)
+      doc(view) must haveLinkWithUrlWithID("bbsiAccountDecision1", controllers.routes.DecisionController.onPageLoad(NormalMode, id).url)
 
     }
 
@@ -101,6 +101,7 @@ class AccountDetailsViewSpec extends BBSIViewSpec {
   private val bankName2 = "test bank name 2"
   private val grossInterest2 = 456.78
   private val source2 = "Customer2"
+  private val id = 1
 
   private val accountNumber3 = "*******0000"
   private val sortCode3 = "000000"
