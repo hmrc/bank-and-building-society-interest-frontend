@@ -101,3 +101,5 @@ decision.remove=I never had this account
 
 removeAccount.title = removeAccount
 removeAccount.heading = removeAccount
+
+cancel = Cancel

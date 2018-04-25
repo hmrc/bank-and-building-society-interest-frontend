@@ -27,6 +27,8 @@ class RemoveAccountViewSpec extends ViewBehaviours {
 
   "RemoveAccount view" must {
     behave like normalPage(createView, messageKeyPrefix)
+    behave like pageWithBackLink(createView)
+    behave like pageWithPreHeading(createView, messages("removeAccount.preHeading"), Some(messages("This section is")))
   }
 
 
