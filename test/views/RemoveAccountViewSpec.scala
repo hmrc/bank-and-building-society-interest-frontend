@@ -28,4 +28,6 @@ class RemoveAccountViewSpec extends ViewBehaviours {
   "RemoveAccount view" must {
     behave like normalPage(createView, messageKeyPrefix)
   }
+
+
 }

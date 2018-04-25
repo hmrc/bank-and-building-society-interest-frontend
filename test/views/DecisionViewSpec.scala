@@ -32,6 +32,7 @@ class DecisionViewSpec extends ViewBehaviours {
   private val id = 1
   private val bankName = "TestName"
   val viewModel = DecisionViewModel(id, bankName)
+  val thisSectionIs = Some("This section is")
 
   def createView = () => decision(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer)
 
@@ -39,6 +40,8 @@ class DecisionViewSpec extends ViewBehaviours {
 
   "Decision view" must {
     behave like normalPage(createView, messageKeyPrefix, heading = Some(messages("decision.heading",bankName)))
+    behave like pageWithBackLink(createView)
+    behave like pageWithPreHeading(createView, messages("decision.preHeading"), thisSectionIs)
   }
 
   "Decision view" when {
@@ -62,9 +65,6 @@ class DecisionViewSpec extends ViewBehaviours {
           }
         }
       }
-    }
-    "Decision view" must {
-      behave like pageWithBackLink(createView)
     }
   }
 }

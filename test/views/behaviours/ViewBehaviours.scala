@@ -25,6 +25,7 @@ trait ViewBehaviours extends ViewSpecBase {
                  messageKeyPrefix: String,
                  title: Option[String] = None,
                  heading: Option[String] =  None,
+                 preHeading: Option[String] = None,
                  expectedGuidanceKeys: Seq[String] = Seq.empty) = {
 
     "behave like a normal page" when {
@@ -58,4 +59,18 @@ trait ViewBehaviours extends ViewSpecBase {
       }
     }
   }
+
+  def pageWithPreHeading(view: () => HtmlFormat.Appendable,
+                         preHeadingText: String,
+                         preHeadingAnnouncementText: Option[String] = None): Unit = {
+    "have an accessible pre heading" in {
+      val doc = asDocument(view())
+      if(preHeadingAnnouncementText.isDefined){
+        assertEqualsValueText(doc, "header>p", s"${preHeadingAnnouncementText.get} ${preHeadingText}")
+      } else {
+        assertEqualsValueText(doc, "header>p", preHeadingText)
+      }
+    }
+  }
+
 }

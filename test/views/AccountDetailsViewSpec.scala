@@ -44,6 +44,7 @@ class AccountDetailsViewSpec extends BBSIViewSpec {
   "bbsi accounts view" should {
     behave like pageWithTitle(messages("accountDetails.heading"))
     behave like pageWithBackLink
+    behave like pageWithCombinedHeader(messages("account.preHeading"),messages("accountDetails.heading"))
 
     "display heading" in {
       doc(view) must haveElementAtPathWithText("h2", messages("account.table.heading", TaxYear().year.toString, TaxYear().next.year.toString))
