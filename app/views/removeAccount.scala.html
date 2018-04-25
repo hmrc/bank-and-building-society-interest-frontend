@@ -18,7 +18,9 @@
 @import uk.gov.hmrc.renderer.TemplateRenderer
 @import components._
 
-@(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer))
+@(appConfig: FrontendAppConfig,
+  bankName: String)
+(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer))
 
 @header = @{
     ptaHeader(
@@ -33,6 +35,10 @@
     pageHeader = Some(header),
     appConfig = appConfig,
     bodyClasses = None) {
+
+    <p>@Messages("removeAccount.description", bankName)</p>
+
+    @cancel_link(url=controllers.routes.AccountDetailsController.onPageLoad)
+
 }
 
-@cancel_link(url=controllers.routes.AccountDetailsController.onPageLoad)

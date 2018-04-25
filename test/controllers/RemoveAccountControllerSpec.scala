@@ -17,10 +17,28 @@
 package controllers
 
 import controllers.actions._
+import models.NormalMode
+import models.domain.BankAccount
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
 import play.api.test.Helpers._
+import service.BBSIService
+import viewmodels.BankAccountViewModel
 import views.html.removeAccount
 
+import scala.concurrent.Future
+
 class RemoveAccountControllerSpec extends ControllerSpecBase {
+
+  private val bankName = "TestName"
+  private val id = 1
+  val viewModel = BankAccountViewModel(id, bankName)
+  val bankAccount = BankAccount(id,
+    Some("accountnumber"),
+    Some("sortcode"),
+    Some(bankName),
+    0,
+    Some("source"))
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new RemoveAccountController(frontendAppConfig, messagesApi, FakeAuthAction,
@@ -35,6 +53,12 @@ class RemoveAccountControllerSpec extends ControllerSpecBase {
 
       status(result) mustBe OK
       contentAsString(result) mustBe viewAsString()
+    }
+
+    "retrieve the bank name correctly" in {
+      val bbsiService = mock[BBSIService]
+      when(bbsiService.bankAccount(any(), any())(any())).thenReturn(Future.successful(Some(bankAccount)))
+      val result = controller(bbsiService).onSubmit(NormalMode, id)
     }
   }
 }

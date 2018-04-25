@@ -22,6 +22,7 @@ import views.html.removeAccount
 class RemoveAccountViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "removeAccount"
+  val bankName = "bank name"
 
   def createView = () => removeAccount(frontendAppConfig)(fakeRequest, messages, templateRenderer)
 
@@ -30,6 +31,7 @@ class RemoveAccountViewSpec extends ViewBehaviours {
     behave like pageWithBackLink(createView)
     behave like pageWithPreHeading(createView, messages("removeAccount.preHeading"), Some(messages("This section is")))
     behave like pageWithCancelLink(createView)
+    behave like pageWithText(createView, messages("removeAccount.description", bankName))
   }
 
 

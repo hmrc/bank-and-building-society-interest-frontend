@@ -16,4 +16,4 @@
 
 package viewmodels
 
-case class DecisionViewModel(id:Int, bankName:String)
+case class BankAccountViewModel(id:Int, bankName:String)

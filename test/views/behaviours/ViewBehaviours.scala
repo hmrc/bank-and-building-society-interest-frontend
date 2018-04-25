@@ -82,4 +82,11 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def pageWithText(view: () => HtmlFormat.Appendable, messageKey: String) = {
+    "render a paragraph with the correct content" in {
+      val doc = asDocument(view())
+      assertContainsText(doc, messages(messageKey))
+    }
+  }
+
 }

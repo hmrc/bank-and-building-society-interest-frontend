@@ -99,7 +99,10 @@ decision.update=I want to update the estimated amount of interest
 decision.close=This account is now closed
 decision.remove=I never had this account
 
-removeAccount.title = removeAccount
-removeAccount.heading = removeAccount
+removeAccount.title = You never had this account with {0}
+removeAccount.customGaTitle = You never had this account
+removeAccount.heading = You never had this account with {0}
+removeAccount.preHeading = Remove account
+removeAccount.description= Sending this update will remove {0} account from your record.
 
 cancel = Cancel

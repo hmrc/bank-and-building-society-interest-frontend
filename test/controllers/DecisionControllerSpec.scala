@@ -31,7 +31,7 @@ import models.domain.BankAccount
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import service.BBSIService
-import viewmodels.DecisionViewModel
+import viewmodels.BankAccountViewModel
 import views.html.decision
 
 import scala.concurrent.Future
@@ -44,7 +44,7 @@ class DecisionControllerSpec extends ControllerSpecBase {
   val form = formProvider()
   private val id = 1
   private val bankName = "TestName"
-  val viewModel = DecisionViewModel(id, bankName)
+  val viewModel = BankAccountViewModel(id, bankName)
   val bankAccount = BankAccount(id,
     Some("accountnumber"),
     Some("sortcode"),

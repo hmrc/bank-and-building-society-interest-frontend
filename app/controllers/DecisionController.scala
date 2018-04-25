@@ -32,7 +32,7 @@ import service.BBSIService
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.renderer.TemplateRenderer
 import utils.{Enumerable, Navigator, UserAnswers}
-import viewmodels.DecisionViewModel
+import viewmodels.BankAccountViewModel
 import views.html.decision
 
 import scala.concurrent.Future
@@ -58,7 +58,7 @@ class DecisionController @Inject()(
 
       bbsiService.bankAccount(Nino(nino), id) map {
         case Some(BankAccount(_, Some(_), Some(_), Some(bankName), _, _)) =>
-          val viewModel = DecisionViewModel(id, bankName)
+          val viewModel = BankAccountViewModel(id, bankName)
           val preparedForm = request.userAnswers.flatMap(_.decision) match {
             case None => form
             case Some(value) => form.fill(value)
@@ -76,7 +76,7 @@ class DecisionController @Inject()(
         (formWithErrors: Form[_]) => {
           bbsiService.bankAccount(Nino(nino), id) flatMap {
             case Some(BankAccount(_, Some(_), Some(_), Some(bankName), _, _)) =>
-              val viewModel = DecisionViewModel(id, bankName)
+              val viewModel = BankAccountViewModel(id, bankName)
               Future.successful(BadRequest(decision(appConfig, formWithErrors, mode, viewModel)))
             case Some(_) => throw new RuntimeException(s"Bank account does not contain name, number or sortcode for nino: [${nino}] and id: [$id]")
             case _ => Future.successful(NotFound)

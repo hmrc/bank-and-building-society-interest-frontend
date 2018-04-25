@@ -20,7 +20,7 @@ import forms.DecisionFormProvider
 import models.{Decision, NormalMode}
 import org.jsoup.nodes.Document
 import play.api.data.Form
-import viewmodels.DecisionViewModel
+import viewmodels.BankAccountViewModel
 import views.behaviours.ViewBehaviours
 import views.html.decision
 
@@ -32,7 +32,7 @@ class DecisionViewSpec extends ViewBehaviours {
 
   private val id = 1
   private val bankName = "TestName"
-  val viewModel = DecisionViewModel(id, bankName)
+  val viewModel = BankAccountViewModel(id, bankName)
   val thisSectionIs = Some("This section is")
 
   def createView = () => decision(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer)

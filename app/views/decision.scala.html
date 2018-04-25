@@ -22,7 +22,7 @@
 @import uk.gov.hmrc.renderer.TemplateRenderer
 @import components._
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, viewModel: viewmodels.DecisionViewModel)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, viewModel: viewmodels.BankAccountViewModel)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
 
 @header = @{
     ptaHeader(
