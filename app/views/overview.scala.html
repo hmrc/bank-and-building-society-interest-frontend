@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import includes._
+@import components._
 @import uk.gov.hmrc.urls.Link
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.time.TaxYearResolver._
@@ -75,7 +75,7 @@
       </div>
     </div>
 
-    @includes.link(
+    @components.link(
     id=Some("checkYourAccounts"),
     copy=Messages("checkYouAccount"),
     url = controllers.routes.AccountDetailsController.onPageLoad().url.toString,

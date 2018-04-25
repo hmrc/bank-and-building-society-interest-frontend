@@ -16,7 +16,7 @@
 
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.renderer.TemplateRenderer
-@import includes._
+@import components._
 
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer))
 
@@ -34,3 +34,5 @@
     appConfig = appConfig,
     bodyClasses = None) {
 }
+
+@cancel_link(url=controllers.routes.AccountDetailsController.onPageLoad)

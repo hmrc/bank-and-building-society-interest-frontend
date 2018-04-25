@@ -73,4 +73,13 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def pageWithCancelLink(view: () => HtmlFormat.Appendable) = {
+    "render a cancel link with the correct url" in {
+      val cancelId = "cancelLink"
+      val doc = asDocument(view())
+      assertRenderedById(doc, cancelId)
+      assert(doc.getElementById(cancelId).attr("href") == controllers.routes.AccountDetailsController.onPageLoad().url)
+    }
+  }
+
 }

@@ -18,6 +18,7 @@ package views
 
 import forms.DecisionFormProvider
 import models.{Decision, NormalMode}
+import org.jsoup.nodes.Document
 import play.api.data.Form
 import viewmodels.DecisionViewModel
 import views.behaviours.ViewBehaviours
@@ -42,7 +43,10 @@ class DecisionViewSpec extends ViewBehaviours {
     behave like normalPage(createView, messageKeyPrefix, heading = Some(messages("decision.heading",bankName)))
     behave like pageWithBackLink(createView)
     behave like pageWithPreHeading(createView, messages("decision.preHeading"), thisSectionIs)
+    behave like pageWithCancelLink(createView)
   }
+
+
 
   "Decision view" when {
     "rendered" must {

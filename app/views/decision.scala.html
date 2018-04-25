@@ -20,7 +20,7 @@
 @import models.Decision
 @import models.Mode
 @import uk.gov.hmrc.renderer.TemplateRenderer
-@import includes._
+@import components._
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, viewModel: viewmodels.DecisionViewModel)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
 
@@ -53,5 +53,5 @@
         @components.submit_button()
     }
 
-    @cancelLink(url=controllers.routes.AccountDetailsController.onPageLoad, gaEventAction = None)
+    @cancel_link(url=controllers.routes.AccountDetailsController.onPageLoad)
 }
