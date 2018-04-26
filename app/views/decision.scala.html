@@ -50,7 +50,7 @@
             inputs = Decision.options.toSeq
         )
 
-        @components.submit_button()
+        @components.submit_button(messages("site.save_and_continue"))
     }
 
     @cancel_link(url=controllers.routes.AccountDetailsController.onPageLoad)

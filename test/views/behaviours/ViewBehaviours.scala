@@ -89,4 +89,20 @@ trait ViewBehaviours extends ViewSpecBase {
     }
   }
 
+  def pageWithSubmitButton(view: () => HtmlFormat.Appendable, submitUrl: String, buttonText: String): Unit = {
+    val doc = asDocument(view())
+    val submit = "submit"
+
+    "have a form with a submit button" in {
+      assertRenderedById(doc, submit)
+    }
+
+    "have a form with a submit button of input labelled as buttonText" in {
+      assert(doc.getElementById(submit).text() == buttonText)
+    }
+
+    "have a form with the correct submit url" in {
+      assert(doc.getElementsByTag("form").attr("action") == submitUrl)
+    }
+  }
 }

@@ -20,3 +20,4 @@ GET        /changeDecision/:id                          controllers.DecisionCont
 POST       /changeDecision/:id                          controllers.DecisionController.onSubmit(mode: Mode = CheckMode, id: Int)
 
 GET        /removeAccount                               controllers.RemoveAccountController.onPageLoad()
+POST       /removeAccount                               controllers.RemoveAccountController.onSubmit()

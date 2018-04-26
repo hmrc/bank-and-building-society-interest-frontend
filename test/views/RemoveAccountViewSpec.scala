@@ -35,7 +35,6 @@ class RemoveAccountViewSpec extends ViewBehaviours {
     behave like pageWithPreHeading(createView, messages("removeAccount.preHeading"), Some(messages("This section is")))
     behave like pageWithCancelLink(createView)
     behave like pageWithText(createView, messages("removeAccount.description", viewModel.bankName))
+    behave like pageWithSubmitButton(createView, controllers.routes.RemoveAccountController.onSubmit().url, messages("confirmAndSend"))
   }
-
-
 }

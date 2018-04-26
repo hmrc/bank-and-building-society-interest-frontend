@@ -35,13 +35,17 @@ class RemoveAccountController @Inject()(appConfig: FrontendAppConfig,
                                          requireData: DataRequiredAction)
                                          (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
 
-  def onPageLoad = (authenticate andThen getData andThen requireData) {
+  def onPageLoad = (authenticate andThen getData andThen requireData).async {
     implicit request =>
       val nino = request.externalId
 
       request.userAnswers.cacheMap.getEntry[BankAccountViewModel]("BankAccount") match {
-        case Some(bankAccountViewModel) => Ok(removeAccount(appConfig, bankAccountViewModel))
-        case _ => NotFound
+        case Some(bankAccountViewModel) => Future.successful(Ok(removeAccount(appConfig, bankAccountViewModel)))
+        case _ => Future.successful(NotFound)
       }
+  }
+
+  def onSubmit = (authenticate).async {
+    implicit request => ???
   }
 }

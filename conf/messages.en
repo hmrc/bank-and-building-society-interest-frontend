@@ -106,3 +106,4 @@ removeAccount.preHeading = Remove account
 removeAccount.description= Sending this update will remove {0} account from your record.
 
 cancel = Cancel
+confirmAndSend=Confirm and Send
