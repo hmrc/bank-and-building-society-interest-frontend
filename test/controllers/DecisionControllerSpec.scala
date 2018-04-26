@@ -17,10 +17,10 @@
 package controllers
 
 import play.api.data.Form
-import play.api.libs.json.JsString
+import play.api.libs.json.{JsString, JsValue, Json}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import utils.FakeNavigator
-import connectors.FakeDataCacheConnector
+import connectors.{DataCacheConnector, FakeDataCacheConnector}
 import controllers.actions._
 import play.api.test.Helpers._
 import forms.DecisionFormProvider
@@ -29,7 +29,7 @@ import models.NormalMode
 import models.Decision
 import models.domain.BankAccount
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{verify, times, when}
 import service.BBSIService
 import viewmodels.BankAccountViewModel
 import views.html.decision
@@ -54,11 +54,12 @@ class DecisionControllerSpec extends ControllerSpecBase {
 
   def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap,
                  bbsiService: BBSIService,
-                 fakeNavigator: FakeNavigator = new FakeNavigator(desiredRoute = onwardRoute)) =
+                 fakeNavigator: FakeNavigator = new FakeNavigator(desiredRoute = onwardRoute),
+                 dataCacheConnector: DataCacheConnector = FakeDataCacheConnector) =
     new DecisionController(
       frontendAppConfig,
       messagesApi,
-      FakeDataCacheConnector,
+      dataCacheConnector,
       fakeNavigator,
       FakeAuthAction,
       dataRetrievalAction,
@@ -72,11 +73,16 @@ class DecisionControllerSpec extends ControllerSpecBase {
 
     "return OK and the correct view for a GET" in {
       val bbsiService = mock[BBSIService]
+      val mockDataCacheConnector = mock[DataCacheConnector]
+      val bankAccountViewModel = BankAccountViewModel(id, bankName)
+      val validData = Map("BankAccount" -> Json.toJson(bankAccountViewModel))
       when(bbsiService.bankAccount(any(), any())(any())).thenReturn(Future.successful(Some(bankAccount)))
-      val result = controller(bbsiService = bbsiService).onPageLoad(NormalMode, id)(fakeRequest)
+      when(mockDataCacheConnector.save(any(), any(), any())(any())).thenReturn(Future.successful(CacheMap(cacheMapId, validData)))
 
+      val result = controller(bbsiService = bbsiService, dataCacheConnector = mockDataCacheConnector).onPageLoad(NormalMode, id)(fakeRequest)
       status(result) mustBe OK
       contentAsString(result) mustBe viewAsString()
+      verify(mockDataCacheConnector, times(1)).save(any(), any(), any())(any())
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {

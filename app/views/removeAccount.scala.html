@@ -19,8 +19,7 @@
 @import components._
 
 @(appConfig: FrontendAppConfig,
-  bankName: String)
-(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer))
+  bankName: String)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer))
 
 @header = @{
     ptaHeader(

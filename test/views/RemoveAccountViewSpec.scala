@@ -24,7 +24,7 @@ class RemoveAccountViewSpec extends ViewBehaviours {
   val messageKeyPrefix = "removeAccount"
   val bankName = "bank name"
 
-  def createView = () => removeAccount(frontendAppConfig)(fakeRequest, messages, templateRenderer)
+  def createView = () => removeAccount(frontendAppConfig, bankName)(fakeRequest, messages, templateRenderer)
 
   "RemoveAccount view" must {
     behave like normalPage(createView, messageKeyPrefix)

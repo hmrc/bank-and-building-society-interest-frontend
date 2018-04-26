@@ -16,4 +16,10 @@
 
 package viewmodels
 
+import play.api.libs.json.Json
+
 case class BankAccountViewModel(id:Int, bankName:String)
+
+object BankAccountViewModel {
+  implicit val formats = Json.format[BankAccountViewModel]
+}

@@ -56,16 +56,20 @@ class DecisionController @Inject()(
 
       val nino = request.externalId
 
-      bbsiService.bankAccount(Nino(nino), id) map {
+      bbsiService.bankAccount(Nino(nino), id) flatMap {
         case Some(BankAccount(_, Some(_), Some(_), Some(bankName), _, _)) =>
           val viewModel = BankAccountViewModel(id, bankName)
-          val preparedForm = request.userAnswers.flatMap(_.decision) match {
-            case None => form
-            case Some(value) => form.fill(value)
+
+          dataCacheConnector.save("cacheId","BankAccount", viewModel) map { _ =>
+            val preparedForm = request.userAnswers.flatMap(_.decision) match {
+              case None => form
+              case Some(value) => form.fill(value)
+            }
+            Ok(decision(appConfig, preparedForm, mode, viewModel))
           }
-          Ok(decision(appConfig, preparedForm, mode, viewModel))
+
         case Some(_) => throw new RuntimeException(s"Bank account does not contain name, number or sortcode for nino: [${nino}] and id: [$id]")
-        case _ => NotFound
+        case _ => Future.successful(NotFound)
       }
   }
 

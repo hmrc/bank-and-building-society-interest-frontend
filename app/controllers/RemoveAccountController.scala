@@ -36,6 +36,6 @@ class RemoveAccountController @Inject()(appConfig: FrontendAppConfig,
 
   def onPageLoad = (authenticate andThen getData andThen requireData) {
     implicit request =>
-      Ok(removeAccount(appConfig))
+      Ok(removeAccount(appConfig, ""))
   }
 }
