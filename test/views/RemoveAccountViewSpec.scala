@@ -16,22 +16,25 @@
 
 package views
 
+import viewmodels.BankAccountViewModel
 import views.behaviours.ViewBehaviours
 import views.html.removeAccount
 
 class RemoveAccountViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "removeAccount"
-  val bankName = "bank name"
+  private val id = 1
+  private val bankName = "testName"
+  val viewModel = BankAccountViewModel(id, bankName)
 
-  def createView = () => removeAccount(frontendAppConfig, bankName)(fakeRequest, messages, templateRenderer)
+  def createView = () => removeAccount(frontendAppConfig, viewModel)(fakeRequest, messages, templateRenderer)
 
   "RemoveAccount view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    behave like normalPage(createView, messageKeyPrefix, heading = Some(messages("removeAccount.heading",bankName)))
     behave like pageWithBackLink(createView)
     behave like pageWithPreHeading(createView, messages("removeAccount.preHeading"), Some(messages("This section is")))
     behave like pageWithCancelLink(createView)
-    behave like pageWithText(createView, messages("removeAccount.description", bankName))
+    behave like pageWithText(createView, messages("removeAccount.description", viewModel.bankName))
   }
 
 

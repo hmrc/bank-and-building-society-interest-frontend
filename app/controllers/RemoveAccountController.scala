@@ -23,6 +23,7 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import controllers.actions._
 import config.FrontendAppConfig
 import uk.gov.hmrc.renderer.TemplateRenderer
+import viewmodels.BankAccountViewModel
 import views.html.removeAccount
 
 import scala.concurrent.Future
@@ -36,6 +37,11 @@ class RemoveAccountController @Inject()(appConfig: FrontendAppConfig,
 
   def onPageLoad = (authenticate andThen getData andThen requireData) {
     implicit request =>
-      Ok(removeAccount(appConfig, ""))
+      val nino = request.externalId
+
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel]("BankAccount") match {
+        case Some(bankAccountViewModel) => Ok(removeAccount(appConfig, bankAccountViewModel))
+        case _ => NotFound
+      }
   }
 }

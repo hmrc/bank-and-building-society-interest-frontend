@@ -16,13 +16,17 @@
 
 package controllers
 
+import connectors.DataCacheConnector
 import controllers.actions._
 import models.NormalMode
 import models.domain.BankAccount
+import models.requests.{DataRequest, OptionalDataRequest}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
+import play.api.libs.json.Json
 import play.api.test.Helpers._
 import service.BBSIService
+import uk.gov.hmrc.http.cache.client.CacheMap
 import viewmodels.BankAccountViewModel
 import views.html.removeAccount
 
@@ -44,22 +48,24 @@ class RemoveAccountControllerSpec extends ControllerSpecBase {
     new RemoveAccountController(frontendAppConfig, messagesApi, FakeAuthAction,
       dataRetrievalAction, new DataRequiredActionImpl)
 
-  def viewAsString() = removeAccount(frontendAppConfig, "")(fakeRequest, messages, templateRenderer).toString
+  def viewAsString() = removeAccount(frontendAppConfig, viewModel)(fakeRequest, messages, templateRenderer).toString
 
   "RemoveAccount Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val result = controller().onPageLoad(fakeRequest)
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map("BankAccount" -> Json.toJson(viewModel)))))
+      val result = controller(dataRetrievalAction = dataRetrievalAction).onPageLoad(fakeRequest)
 
       status(result) mustBe OK
       contentAsString(result) mustBe viewAsString()
     }
 
-//    "retrieve the bank name correctly" in {
-//      val bbsiService = mock[BBSIService]
-//      when(bbsiService.bankAccount(any(), any())(any())).thenReturn(Future.successful(Some(bankAccount)))
-//      val result = controller(bbsiService).onSubmit(NormalMode, id)
-//    }
+    "return Not Found for a GET" in {
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map())))
+      val result = controller(dataRetrievalAction = dataRetrievalAction).onPageLoad(fakeRequest)
+
+      status(result) mustBe NOT_FOUND
+    }
   }
 }
 

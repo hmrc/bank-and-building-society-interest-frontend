@@ -73,6 +73,14 @@ class DecisionControllerSpec extends ControllerSpecBase {
 
     "return OK and the correct view for a GET" in {
       val bbsiService = mock[BBSIService]
+      when(bbsiService.bankAccount(any(), any())(any())).thenReturn(Future.successful(Some(bankAccount)))
+      val result = controller(bbsiService = bbsiService).onPageLoad(NormalMode, id)(fakeRequest)
+      status(result) mustBe OK
+      contentAsString(result) mustBe viewAsString()
+    }
+
+    "cache bank account details" in {
+      val bbsiService = mock[BBSIService]
       val mockDataCacheConnector = mock[DataCacheConnector]
       val bankAccountViewModel = BankAccountViewModel(id, bankName)
       val validData = Map("BankAccount" -> Json.toJson(bankAccountViewModel))
@@ -81,7 +89,6 @@ class DecisionControllerSpec extends ControllerSpecBase {
 
       val result = controller(bbsiService = bbsiService, dataCacheConnector = mockDataCacheConnector).onPageLoad(NormalMode, id)(fakeRequest)
       status(result) mustBe OK
-      contentAsString(result) mustBe viewAsString()
       verify(mockDataCacheConnector, times(1)).save(any(), any(), any())(any())
     }
 

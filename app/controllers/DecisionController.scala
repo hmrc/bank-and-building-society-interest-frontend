@@ -60,7 +60,7 @@ class DecisionController @Inject()(
         case Some(BankAccount(_, Some(_), Some(_), Some(bankName), _, _)) =>
           val viewModel = BankAccountViewModel(id, bankName)
 
-          dataCacheConnector.save("cacheId","BankAccount", viewModel) map { _ =>
+          dataCacheConnector.save(nino ,"BankAccount", viewModel) map { _ =>
             val preparedForm = request.userAnswers.flatMap(_.decision) match {
               case None => form
               case Some(value) => form.fill(value)

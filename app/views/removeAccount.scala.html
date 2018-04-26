@@ -19,12 +19,12 @@
 @import components._
 
 @(appConfig: FrontendAppConfig,
-  bankName: String)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer))
+  viewModel: viewmodels.BankAccountViewModel)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer))
 
 @header = @{
     ptaHeader(
         displayBackLink = true,
-        mainHeadingText = messages("removeAccount.heading"),
+        mainHeadingText = messages("removeAccount.heading", viewModel.bankName),
         preHeadingText = messages("removeAccount.preHeading")
     )
 }
@@ -35,7 +35,7 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    <p>@Messages("removeAccount.description", bankName)</p>
+    <p>@Messages("removeAccount.description", viewModel.bankName)</p>
 
     @cancel_link(url=controllers.routes.AccountDetailsController.onPageLoad)
 
