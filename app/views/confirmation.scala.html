@@ -20,17 +20,10 @@
 
 @(appConfig: FrontendAppConfig)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer))
 
-@header = @{
-    ptaHeader(
-        displayBackLink = true,
-        mainHeadingText = messages("confirmation.heading"),
-        preHeadingText = messages("confirmation.preHeading")
-    )
-}
 
 @main_template(
     title = messages("confirmation.title"),
-    pageHeader = Some(header),
+    pageHeader = None,
     appConfig = appConfig,
     bodyClasses = None) {
 }

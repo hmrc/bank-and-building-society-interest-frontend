@@ -26,6 +26,10 @@ class ConfirmationViewSpec extends ViewBehaviours {
   def createView = () => confirmation(frontendAppConfig)(fakeRequest, messages, templateRenderer)
 
   "Confirmation view" must {
-    behave like normalPage(createView, messageKeyPrefix)
+    "renders correct title" in {
+      val doc = asDocument(createView())
+      assert(doc.title() == messages("confirmation.title"))
+    }
+
   }
 }
