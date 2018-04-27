@@ -22,8 +22,26 @@
 
 
 @main_template(
-    title = messages("confirmation.title"),
+    title = messages("confirmation.heading"),
     pageHeader = None,
     appConfig = appConfig,
     bodyClasses = None) {
+
+    <div class="grid-row">
+      <div class="column-two-thirds">
+
+        <div class="transaction-banner--complete">
+          <h1 class="transaction-banner__heading">
+            @messages("confirmation.heading")
+          </h1>
+        </div>
+
+        <section class="section soft--top">
+          <h2 class="heading-medium">@messages("confirmation.sectionOne.heading")</h2>
+          <p>@messages("confirmation.paraOne")</p>
+          <p>@messages("confirmation.paraTwo")</p>
+          <p>@messages("confirmation.paraThree")</p>
+        </section>
+      </div>
+    </div>
 }
