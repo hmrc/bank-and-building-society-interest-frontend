@@ -44,6 +44,11 @@ class ConfirmationViewSpec extends ViewBehaviours {
     "render third part of description" when {
       behave like pageWithText(createView, messages("confirmation.paraThree"))
     }
+    "display return button" in {
+      val doc = asDocument(createView())
+      assert(doc.getElementById("returnToAccounts").text() == messages("confirmation.back"))
+      assert(doc.getElementById("returnToAccounts").attr("href") == controllers.routes.AccountDetailsController.onPageLoad().url)
+    }
   }
 
 

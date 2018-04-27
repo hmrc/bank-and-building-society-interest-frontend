@@ -44,4 +44,11 @@
         </section>
       </div>
     </div>
+
+    @link(
+          id=Some("returnToAccounts"),
+          copy=Messages("confirmation.back"),
+          url = controllers.routes.AccountDetailsController.onPageLoad().url.toString,
+          isButton=true
+    )
 }
