@@ -22,6 +22,8 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import controllers.actions._
 import config.FrontendAppConfig
+import service.BBSIService
+import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.renderer.TemplateRenderer
 import viewmodels.BankAccountViewModel
 import views.html.removeAccount
@@ -32,20 +34,31 @@ class RemoveAccountController @Inject()(appConfig: FrontendAppConfig,
                                          override val messagesApi: MessagesApi,
                                          authenticate: AuthAction,
                                          getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction)
+                                         requireData: DataRequiredAction,
+                                         bbsiService: BBSIService)
                                          (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
 
   def onPageLoad = (authenticate andThen getData andThen requireData).async {
     implicit request =>
-      val nino = request.externalId
-
       request.userAnswers.cacheMap.getEntry[BankAccountViewModel]("BankAccount") match {
         case Some(bankAccountViewModel) => Future.successful(Ok(removeAccount(appConfig, bankAccountViewModel)))
         case _ => Future.successful(NotFound)
       }
   }
 
-  def onSubmit = (authenticate).async {
-    implicit request => ???
+  def onSubmit = (authenticate andThen getData andThen requireData).async {
+    implicit request =>
+      val nino = request.externalId
+
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel]("BankAccount") match {
+        case Some(bankAccountViewModel) => {
+          bbsiService.removeBankAccount(Nino(nino), bankAccountViewModel.id) map { _ =>
+            SeeOther("")
+          }
+        }
+        case _ => Future.successful(NotFound)
+      }
+
+
   }
 }

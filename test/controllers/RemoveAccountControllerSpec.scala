@@ -44,28 +44,48 @@ class RemoveAccountControllerSpec extends ControllerSpecBase {
     0,
     Some("source"))
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new RemoveAccountController(frontendAppConfig, messagesApi, FakeAuthAction,
-      dataRetrievalAction, new DataRequiredActionImpl)
+  def controller(
+                  dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap,
+                  bbsiService: BBSIService) =
+    new RemoveAccountController(
+      frontendAppConfig,
+      messagesApi,
+      FakeAuthAction,
+      dataRetrievalAction,
+      new DataRequiredActionImpl,
+      bbsiService)
 
   def viewAsString() = removeAccount(frontendAppConfig, viewModel)(fakeRequest, messages, templateRenderer).toString
 
   "RemoveAccount Controller" must {
 
     "return OK and the correct view for a GET" in {
+      val bbsiService = mock[BBSIService]
       val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map("BankAccount" -> Json.toJson(viewModel)))))
-      val result = controller(dataRetrievalAction = dataRetrievalAction).onPageLoad(fakeRequest)
+      val result = controller(dataRetrievalAction = dataRetrievalAction, bbsiService = bbsiService).onPageLoad(fakeRequest)
 
       status(result) mustBe OK
       contentAsString(result) mustBe viewAsString()
     }
 
     "return Not Found for a GET" in {
+      val bbsiService = mock[BBSIService]
       val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map())))
-      val result = controller(dataRetrievalAction = dataRetrievalAction).onPageLoad(fakeRequest)
+      val result = controller(dataRetrievalAction = dataRetrievalAction, bbsiService = bbsiService).onPageLoad(fakeRequest)
 
       status(result) mustBe NOT_FOUND
     }
+
+    "redirect to the next page when valid data is submitted" in {
+      val bbsiService = mock[BBSIService]
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map("BankAccount" -> Json.toJson(viewModel)))))
+      when(bbsiService.removeBankAccount(any(), any())(any())).thenReturn(Future.successful("envelopeId"))
+      val result = controller(dataRetrievalAction = dataRetrievalAction, bbsiService = bbsiService).onSubmit()(fakeRequest)
+
+      status(result) mustBe SEE_OTHER
+//      redirectLocation(result) mustBe Some(onwardRoute.url)
+    }
+
   }
 }
 
