@@ -83,7 +83,7 @@ class RemoveAccountControllerSpec extends ControllerSpecBase {
       val result = controller(dataRetrievalAction = dataRetrievalAction, bbsiService = bbsiService).onSubmit()(fakeRequest)
 
       status(result) mustBe SEE_OTHER
-//      redirectLocation(result) mustBe Some(onwardRoute.url)
+      redirectLocation(result) mustBe Some(controllers.routes.ConfirmationController.onPageLoad().url)
     }
 
   }

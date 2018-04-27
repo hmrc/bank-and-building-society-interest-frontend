@@ -107,3 +107,5 @@ removeAccount.description= Sending this update will remove {0} account from your
 
 cancel = Cancel
 confirmAndSend=Confirm and Send
+confirmation.title = confirmation
+confirmation.heading = confirmation

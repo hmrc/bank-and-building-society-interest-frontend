@@ -21,3 +21,5 @@ POST       /changeDecision/:id                          controllers.DecisionCont
 
 GET        /removeAccount                               controllers.RemoveAccountController.onPageLoad()
 POST       /removeAccount                               controllers.RemoveAccountController.onSubmit()
+
+GET        /confirmation                                controllers.ConfirmationController.onPageLoad()
