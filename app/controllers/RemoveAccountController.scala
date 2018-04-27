@@ -22,6 +22,7 @@ import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import controllers.actions._
 import config.FrontendAppConfig
+import connectors.DataCacheConnector
 import service.BBSIService
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.renderer.TemplateRenderer
@@ -32,6 +33,7 @@ import scala.concurrent.Future
 
 class RemoveAccountController @Inject()(appConfig: FrontendAppConfig,
                                          override val messagesApi: MessagesApi,
+                                         dataCacheConnector: DataCacheConnector,
                                          authenticate: AuthAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
@@ -52,8 +54,10 @@ class RemoveAccountController @Inject()(appConfig: FrontendAppConfig,
 
       request.userAnswers.cacheMap.getEntry[BankAccountViewModel]("BankAccount") match {
         case Some(bankAccountViewModel) => {
-          bbsiService.removeBankAccount(Nino(nino), bankAccountViewModel.id) map { _ =>
-            Redirect(controllers.routes.ConfirmationController.onPageLoad)
+          bbsiService.removeBankAccount(Nino(nino), bankAccountViewModel.id) flatMap { _ =>
+            dataCacheConnector.remove(nino, "BankAccount") map { _ =>
+              Redirect(controllers.routes.ConfirmationController.onPageLoad)
+            }
           }
         }
         case _ => Future.successful(NotFound)

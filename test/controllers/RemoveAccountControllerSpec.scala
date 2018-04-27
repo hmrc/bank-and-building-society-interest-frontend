@@ -16,13 +16,13 @@
 
 package controllers
 
-import connectors.DataCacheConnector
+import connectors.{DataCacheConnector, FakeDataCacheConnector}
 import controllers.actions._
 import models.NormalMode
 import models.domain.BankAccount
 import models.requests.{DataRequest, OptionalDataRequest}
 import org.mockito.Matchers.any
-import org.mockito.Mockito.when
+import org.mockito.Mockito.{times, verify, when}
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import service.BBSIService
@@ -46,10 +46,12 @@ class RemoveAccountControllerSpec extends ControllerSpecBase {
 
   def controller(
                   dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap,
-                  bbsiService: BBSIService) =
+                  bbsiService: BBSIService,
+                  dataCacheConnector: DataCacheConnector = FakeDataCacheConnector) =
     new RemoveAccountController(
       frontendAppConfig,
       messagesApi,
+      dataCacheConnector,
       FakeAuthAction,
       dataRetrievalAction,
       new DataRequiredActionImpl,
@@ -76,16 +78,30 @@ class RemoveAccountControllerSpec extends ControllerSpecBase {
       status(result) mustBe NOT_FOUND
     }
 
-    "redirect to the next page when valid data is submitted" in {
+    "onSubmit" when {
+
       val bbsiService = mock[BBSIService]
+      val mockDataCacheConnector = mock[DataCacheConnector]
       val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map("BankAccount" -> Json.toJson(viewModel)))))
+
       when(bbsiService.removeBankAccount(any(), any())(any())).thenReturn(Future.successful("envelopeId"))
-      val result = controller(dataRetrievalAction = dataRetrievalAction, bbsiService = bbsiService).onSubmit()(fakeRequest)
+      when(mockDataCacheConnector.remove(any(), any())).thenReturn(Future.successful(true))
 
-      status(result) mustBe SEE_OTHER
-      redirectLocation(result) mustBe Some(controllers.routes.ConfirmationController.onPageLoad().url)
+      val result = controller(
+        dataCacheConnector = mockDataCacheConnector,
+        dataRetrievalAction = dataRetrievalAction,
+        bbsiService = bbsiService).onSubmit()(fakeRequest)
+
+      "redirect to the next page when valid data is submitted" in {
+        status(result) mustBe SEE_OTHER
+        redirectLocation(result) mustBe Some(controllers.routes.ConfirmationController.onPageLoad().url)
+      }
+
+      "flush the cache on submit" in {
+        status(result) mustBe SEE_OTHER
+        verify(mockDataCacheConnector, times(1)).remove(any(), any())
+      }
     }
-
   }
 }
 
