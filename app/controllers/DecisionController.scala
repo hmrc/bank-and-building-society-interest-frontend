@@ -17,6 +17,7 @@
 package controllers
 
 import javax.inject.Inject
+
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -31,7 +32,7 @@ import models.domain.BankAccount
 import service.BBSIService
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.renderer.TemplateRenderer
-import utils.{Enumerable, Navigator, UserAnswers}
+import utils.{Enumerable, JourneyConstants, Navigator, UserAnswers}
 import viewmodels.BankAccountViewModel
 import views.html.decision
 
@@ -47,7 +48,7 @@ class DecisionController @Inject()(
                                     requireData: DataRequiredAction,
                                     formProvider: DecisionFormProvider,
                                     bbsiService: BBSIService)
-                                    (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport with Enumerable.Implicits {
+                                    (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport with JourneyConstants with Enumerable.Implicits {
 
   val form = formProvider()
 
@@ -60,7 +61,7 @@ class DecisionController @Inject()(
         case Some(BankAccount(_, Some(_), Some(_), Some(bankName), _, _)) =>
           val viewModel = BankAccountViewModel(id, bankName)
 
-          dataCacheConnector.save(nino ,"BankAccount", viewModel) map { _ =>
+          dataCacheConnector.save(nino, BankAccountDetailsKey, viewModel) map { _ =>
             val preparedForm = request.userAnswers.flatMap(_.decision) match {
               case None => form
               case Some(value) => form.fill(value)

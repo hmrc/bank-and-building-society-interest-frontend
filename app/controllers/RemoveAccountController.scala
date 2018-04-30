@@ -28,6 +28,8 @@ import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.renderer.TemplateRenderer
 import viewmodels.BankAccountViewModel
 import views.html.removeAccount
+import utils.JourneyConstants
+
 
 import scala.concurrent.Future
 
@@ -38,11 +40,11 @@ class RemoveAccountController @Inject()(appConfig: FrontendAppConfig,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          bbsiService: BBSIService)
-                                         (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
+                                         (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport with JourneyConstants {
 
   def onPageLoad = (authenticate andThen getData andThen requireData).async {
     implicit request =>
-      request.userAnswers.cacheMap.getEntry[BankAccountViewModel]("BankAccount") match {
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
         case Some(bankAccountViewModel) => Future.successful(Ok(removeAccount(appConfig, bankAccountViewModel)))
         case _ => Future.successful(NotFound)
       }
@@ -52,17 +54,15 @@ class RemoveAccountController @Inject()(appConfig: FrontendAppConfig,
     implicit request =>
       val nino = request.externalId
 
-      request.userAnswers.cacheMap.getEntry[BankAccountViewModel]("BankAccount") match {
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
         case Some(bankAccountViewModel) => {
           bbsiService.removeBankAccount(Nino(nino), bankAccountViewModel.id) flatMap { _ =>
-            dataCacheConnector.remove(nino, "BankAccount") map { _ =>
+            dataCacheConnector.remove(nino, BankAccountDetailsKey) map { _ =>
               Redirect(controllers.routes.ConfirmationController.onPageLoad)
             }
           }
         }
         case _ => Future.successful(NotFound)
       }
-
-
   }
 }

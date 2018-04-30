@@ -16,27 +16,26 @@
 
 package controllers
 
-import play.api.data.Form
-import play.api.libs.json.{JsString, JsValue, Json}
-import uk.gov.hmrc.http.cache.client.CacheMap
-import utils.FakeNavigator
 import connectors.{DataCacheConnector, FakeDataCacheConnector}
 import controllers.actions._
-import play.api.test.Helpers._
 import forms.DecisionFormProvider
 import identifiers.DecisionId
-import models.NormalMode
-import models.Decision
+import models.{Decision, NormalMode}
 import models.domain.BankAccount
 import org.mockito.Matchers.any
-import org.mockito.Mockito.{verify, times, when}
+import org.mockito.Mockito.{times, verify, when}
+import play.api.data.Form
+import play.api.libs.json.{JsString, Json}
+import play.api.test.Helpers._
 import service.BBSIService
+import uk.gov.hmrc.http.cache.client.CacheMap
+import utils.{FakeNavigator, JourneyConstants}
 import viewmodels.BankAccountViewModel
 import views.html.decision
 
 import scala.concurrent.Future
 
-class DecisionControllerSpec extends ControllerSpecBase {
+class DecisionControllerSpec extends ControllerSpecBase with JourneyConstants {
 
   def onwardRoute = routes.RemoveAccountController.onPageLoad()
 
@@ -83,7 +82,7 @@ class DecisionControllerSpec extends ControllerSpecBase {
       val bbsiService = mock[BBSIService]
       val mockDataCacheConnector = mock[DataCacheConnector]
       val bankAccountViewModel = BankAccountViewModel(id, bankName)
-      val validData = Map("BankAccount" -> Json.toJson(bankAccountViewModel))
+      val validData = Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel))
       when(bbsiService.bankAccount(any(), any())(any())).thenReturn(Future.successful(Some(bankAccount)))
       when(mockDataCacheConnector.save(any(), any(), any())(any())).thenReturn(Future.successful(CacheMap(cacheMapId, validData)))
 
@@ -126,3 +125,4 @@ class DecisionControllerSpec extends ControllerSpecBase {
     }
   }
 }
+

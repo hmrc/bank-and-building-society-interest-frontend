@@ -18,21 +18,20 @@ package controllers
 
 import connectors.{DataCacheConnector, FakeDataCacheConnector}
 import controllers.actions._
-import models.NormalMode
 import models.domain.BankAccount
-import models.requests.{DataRequest, OptionalDataRequest}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
 import play.api.libs.json.Json
 import play.api.test.Helpers._
 import service.BBSIService
 import uk.gov.hmrc.http.cache.client.CacheMap
+import utils.JourneyConstants
 import viewmodels.BankAccountViewModel
 import views.html.removeAccount
 
 import scala.concurrent.Future
 
-class RemoveAccountControllerSpec extends ControllerSpecBase {
+class RemoveAccountControllerSpec extends ControllerSpecBase with JourneyConstants{
 
   private val bankName = "TestName"
   private val id = 1
@@ -63,7 +62,7 @@ class RemoveAccountControllerSpec extends ControllerSpecBase {
 
     "return OK and the correct view for a GET" in {
       val bbsiService = mock[BBSIService]
-      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map("BankAccount" -> Json.toJson(viewModel)))))
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(viewModel)))))
       val result = controller(dataRetrievalAction = dataRetrievalAction, bbsiService = bbsiService).onPageLoad(fakeRequest)
 
       status(result) mustBe OK
@@ -82,9 +81,9 @@ class RemoveAccountControllerSpec extends ControllerSpecBase {
 
       val bbsiService = mock[BBSIService]
       val mockDataCacheConnector = mock[DataCacheConnector]
-      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map("BankAccount" -> Json.toJson(viewModel)))))
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(viewModel)))))
 
-      when(bbsiService.removeBankAccount(any(), any())(any())).thenReturn(Future.successful("envelopeId"))
+      when(bbsiService.removeBankAccount(any(), any())(any())).thenReturn(Future.successful(EnvelopeIdKey))
       when(mockDataCacheConnector.remove(any(), any())).thenReturn(Future.successful(true))
 
       val result = controller(
