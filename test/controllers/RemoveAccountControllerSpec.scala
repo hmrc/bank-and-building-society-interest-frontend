@@ -98,7 +98,7 @@ class RemoveAccountControllerSpec extends ControllerSpecBase with JourneyConstan
 
       "flush the cache on submit" in {
         status(result) mustBe SEE_OTHER
-        verify(mockDataCacheConnector, times(1)).remove(any(), any())
+        verify(mockDataCacheConnector, times(2)).remove(any(), any())
       }
     }
   }

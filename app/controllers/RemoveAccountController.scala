@@ -58,7 +58,9 @@ class RemoveAccountController @Inject()(appConfig: FrontendAppConfig,
         case Some(bankAccountViewModel) => {
           bbsiService.removeBankAccount(Nino(nino), bankAccountViewModel.id) flatMap { _ =>
             dataCacheConnector.remove(nino, BankAccountDetailsKey) map { _ =>
-              Redirect(controllers.routes.ConfirmationController.onPageLoad)
+                // TODO: Replace remove calls with flush cache
+                dataCacheConnector.remove(nino, DecisionKey)
+                Redirect(controllers.routes.ConfirmationController.onPageLoad)
             }
           }
         }
