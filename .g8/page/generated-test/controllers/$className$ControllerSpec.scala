@@ -10,7 +10,7 @@ class $className$ControllerSpec extends ControllerSpecBase {
     new $className$Controller(frontendAppConfig, messagesApi, FakeAuthAction,
       dataRetrievalAction, new DataRequiredActionImpl)
 
-  def viewAsString() = $className;format="decap"$(frontendAppConfig)(fakeRequest, messages).toString
+  def viewAsString() = $className;format="decap"$(frontendAppConfig)(fakeRequest, messages, templateRenderer).toString
 
   "$className$ Controller" must {
 

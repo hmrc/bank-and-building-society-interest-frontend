@@ -23,19 +23,23 @@ trait ViewBehaviours extends ViewSpecBase {
 
   def normalPage(view: () => HtmlFormat.Appendable,
                  messageKeyPrefix: String,
-                 expectedGuidanceKeys: String*) = {
+                 title: Option[String] = None,
+                 heading: Option[String] =  None,
+                 preHeading: Option[String] = None,
+                 expectedGuidanceKeys: Seq[String] = Seq.empty) = {
 
     "behave like a normal page" when {
+
       "rendered" must {
 
         "display the correct browser title" in {
           val doc = asDocument(view())
-          assertEqualsMessage(doc, "title", s"$messageKeyPrefix.title")
+          assertEqualsMessage(doc, "title", title.getOrElse(s"$messageKeyPrefix.title"))
         }
 
-        "display the correct page title" in {
+        "display the correct page heading" in {
           val doc = asDocument(view())
-          assertPageTitleEqualsMessage(doc, s"$messageKeyPrefix.heading")
+          assertPageTitleEqualsMessage(doc, heading.getOrElse(s"$messageKeyPrefix.heading"))
         }
 
         "display the correct guidance" in {
@@ -53,6 +57,52 @@ trait ViewBehaviours extends ViewSpecBase {
         val doc = asDocument(view())
         assertRenderedById(doc, "back-link")
       }
+    }
+  }
+
+  def pageWithPreHeading(view: () => HtmlFormat.Appendable,
+                         preHeadingText: String,
+                         preHeadingAnnouncementText: Option[String] = None): Unit = {
+    "have an accessible pre heading" in {
+      val doc = asDocument(view())
+      if(preHeadingAnnouncementText.isDefined){
+        assertEqualsValueText(doc, "header>p", s"${preHeadingAnnouncementText.get} ${preHeadingText}")
+      } else {
+        assertEqualsValueText(doc, "header>p", preHeadingText)
+      }
+    }
+  }
+
+  def pageWithCancelLink(view: () => HtmlFormat.Appendable) = {
+    "render a cancel link with the correct url" in {
+      val cancelId = "cancelLink"
+      val doc = asDocument(view())
+      assertRenderedById(doc, cancelId)
+      assert(doc.getElementById(cancelId).attr("href") == controllers.routes.AccountDetailsController.onPageLoad().url)
+    }
+  }
+
+  def pageWithText(view: () => HtmlFormat.Appendable, messageKey: String) = {
+    "render a paragraph with the correct content" in {
+      val doc = asDocument(view())
+      assertContainsText(doc, messages(messageKey))
+    }
+  }
+
+  def pageWithSubmitButton(view: () => HtmlFormat.Appendable, submitUrl: String, buttonText: String): Unit = {
+    val doc = asDocument(view())
+    val submit = "submit"
+
+    "have a form with a submit button" in {
+      assertRenderedById(doc, submit)
+    }
+
+    "have a form with a submit button of input labelled as buttonText" in {
+      assert(doc.getElementById(submit).text() == buttonText)
+    }
+
+    "have a form with the correct submit url" in {
+      assert(doc.getElementsByTag("form").attr("action") == submitUrl)
     }
   }
 }

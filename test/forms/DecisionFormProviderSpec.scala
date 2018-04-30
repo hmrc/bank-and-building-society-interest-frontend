@@ -14,17 +14,32 @@
  * limitations under the License.
  */
 
-package views
+package forms
 
-import views.behaviours.ViewBehaviours
-import views.html.session_expired
+import forms.behaviours.OptionFieldBehaviours
+import models.Decision
+import play.api.data.FormError
 
-class SessionExpiredViewSpec extends ViewBehaviours {
+class DecisionFormProviderSpec extends OptionFieldBehaviours {
 
-  def view = () => session_expired(frontendAppConfig)(fakeRequest, messages,templateRenderer)
+  val form = new DecisionFormProvider()()
 
-  "Session Expired view" must {
+  ".value" must {
 
-    behave like normalPage(view, "session_expired", expectedGuidanceKeys = List("guidance"))
+    val fieldName = "value"
+    val requiredKey = "decision.error.required"
+
+    behave like optionsField[Decision](
+      form,
+      fieldName,
+      validValues  = Decision.values,
+      invalidError = FormError(fieldName, "error.invalid")
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
   }
 }

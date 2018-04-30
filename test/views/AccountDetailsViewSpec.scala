@@ -32,6 +32,7 @@ package views
  * limitations under the License.
  */
 
+import models.NormalMode
 import models.bbsi.TaxYear
 import models.domain.{BankAccount, UntaxedInterest}
 import play.twirl.api.Html
@@ -43,6 +44,7 @@ class AccountDetailsViewSpec extends BBSIViewSpec {
   "bbsi accounts view" should {
     behave like pageWithTitle(messages("accountDetails.heading"))
     behave like pageWithBackLink
+    behave like pageWithCombinedHeader(messages("account.preHeading"),messages("accountDetails.heading"))
 
     "display heading" in {
       doc(view) must haveElementAtPathWithText("h2", messages("account.table.heading", TaxYear().year.toString, TaxYear().next.year.toString))
@@ -64,6 +66,9 @@ class AccountDetailsViewSpec extends BBSIViewSpec {
 
       doc(view) must haveElementAtPathWithText(".cya-answer", messages("account.table.amount") + " " + "£123.45")
       doc(view) must haveElementAtPathWithText(".cya-answer", messages("account.table.amount") + " " + "£456.78")
+
+      doc(view) must haveElementAtPathWithText(".cya-change a span", messages("account.updateOrRemoveLink"))
+      doc(view) must haveLinkWithUrlWithID("bbsiAccountDecision1", controllers.routes.DecisionController.onPageLoad(NormalMode, id).url)
 
     }
 
@@ -97,6 +102,7 @@ class AccountDetailsViewSpec extends BBSIViewSpec {
   private val bankName2 = "test bank name 2"
   private val grossInterest2 = 456.78
   private val source2 = "Customer2"
+  private val id = 1
 
   private val accountNumber3 = "*******0000"
   private val sortCode3 = "000000"

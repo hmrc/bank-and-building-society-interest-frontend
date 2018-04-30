@@ -84,3 +84,33 @@ account.whatHappensNext.title=What happens next
 account.whatHappensNext.desc1=The figures shown, or any update you send, will be used to estimate your Income Tax for the current year.
 account.whatHappensNext.desc2=Details of the interest you actually received for April {0} to April {1} will be sent to us after 5 April {1}. We will use the actual figures to calculate how much Income Tax you should have paid in that year.
 
+
+
+decision.checkYourAnswersLabel = decision
+decision.error.required = Please give an answer for decision
+
+##BBSI decision
+decision.title=What do you want to tell us about your account with {0}
+decision.heading=What do you want to tell us about your account with {0}
+decision.customGaTitle=What do you want to tell us about your account
+decision.preHeading=Update or remove account
+decision.error.selectOption=There’s been a problem
+decision.update=I want to update the estimated amount of interest
+decision.close=This account is now closed
+decision.remove=I never had this account
+
+removeAccount.title = You never had this account with {0}
+removeAccount.customGaTitle = You never had this account
+removeAccount.heading = You never had this account with {0}
+removeAccount.preHeading = Remove account
+removeAccount.description= Sending this update will remove {0} account from your record.
+
+cancel = Cancel
+confirmAndSend=Confirm and Send
+
+confirmation.heading=Your update about your account has been received
+confirmation.sectionOne.heading=What happens next
+confirmation.paraOne=We will check the information you sent.
+confirmation.paraTwo=If no further information is needed your records will be updated within 3 weeks and you will receive a confirmation.
+confirmation.paraThree=You do not need to call us. We will contact you if we have any questions.
+confirmation.back=Return to your account details

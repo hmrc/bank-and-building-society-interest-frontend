@@ -7,7 +7,7 @@ class $className$ViewSpec extends ViewBehaviours {
 
   val messageKeyPrefix = "$className;format="decap"$"
 
-  def createView = () => $className;format="decap"$(frontendAppConfig)(fakeRequest, messages)
+  def createView = () => $className;format="decap"$(frontendAppConfig)(fakeRequest, messages, templateRenderer)
 
   "$className$ view" must {
     behave like normalPage(createView, messageKeyPrefix)

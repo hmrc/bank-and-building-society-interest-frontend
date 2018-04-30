@@ -21,4 +21,8 @@ import models.CheckMode
 import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
+
+  def decision: Option[AnswerRow] = userAnswers.decision map {
+    x => AnswerRow("decision.checkYourAnswersLabel", s"decision.$x", true, routes.DecisionController.onPageLoad(CheckMode, 0).url)
+  }
 }

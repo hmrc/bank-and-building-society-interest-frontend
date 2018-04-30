@@ -21,4 +21,6 @@ import identifiers._
 import models._
 
 class UserAnswers(val cacheMap: CacheMap) extends Enumerable.Implicits {
+  def decision: Option[Decision] = cacheMap.getEntry[Decision](DecisionId.toString)
+
 }

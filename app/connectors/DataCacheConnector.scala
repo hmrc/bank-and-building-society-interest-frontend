@@ -83,6 +83,7 @@ class DataCacheConnectorImpl @Inject()(val sessionRepository: SessionRepository,
       }
     }
   }
+
 }
 
 @ImplementedBy(classOf[DataCacheConnectorImpl])
@@ -100,4 +101,5 @@ trait DataCacheConnector {
   def removeFromCollection[A](cacheId: String, collectionKey: String, item: A)(implicit fmt: Format[A]): Future[CacheMap]
 
   def replaceInCollection[A](cacheId: String, collectionKey: String, index: Int, item: A)(implicit fmt: Format[A]): Future[CacheMap]
+
 }

@@ -14,8 +14,24 @@
  * limitations under the License.
  *@
 
-@(text: String)(implicit messages: Messages)
+@(url: Call,
+  gaEventAction: Option[String] = None
+)(implicit m: Messages)
 
-<div class="section">
-    <button id="submit" class="button">@text</button>
+@import uk.gov.hmrc.urls.Link
+
+@stagePromptAttributes = @{
+  gaEventAction match {
+    case Some(actionString) => Some(Map("journey-click" -> s"link - click:${actionString}:${Messages("cancel")}"))
+    case _=> None
+  }
+}
+
+<div class="subsection">
+    @{Link.toInternalPage(
+    id=Some("cancelLink"),
+    url=url.toString,
+    value=Some(Messages("cancel")),
+    dataAttributes = stagePromptAttributes
+    ).toHtml}
 </div>

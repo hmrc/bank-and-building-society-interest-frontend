@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(text: String)(implicit messages: Messages)
+package models
 
-<div class="section">
-    <button id="submit" class="button">@text</button>
-</div>
+import utils.{Enumerable, RadioOption, WithName}
+
+sealed trait Decision
+
+object Decision {
+
+  case object Update extends WithName("update") with Decision
+  case object Close extends WithName("close") with Decision
+  case object Remove extends WithName("remove") with Decision
+
+  val values: Set[Decision] = Set(
+    Update, Close, Remove
+  )
+
+  val options: Set[RadioOption] = values.map {
+    value =>
+      RadioOption("decision", value.toString)
+  }
+
+  implicit val enumerable: Enumerable[Decision] =
+    Enumerable(values.toSeq.map(v => v.toString -> v): _*)
+}

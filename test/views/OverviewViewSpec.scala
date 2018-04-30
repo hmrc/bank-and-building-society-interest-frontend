@@ -28,7 +28,7 @@ class OverviewViewSpec extends BBSIViewSpec {
 
   "BankBuildingSociety Overview page" should {
     behave like pageWithTitle(messages("overview.heading"))
-    behave like pageWithHeader(messages("overview.heading"))
+    behave like pageWithCombinedHeader(messages("account.preHeading"),messages("overview.heading"))
 
     "display first section" in {
       page must haveParagraphWithText(messages("overview.para1"))

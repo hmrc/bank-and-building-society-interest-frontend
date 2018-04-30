@@ -13,3 +13,13 @@ GET        /check-your-answers                          controllers.CheckYourAns
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
 GET        /account-details                             controllers.AccountDetailsController.onPageLoad
+
+GET        /decision/:id                                controllers.DecisionController.onPageLoad(mode: Mode = NormalMode, id: Int)
+POST       /decision/:id                                controllers.DecisionController.onSubmit(mode: Mode = NormalMode, id: Int)
+GET        /changeDecision/:id                          controllers.DecisionController.onPageLoad(mode: Mode = CheckMode, id: Int)
+POST       /changeDecision/:id                          controllers.DecisionController.onSubmit(mode: Mode = CheckMode, id: Int)
+
+GET        /removeAccount                               controllers.RemoveAccountController.onPageLoad()
+POST       /removeAccount                               controllers.RemoveAccountController.onSubmit()
+
+GET        /confirmation                                controllers.ConfirmationController.onPageLoad()

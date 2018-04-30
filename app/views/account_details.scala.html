@@ -14,7 +14,7 @@
  * limitations under the License.
  *@
 
-@import includes._
+@import components._
 @import models.bbsi.TaxYear
 @import uk.gov.hmrc.urls.Link
 @import config.FrontendAppConfig
@@ -69,6 +69,14 @@
                   </div>
               </div>
               <div class="cya-answer">@messages("account.table.amount") @pounds(bankAccount.grossInterest, 2)</div>
+              <div class="cya-change">
+                  @components.link(
+                  id=Some(s"bbsiAccountDecision${bankAccount.id}"),
+                  url=controllers.routes.DecisionController.onPageLoad(NormalMode, bankAccount.id).url,
+                  copy=Messages("account.updateOrRemoveLink"),
+                  altCopy=Some(Messages("account.updateOrRemoveLink") + " " + bankAccount.bankName.getOrElse(""))
+                  )
+              </div>
               }
           </div>
           }

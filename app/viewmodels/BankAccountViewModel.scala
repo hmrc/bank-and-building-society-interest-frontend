@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,10 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@(text: String)(implicit messages: Messages)
+package viewmodels
 
-<div class="section">
-    <button id="submit" class="button">@text</button>
-</div>
+import play.api.libs.json.Json
+
+case class BankAccountViewModel(id:Int, bankName:String)
+
+object BankAccountViewModel {
+  implicit val formats = Json.format[BankAccountViewModel]
+}
