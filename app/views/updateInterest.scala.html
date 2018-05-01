@@ -1,0 +1,79 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.FrontendAppConfig
+@import uk.gov.hmrc.play.views.html._
+@import controllers.routes._
+@import models.Mode
+@import models.bbsi.TaxYear
+@import uk.gov.hmrc.play.language.LanguageUtils.Dates
+@import uk.gov.hmrc.play.views.formatting.Money.pounds
+@import components._
+@import uk.gov.hmrc.renderer.TemplateRenderer
+
+@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode, viewModel: viewmodels.UpdateInterestViewModel)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+
+@header = @{
+    ptaHeader(
+        displayBackLink = true,
+        mainHeadingText = messages("updateInterest.title", viewModel.bankName),
+        preHeadingText = messages("updateInterest.preHeading")
+)
+}
+
+@main_template(
+    title = messages("updateInterest.title", viewModel.bankName),
+    pageHeader = Some(header),
+    appConfig = appConfig,
+    bodyClasses = None) {
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+                        <p><span class="lede">@Html(messages("updateInterest.para1", Dates.formatDate(TaxYear().start),
+                                    Dates.formatDate(TaxYear().end),
+                                    pounds(viewModel.interest)))</span></p>
+                        <p>@messages("updateInterest.para2")</p>
+                        <p>@messages("updateInterest.para3")</p>
+
+                        @helpers.form(action = UpdateInterestController.onSubmit(mode), 'autoComplete -> "off") {
+
+
+                            @components.error_summary(form.errors)
+                            <div class="section">
+                                @components.input_text(
+                                field = form("updateInterest"),
+                                label = Messages("updateInterest.textBox.title"),
+                                isCurrency = true
+                                )
+                            </div>
+
+                            @components.details_summary(Messages("updateInterest.accordion.title")) {
+                            <p >@messages("updateInterest.accordion.desc1")</p>
+                            <p >@messages("updateInterest.accordion.desc2")</p>
+
+                            }
+
+                            <p class="section flush">@messages("updateInterest.para4",
+                                TaxYear().year.toString,
+                                TaxYear().end.getYear.toString,
+                                Dates.formatDate(TaxYear().end))</p>
+
+                            @components.submit_button(messages("continue"))
+                        }
+        </div>
+</div>
+    @cancel_link(url=controllers.routes.AccountDetailsController.onPageLoad)
+}

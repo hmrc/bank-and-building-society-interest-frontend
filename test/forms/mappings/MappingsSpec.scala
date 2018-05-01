@@ -43,7 +43,7 @@ class MappingsSpec extends WordSpec with MustMatchers with OptionValues with Map
 
     val testForm: Form[String] =
       Form(
-        "value" -> text()
+        "value" -> texts()
       )
 
     "bind a valid string" in {
@@ -62,7 +62,7 @@ class MappingsSpec extends WordSpec with MustMatchers with OptionValues with Map
     }
 
     "return a custom error message" in {
-      val form = Form("value" -> text("custom.error"))
+      val form = Form("value" -> texts("custom.error"))
       val result = form.bind(Map("value" -> ""))
       result.errors must contain(FormError("value", "custom.error"))
     }

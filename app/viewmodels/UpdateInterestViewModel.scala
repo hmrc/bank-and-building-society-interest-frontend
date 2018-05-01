@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package utils
+package viewmodels
 
-import uk.gov.hmrc.http.cache.client.CacheMap
-import identifiers._
-import models._
+import play.api.libs.json.Json
 
-class UserAnswers(val cacheMap: CacheMap) extends Enumerable.Implicits {
-  def updateInterest: Option[String] = cacheMap.getEntry[String](UpdateInterestId.toString)
+case class UpdateInterestViewModel(id: Int, interest: BigDecimal, bankName: String)
 
-  def decision: Option[Decision] = cacheMap.getEntry[Decision](DecisionId.toString)
-
+object UpdateInterestViewModel {
+  implicit val formats = Json.format[BankAccountViewModel]
 }

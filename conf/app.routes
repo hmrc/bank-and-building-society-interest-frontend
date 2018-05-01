@@ -23,3 +23,8 @@ GET        /removeAccount                               controllers.RemoveAccoun
 POST       /removeAccount                               controllers.RemoveAccountController.onSubmit()
 
 GET        /confirmation                                controllers.ConfirmationController.onPageLoad()
+
+GET        /updateInterest                              controllers.UpdateInterestController.onPageLoad(mode: Mode = NormalMode)
+POST       /updateInterest                              controllers.UpdateInterestController.onSubmit(mode: Mode = NormalMode)
+GET        /changeUpdateInterest                        controllers.UpdateInterestController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeUpdateInterest                        controllers.UpdateInterestController.onSubmit(mode: Mode = CheckMode)
