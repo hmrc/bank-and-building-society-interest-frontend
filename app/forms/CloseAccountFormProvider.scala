@@ -14,15 +14,23 @@
  * limitations under the License.
  */
 
-package utils
+package forms
 
-import uk.gov.hmrc.http.cache.client.CacheMap
-import identifiers._
-import models._
+import javax.inject.Inject
 
-class UserAnswers(val cacheMap: CacheMap) extends Enumerable.Implicits {
-  def closeAccount: Option[CloseAccount] = cacheMap.getEntry[CloseAccount](CloseAccountId.toString)
+import forms.mappings.Mappings
+import play.api.data.Form
+import play.api.data.Forms._
+import models.CloseAccount
 
-  def decision: Option[Decision] = cacheMap.getEntry[Decision](DecisionId.toString)
+class CloseAccountFormProvider @Inject() extends Mappings {
 
-}
+   def apply(): Form[CloseAccount] = Form(
+     mapping(
+      "field1" -> text("closeAccount.error.field1.required")
+        .verifying(maxLength(100, "closeAccount.error.field1.length")),
+      "field2" -> text("closeAccount.error.field2.required")
+        .verifying(maxLength(100, "closeAccount.error.field2.length"))
+    )(CloseAccount.apply)(CloseAccount.unapply)
+   )
+ }

@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package utils
+package models
 
-import uk.gov.hmrc.http.cache.client.CacheMap
-import identifiers._
-import models._
+import play.api.libs.json._
 
-class UserAnswers(val cacheMap: CacheMap) extends Enumerable.Implicits {
-  def closeAccount: Option[CloseAccount] = cacheMap.getEntry[CloseAccount](CloseAccountId.toString)
+case class CloseAccount (field1: String, field2: String)
 
-  def decision: Option[Decision] = cacheMap.getEntry[Decision](DecisionId.toString)
-
+object CloseAccount {
+  implicit val format = Json.format[CloseAccount]
 }
