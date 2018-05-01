@@ -13,6 +13,8 @@ GET        /check-your-answers                          controllers.CheckYourAns
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
 GET        /account-details                             controllers.AccountDetailsController.onPageLoad
+GET        /cancel-journey                              controllers.AccountDetailsController.cancelJourney
+
 
 GET        /decision/:id                                controllers.DecisionController.onPageLoad(mode: Mode = NormalMode, id: Int)
 POST       /decision/:id                                controllers.DecisionController.onSubmit(mode: Mode = NormalMode, id: Int)

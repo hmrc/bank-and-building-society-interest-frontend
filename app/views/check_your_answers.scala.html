@@ -17,6 +17,7 @@
 @import config.FrontendAppConfig
 @import viewmodels.{Section, AnswerSection, RepeaterAnswerSection}
 @import uk.gov.hmrc.renderer.TemplateRenderer
+@import components._
 
 @(appConfig: FrontendAppConfig, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
 
@@ -37,4 +38,6 @@
             }
         }
     }
+
+    @cancel_link(url=controllers.routes.AccountDetailsController.cancelJourney)
 }

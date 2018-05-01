@@ -18,6 +18,7 @@ package controllers
 
 import connectors.{DataCacheConnector, FakeDataCacheConnector}
 import controllers.actions._
+import models.NormalMode
 import models.domain.BankAccount
 import org.mockito.Matchers.any
 import org.mockito.Mockito.{times, verify, when}
@@ -27,11 +28,12 @@ import service.BBSIService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import utils.JourneyConstants
 import viewmodels.BankAccountViewModel
-import views.html.removeAccount
+import views.behaviours.ViewBehaviours
+import views.html.{decision, removeAccount}
 
 import scala.concurrent.Future
 
-class RemoveAccountControllerSpec extends ControllerSpecBase with JourneyConstants{
+class RemoveAccountControllerSpec extends ControllerSpecBase with JourneyConstants with ViewBehaviours {
 
   private val bankName = "TestName"
   private val id = 1
@@ -42,6 +44,8 @@ class RemoveAccountControllerSpec extends ControllerSpecBase with JourneyConstan
     Some(bankName),
     0,
     Some("source"))
+
+  def createView = () => removeAccount(frontendAppConfig, viewModel)(fakeRequest, messages, templateRenderer)
 
   def controller(
                   dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap,
@@ -59,6 +63,8 @@ class RemoveAccountControllerSpec extends ControllerSpecBase with JourneyConstan
   def viewAsString() = removeAccount(frontendAppConfig, viewModel)(fakeRequest, messages, templateRenderer).toString
 
   "RemoveAccount Controller" must {
+
+    behave like pageWithCancelLink(createView)
 
     "return OK and the correct view for a GET" in {
       val bbsiService = mock[BBSIService]

@@ -78,7 +78,7 @@ trait ViewBehaviours extends ViewSpecBase {
       val cancelId = "cancelLink"
       val doc = asDocument(view())
       assertRenderedById(doc, cancelId)
-      assert(doc.getElementById(cancelId).attr("href") == controllers.routes.AccountDetailsController.onPageLoad().url)
+      assert(doc.getElementById(cancelId).attr("href") == controllers.routes.AccountDetailsController.cancelJourney().url)
     }
   }
 

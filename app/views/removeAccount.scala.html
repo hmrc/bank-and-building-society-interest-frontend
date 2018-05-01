@@ -42,6 +42,6 @@
     @form(action = controllers.routes.RemoveAccountController.onSubmit) {
       @submit_button(messages("confirmAndSend"))
     }
-    @cancel_link(url=controllers.routes.AccountDetailsController.onPageLoad)
+    @cancel_link(url=controllers.routes.AccountDetailsController.cancelJourney)
 }
 
