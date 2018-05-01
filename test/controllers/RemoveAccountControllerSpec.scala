@@ -84,7 +84,7 @@ class RemoveAccountControllerSpec extends ControllerSpecBase with JourneyConstan
       val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(viewModel)))))
 
       when(bbsiService.removeBankAccount(any(), any())(any())).thenReturn(Future.successful(EnvelopeIdKey))
-      when(mockDataCacheConnector.remove(any(), any())).thenReturn(Future.successful(true))
+      when(mockDataCacheConnector.flush(any())).thenReturn(Future.successful(true))
 
       val result = controller(
         dataCacheConnector = mockDataCacheConnector,
@@ -98,7 +98,7 @@ class RemoveAccountControllerSpec extends ControllerSpecBase with JourneyConstan
 
       "flush the cache on submit" in {
         status(result) mustBe SEE_OTHER
-        verify(mockDataCacheConnector, times(2)).remove(any(), any())
+        verify(mockDataCacheConnector, times(1)).flush(any())
       }
     }
   }
