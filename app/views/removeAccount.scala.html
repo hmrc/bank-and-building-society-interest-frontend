@@ -32,16 +32,22 @@
 }
 
 @main_template(
-    title = messages("removeAccount.title"),
+    title = messages("removeAccount.title", viewModel.bankName),
     pageHeader = Some(header),
     appConfig = appConfig,
     bodyClasses = None) {
 
-    <p>@Messages("removeAccount.description", viewModel.bankName)</p>
+    <div class="grid-row">
+      <div class="column-two-thirds">
 
-    @form(action = controllers.routes.RemoveAccountController.onSubmit) {
-      @submit_button(messages("confirmAndSend"))
-    }
-    @cancel_link(url=controllers.routes.AccountDetailsController.cancelJourney)
+        <p>@Messages("removeAccount.description", viewModel.bankName)</p>
+
+        @form(action = controllers.routes.RemoveAccountController.onSubmit) {
+          @submit_button(messages("confirmAndSend"))
+        }
+        @cancel_link(url=controllers.routes.AccountDetailsController.cancelJourney)
+
+      </div>
+    </div>
 }
 
