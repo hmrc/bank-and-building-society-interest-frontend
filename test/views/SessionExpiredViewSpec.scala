@@ -22,9 +22,10 @@ import views.html.session_expired
 class SessionExpiredViewSpec extends ViewBehaviours {
 
   def view = () => session_expired(frontendAppConfig)(fakeRequest, messages,templateRenderer)
+  val messageKeyPrefix = "session.expired"
 
   "Session Expired view" must {
-    val messageKeyPrefix = "session.expired"
-    behave like normalPage(view, messageKeyPrefix, messages("messageKeyPrefix") + messages(""), expectedGuidanceKeys = List("guidance"))
+
+    behave like normalPage(view, messageKeyPrefix)
   }
 }

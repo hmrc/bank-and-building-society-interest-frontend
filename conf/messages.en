@@ -43,7 +43,6 @@ site.textarea.char_limit = (Limit is {0} characters)
 site.title = title
 site.gov.uk =- GOV.UK
 
-unauthorised = unauthorised
 
 ptaHeader.accessible.preHeading=This section is
 
