@@ -18,14 +18,16 @@ package utils
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.mvc.Call
 import controllers.routes
 import identifiers._
-import models.Decision.{Close, Remove, Update}
+import models.Decision.{Close, Remove}
 import models.{CheckMode, Mode, NormalMode}
+import org.joda.time.LocalDate
+import play.api.mvc.Call
+import uk.gov.hmrc.time.TaxYearResolver
 
 @Singleton
-class Navigator @Inject()() {
+class Navigator @Inject()() extends JourneyConstants{
 
   private def routeMap(mode: Mode): Map[Identifier, UserAnswers => Call] = Map(
     DecisionId -> ( _.decision match {
@@ -34,12 +36,20 @@ class Navigator @Inject()() {
       case Some(Close) =>
         routes.CloseAccountController.onPageLoad(mode)
       case _ => routes.IndexController.onPageLoad()
-    }
-      ))
-
-  private val editRouteMap: Map[Identifier, UserAnswers => Call] = Map(
-
+    }),
+    CloseAccountId -> (_.cacheMap.getEntry[String](closeAccountDateKey) match {
+        case Some(value) => {
+          if(TaxYearResolver.fallsInThisTaxYear(new LocalDate(value))){
+            routes.IndexController.onPageLoad()
+          }else{
+            routes.CheckYourAnswersController.onPageLoad()
+          }
+        }
+        case None => routes.IndexController.onPageLoad()
+    })
   )
+
+  private val editRouteMap: Map[Identifier, UserAnswers => Call] = Map()
 
   def nextPage(id: Identifier, mode: Mode): UserAnswers => Call = mode match {
     case NormalMode =>

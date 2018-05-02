@@ -20,7 +20,7 @@ import play.api.data.Form
 import play.api.libs.json.Json
 import uk.gov.hmrc.http.cache.client.CacheMap
 import utils.{FakeNavigator, JourneyConstants}
-import connectors.FakeDataCacheConnector
+import connectors.{DataCacheConnector, FakeDataCacheConnector}
 import controllers.actions._
 import play.api.test.Helpers._
 import forms.CloseAccountFormProvider
@@ -42,8 +42,9 @@ class CloseAccountControllerSpec extends ControllerSpecBase with JourneyConstant
   val form = formProvider()
   val viewModel = BankAccountViewModel(1, "testName")
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new CloseAccountController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(desiredRoute = onwardRoute), FakeAuthAction,
+  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap,
+                 dataCacheConnector: DataCacheConnector = FakeDataCacheConnector) =
+    new CloseAccountController(frontendAppConfig, messagesApi, dataCacheConnector, new FakeNavigator(desiredRoute = onwardRoute), FakeAuthAction,
       dataRetrievalAction, new DataRequiredActionImpl, formProvider)
 
   def viewAsString(form: Form[_] = form) = closeAccount(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer).toString
@@ -65,40 +66,49 @@ class CloseAccountControllerSpec extends ControllerSpecBase with JourneyConstant
       contentAsString(result) mustBe viewAsString(form.fill(CloseAccount("01","10","2017")))
     }
 
+    "return Not Found for a GET" in {
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map())))
+      val result = controller(dataRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
+      status(result) mustBe NOT_FOUND
+    }
 
-//
-//    "redirect to the next page when valid data is submitted" in {
-//      val postRequest = fakeRequest.withFormUrlEncodedBody(("field1", "value 1"), ("field2", "value 2"))
-//
-//      val result = controller().onSubmit(NormalMode)(postRequest)
-//
-//      status(result) mustBe SEE_OTHER
-//      redirectLocation(result) mustBe Some(onwardRoute.url)
-//    }
-//
-//    "return a Bad Request and errors when invalid data is submitted" in {
-//      val postRequest = fakeRequest.withFormUrlEncodedBody(("value", "invalid value"))
-//      val boundForm = form.bind(Map("value" -> "invalid value"))
-//
-//      val result = controller().onSubmit(NormalMode)(postRequest)
-//
-//      status(result) mustBe BAD_REQUEST
-//      contentAsString(result) mustBe viewAsString(boundForm)
-//    }
-//
-//    "redirect to Session Expired for a GET if no existing data is found" in {
-//      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
-//
-//      status(result) mustBe SEE_OTHER
-//      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
-//    }
-//
-//    "redirect to Session Expired for a POST if no existing data is found" in {
-//      val postRequest = fakeRequest.withFormUrlEncodedBody(("field1", "value 1"), ("field2", "value 2"))
-//      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
-//
-//      status(result) mustBe SEE_OTHER
-//      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
-//    }
+    "redirect to the next page when valid data is submitted" in {
+      val mockDataCacheConnector = mock[DataCacheConnector]
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(viewModel)))))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("accountClosedDay", "01"), ("accountClosedMonth", "10"),("accountClosedYear","2017"))
+      val validData = Map(closeAccountDateKey -> Json.toJson("2017-10-01"))
+      when(mockDataCacheConnector.save(any(), any(), any())(any())).thenReturn(Future.successful(CacheMap(cacheMapId, validData)))
+
+      val result = controller(dataRetrievalAction = dataRetrievalAction, dataCacheConnector = mockDataCacheConnector).onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(onwardRoute.url)
+    }
+
+    "return a Bad Request and errors when invalid data is submitted" in {
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(viewModel)))))
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("accountClosedDay", "011"), ("accountClosedMonth", "123"),("accountClosedYear","20172"))
+      val boundForm = form.bind(Map("accountClosedDay" -> "011", "accountClosedMonth" -> "123", "accountClosedYear" ->"20172"))
+
+      val result = controller(dataRetrievalAction = dataRetrievalAction).onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe BAD_REQUEST
+      contentAsString(result) mustBe viewAsString(boundForm)
+    }
+
+    "redirect to Session Expired for a GET if no existing data is found" in {
+      val result = controller(dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+    }
+
+    "redirect to Session Expired for a POST if no existing data is found" in {
+      val postRequest = fakeRequest.withFormUrlEncodedBody(("accountClosedDay", "01"), ("accountClosedMonth", "10"),("accountClosedYear","2017"))
+      val result = controller(dontGetAnyData).onSubmit(NormalMode)(postRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+    }
   }
 }

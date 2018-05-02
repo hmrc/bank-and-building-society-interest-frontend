@@ -23,7 +23,8 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.CloseAccountFormProvider
 import identifiers.CloseAccountId
-import models.{CloseAccount, Mode}
+import models.Mode
+import org.joda.time.LocalDate
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
@@ -43,11 +44,11 @@ class CloseAccountController @Inject()(appConfig: FrontendAppConfig,
                                                   requireData: DataRequiredAction,
                                                   formProvider: CloseAccountFormProvider)
                                                   (implicit templateRenderer: TemplateRenderer)
-                                                  extends FrontendController with I18nSupport with JourneyConstants {
+                                                  extends FrontendController with I18nSupport with JourneyConstants{
 
   val form = formProvider()
 
-  def onPageLoad(mode: Mode) = (authenticate andThen getData andThen requireData) {
+  def onPageLoad(mode: Mode) = (authenticate andThen getData andThen requireData).async {
     implicit request =>
       request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
         case Some(bankAccountViewModel) => {
@@ -55,21 +56,33 @@ class CloseAccountController @Inject()(appConfig: FrontendAppConfig,
             case None => form
             case Some(value) => form.fill(value)
           }
-          Ok(closeAccount(appConfig, preparedForm, mode, bankAccountViewModel))
+          Future.successful(Ok(closeAccount(appConfig, preparedForm, mode, bankAccountViewModel)))
         }
-        case _ => NotFound
+        case _ => Future.successful(NotFound)
       }
-
   }
 
   def onSubmit(mode: Mode) = (authenticate andThen getData andThen requireData).async {
     implicit request =>
-      form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
-          Future.successful(BadRequest(closeAccount(appConfig, formWithErrors, mode, BankAccountViewModel(1,"")))),
-        (value) =>
-          dataCacheConnector.save[CloseAccount](request.externalId, CloseAccountId.toString, value).map(cacheMap =>
-            Redirect(navigator.nextPage(CloseAccountId, mode)(new UserAnswers(cacheMap))))
-      )
+
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
+        case Some(bankAccountViewModel) => {
+          form.bindFromRequest().fold(
+            (formWithErrors: Form[_]) =>
+              Future.successful(BadRequest(closeAccount(appConfig, formWithErrors, mode, bankAccountViewModel))),
+            (value) => {
+
+              val formattedDate = new LocalDate(
+                Integer.parseInt(value.accountClosedYear),
+                Integer.parseInt(value.accountClosedMonth),
+                Integer.parseInt(value.accountClosedDay))
+
+              dataCacheConnector.save[String](request.externalId, closeAccountDateKey, formattedDate.toString()) map (cacheMap =>
+                Redirect(navigator.nextPage(CloseAccountId, mode)(new UserAnswers(cacheMap))))
+            }
+          )
+        }
+        case _ => Future.successful(NotFound)
+      }
   }
 }
