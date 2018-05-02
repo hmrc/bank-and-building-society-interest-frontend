@@ -21,7 +21,7 @@ import javax.inject.{Inject, Singleton}
 import controllers.routes
 import identifiers._
 import models.Decision.{Close, Remove}
-import models.{CheckMode, Mode, NormalMode}
+import models.{CheckMode, CloseAccount, Mode, NormalMode}
 import org.joda.time.LocalDate
 import play.api.mvc.Call
 import uk.gov.hmrc.time.TaxYearResolver
@@ -37,9 +37,9 @@ class Navigator @Inject()() extends JourneyConstants{
         routes.CloseAccountController.onPageLoad(mode)
       case _ => routes.IndexController.onPageLoad()
     }),
-    CloseAccountId -> (_.cacheMap.getEntry[String](closeAccountDateKey) match {
-        case Some(value) => {
-          if(TaxYearResolver.fallsInThisTaxYear(new LocalDate(value))){
+    CloseAccountId -> (_.closeAccount match {
+        case Some(CloseAccount(day,month,year)) => {
+          if(TaxYearResolver.fallsInThisTaxYear(new LocalDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)))){
             routes.IndexController.onPageLoad()
           }else{
             routes.CheckYourAnswersController.onPageLoad()

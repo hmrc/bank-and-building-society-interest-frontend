@@ -16,19 +16,18 @@
 
 package controllers
 
-import play.api.data.Form
-import play.api.libs.json.Json
-import uk.gov.hmrc.http.cache.client.CacheMap
-import utils.{FakeNavigator, JourneyConstants}
 import connectors.{DataCacheConnector, FakeDataCacheConnector}
 import controllers.actions._
-import play.api.test.Helpers._
 import forms.CloseAccountFormProvider
 import identifiers.CloseAccountId
-import models.{CheckMode, CloseAccount, NormalMode}
+import models.{CloseAccount, NormalMode}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
-import service.BBSIService
+import play.api.data.Form
+import play.api.libs.json.Json
+import play.api.test.Helpers._
+import uk.gov.hmrc.http.cache.client.CacheMap
+import utils.{FakeNavigator, JourneyConstants}
 import viewmodels.BankAccountViewModel
 import views.html.closeAccount
 
@@ -76,7 +75,7 @@ class CloseAccountControllerSpec extends ControllerSpecBase with JourneyConstant
       val mockDataCacheConnector = mock[DataCacheConnector]
       val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(viewModel)))))
       val postRequest = fakeRequest.withFormUrlEncodedBody(("accountClosedDay", "01"), ("accountClosedMonth", "10"),("accountClosedYear","2017"))
-      val validData = Map(closeAccountDateKey -> Json.toJson("2017-10-01"))
+      val validData = Map(CloseAccountId.toString -> Json.toJson("2017-10-01"))
       when(mockDataCacheConnector.save(any(), any(), any())(any())).thenReturn(Future.successful(CacheMap(cacheMapId, validData)))
 
       val result = controller(dataRetrievalAction = dataRetrievalAction, dataCacheConnector = mockDataCacheConnector).onSubmit(NormalMode)(postRequest)

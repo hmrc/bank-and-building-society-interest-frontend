@@ -23,7 +23,7 @@ import connectors.DataCacheConnector
 import controllers.actions._
 import forms.CloseAccountFormProvider
 import identifiers.CloseAccountId
-import models.Mode
+import models.{CloseAccount, Mode}
 import org.joda.time.LocalDate
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -71,13 +71,7 @@ class CloseAccountController @Inject()(appConfig: FrontendAppConfig,
             (formWithErrors: Form[_]) =>
               Future.successful(BadRequest(closeAccount(appConfig, formWithErrors, mode, bankAccountViewModel))),
             (value) => {
-
-              val formattedDate = new LocalDate(
-                Integer.parseInt(value.accountClosedYear),
-                Integer.parseInt(value.accountClosedMonth),
-                Integer.parseInt(value.accountClosedDay))
-
-              dataCacheConnector.save[String](request.externalId, closeAccountDateKey, formattedDate.toString()) map (cacheMap =>
+              dataCacheConnector.save[CloseAccount](request.externalId, CloseAccountId.toString, value) map (cacheMap =>
                 Redirect(navigator.nextPage(CloseAccountId, mode)(new UserAnswers(cacheMap))))
             }
           )

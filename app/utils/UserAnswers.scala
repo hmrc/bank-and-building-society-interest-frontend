@@ -22,7 +22,5 @@ import models._
 
 class UserAnswers(val cacheMap: CacheMap) extends Enumerable.Implicits {
   def closeAccount: Option[CloseAccount] = cacheMap.getEntry[CloseAccount](CloseAccountId.toString)
-
   def decision: Option[Decision] = cacheMap.getEntry[Decision](DecisionId.toString)
-
 }

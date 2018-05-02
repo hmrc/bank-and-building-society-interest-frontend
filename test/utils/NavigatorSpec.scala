@@ -17,13 +17,15 @@
 package utils
 
 import base.SpecBase
-import org.mockito.Mockito._
-import org.scalatest.mockito.MockitoSugar
 import controllers.routes
 import identifiers._
+import models.Decision.{Close, Remove}
 import models._
+import org.mockito.Mockito._
+import org.scalatest.mockito.MockitoSugar
+import uk.gov.hmrc.time.TaxYearResolver
 
-class NavigatorSpec extends SpecBase with MockitoSugar {
+class NavigatorSpec extends SpecBase with MockitoSugar with JourneyConstants {
 
   val navigator = new Navigator
 
@@ -33,6 +35,25 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
       "go to Index from an identifier that doesn't exist in the route map" in {
         case object UnknownIdentifier extends Identifier
         navigator.nextPage(UnknownIdentifier, NormalMode)(mock[UserAnswers]) mustBe routes.IndexController.onPageLoad()
+      }
+
+      "go to RemoveAccount for the identifier remove in the route map" in {
+        val mockUserAnswers = mock[UserAnswers]
+        when(mockUserAnswers.decision).thenReturn(Some(Remove))
+        navigator.nextPage(DecisionId,NormalMode)(mockUserAnswers) mustBe routes.RemoveAccountController.onPageLoad()
+      }
+
+      "go to CloseAccount for the identifier close in the route map" in {
+        val mockUserAnswers = mock[UserAnswers]
+        val mode = NormalMode
+        when(mockUserAnswers.decision).thenReturn(Some(Close))
+        navigator.nextPage(DecisionId,mode)(mockUserAnswers) mustBe routes.CloseAccountController.onPageLoad(mode)
+      }
+
+      "go to CheckYourAnswers for an account close date which is previous to the current tax year" in {
+        val mockUserAnswers = mock[UserAnswers]
+        when(mockUserAnswers.closeAccount).thenReturn(Some(CloseAccount("01","01",TaxYearResolver.currentTaxYear.toString)))
+        navigator.nextPage(CloseAccountId,NormalMode)(mockUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad()
       }
     }
 
