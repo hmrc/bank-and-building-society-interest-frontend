@@ -16,25 +16,51 @@
 
 package controllers
 
+import connectors.{DataCacheConnector, FakeDataCacheConnector}
 import play.api.test.Helpers._
-import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeAuthAction}
-import viewmodels.AnswerSection
+import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeAuthAction, FakeDataRetrievalAction}
+import identifiers.UpdateInterestId
+import org.mockito.Matchers.any
+import org.mockito.Mockito.when
+import play.api.libs.json.JsString
+import service.BBSIService
+import uk.gov.hmrc.http.cache.client.CacheMap
+import utils.FakeNavigator
+import viewmodels.{AnswerSection, BankAccountViewModel, UpdateInterestViewModelCheckAnswers}
 import views.html.check_your_answers
+
+import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends ControllerSpecBase {
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
-    new CheckYourAnswersController(frontendAppConfig, messagesApi, FakeAuthAction, dataRetrievalAction, new DataRequiredActionImpl)
+  private val id = 1
+  private val interestAmount = "3000"
+  private val bankName = "Test Name"
+
+  val bankAccountViewModel = BankAccountViewModel(id, bankName)
+
+  def onwardRoute = routes.ConfirmationController.onPageLoad()
+
+  private val viewModel = UpdateInterestViewModelCheckAnswers(id, interestAmount, bankName)
+
+  def controller(bbsiService: BBSIService, dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, dataCacheConnector: DataCacheConnector = FakeDataCacheConnector) =
+    new CheckYourAnswersController(frontendAppConfig, messagesApi, dataCacheConnector, new FakeNavigator(desiredRoute = onwardRoute), FakeAuthAction, dataRetrievalAction, new DataRequiredActionImpl, bbsiService)
 
   "Check Your Answers Controller" must {
     "return 200 and the correct view for a GET" in {
-      val result = controller().onPageLoad()(fakeRequest)
+      val bbsiService = mock[BBSIService]
+      val mockDataCacheConnector = mock[DataCacheConnector]
+      val validData = Map(UpdateInterestId.toString -> JsString("3000"))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(Some(bankAccountViewModel)))
+      val result = controller(bbsiService = bbsiService, getRelevantData, dataCacheConnector = mockDataCacheConnector).onPageLoad()(fakeRequest)
       status(result) mustBe OK
-      contentAsString(result) mustBe check_your_answers(frontendAppConfig, Seq(AnswerSection(None, Seq())))(fakeRequest, messages,templateRenderer).toString
+      contentAsString(result) mustBe check_your_answers(frontendAppConfig, viewModel)(fakeRequest, messages,templateRenderer).toString
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(dontGetAnyData).onPageLoad()(fakeRequest)
+      val bbsiService = mock[BBSIService]
+      val result = controller(bbsiService = bbsiService, dontGetAnyData).onPageLoad()(fakeRequest)
 
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)

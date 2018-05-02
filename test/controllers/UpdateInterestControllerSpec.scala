@@ -37,7 +37,7 @@ import scala.concurrent.Future
 
 class UpdateInterestControllerSpec extends ControllerSpecBase with JourneyConstants{
 
-  def onwardRoute = routes.IndexController.onPageLoad()
+  def onwardRoute = routes.CheckYourAnswersController.onPageLoad()
 
   val formProvider = new UpdateInterestFormProvider()
   val form = formProvider()
