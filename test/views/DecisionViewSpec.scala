@@ -44,6 +44,7 @@ class DecisionViewSpec extends ViewBehaviours {
     behave like pageWithBackLink(createView)
     behave like pageWithPreHeading(createView, messages("decision.preHeading"), thisSectionIs)
     behave like pageWithCancelLink(createView)
+    behave like pageWithSubmitButton(createView,controllers.routes.DecisionController.onSubmit(NormalMode,1).url,messages("site.continue"))
   }
 
 
