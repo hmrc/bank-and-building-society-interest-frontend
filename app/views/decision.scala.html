@@ -33,7 +33,7 @@
 }
 
 @main_template(
-    title = messages("decision.title"),
+    title = messages("decision.title", viewModel.bankName),
     pageHeader = Some(header),
     appConfig = appConfig,
     bodyClasses = None

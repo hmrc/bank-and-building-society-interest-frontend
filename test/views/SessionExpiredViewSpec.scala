@@ -24,7 +24,7 @@ class SessionExpiredViewSpec extends ViewBehaviours {
   def view = () => session_expired(frontendAppConfig)(fakeRequest, messages,templateRenderer)
 
   "Session Expired view" must {
-
-    behave like normalPage(view, "session_expired", expectedGuidanceKeys = List("guidance"))
+    val messageKeyPrefix = "session.expired"
+    behave like normalPage(view, messageKeyPrefix, messages("messageKeyPrefix") + messages(""), expectedGuidanceKeys = List("guidance"))
   }
 }

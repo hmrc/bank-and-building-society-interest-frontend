@@ -25,9 +25,9 @@ index.title = bank-and-building-society-interest-frontend
 index.heading = bank-and-building-society-interest-frontend
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
 
-session_expired.title = For your security, this service has been reset
-session_expired.heading = For your security, this service has been reset
-session_expired.guidance = The details you have given have been deleted because you did not continue the service for 1 hour.
+session.expired.title = For your security, this service has been reset
+session.expired.heading = For your security, this service has been reset
+session.expired.guidance = The details you have given have been deleted because you did not continue the service for 1 hour.
 
 site.back = Back
 site.delete = Remove
@@ -40,6 +40,10 @@ site.save_and_continue = Save and continue
 site.continue = Continue
 site.service_name = bank-and-building-society-interest-frontend
 site.textarea.char_limit = (Limit is {0} characters)
+site.title = title
+site.gov.uk =- GOV.UK
+
+unauthorised = unauthorised
 
 ptaHeader.accessible.preHeading=This section is
 
