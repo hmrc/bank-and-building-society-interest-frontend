@@ -14,27 +14,34 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.play.views.html._
 @import config.FrontendAppConfig
 @import viewmodels.{Section, AnswerSection, RepeaterAnswerSection}
 @import uk.gov.hmrc.renderer.TemplateRenderer
+@import components._
 
-@(appConfig: FrontendAppConfig, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+@(appConfig: FrontendAppConfig, viewModel: viewmodels.UpdateInterestViewModelCheckAnswers)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+
+@header = @{
+        ptaHeader(
+        displayBackLink = true,
+        mainHeadingText = Messages("tai.checkYourAnswers"),
+        preHeadingText = Messages("tai.bbsi.update.checkYourAnswers.preHeading")
+        )
+}
 
 @main_template(
     title = messages("checkYourAnswers.title"),
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @components.heading("checkYourAnswers.heading")</h1>
+                @checkYourAnswers(
+                title = Some(viewModel.bankName),
+                confirmationLines = viewModel.journeyConfirmationLines
+                )
 
-    <p>@messages("checkYourAnswers.guidance")</p>
+                <p class="subsection">@Messages("tai.checkYourAnswers.confirmText")</p>
 
-    @for(section <- answerSections){
-        @{
-            section match {
-                case a: AnswerSection => components.answer_section(a)
-                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-            }
-        }
-    }
+
+                @cancel_link(controllers.routes.AccountDetailsController.onPageLoad)
 }

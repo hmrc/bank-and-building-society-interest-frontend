@@ -28,14 +28,16 @@ import models.{CheckMode, Mode, NormalMode}
 class Navigator @Inject()() {
 
   private def routeMap(mode: Mode): Map[Identifier, UserAnswers => Call] = Map(
-    DecisionId -> ( _.decision match {
+    DecisionId -> (_.decision match {
       case Some(Remove) =>
         routes.RemoveAccountController.onPageLoad()
       case Some(Update) =>
         routes.UpdateInterestController.onPageLoad(mode)
       case _ => routes.IndexController.onPageLoad()
     }
-  ))
+      ),
+    UpdateInterestId -> (_ => routes.CheckYourAnswersController.onPageLoad())
+  )
 
   private val editRouteMap: Map[Identifier, UserAnswers => Call] = Map(
 
