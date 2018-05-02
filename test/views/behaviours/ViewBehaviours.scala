@@ -34,7 +34,8 @@ trait ViewBehaviours extends ViewSpecBase {
 
         "display the correct browser title" in {
           val doc = asDocument(view())
-          assertEqualsMessage(doc, "title", title.getOrElse(s"$messageKeyPrefix.title"))
+          val fallbackTitle = messages(s"$messageKeyPrefix.title")
+          assertEqualsValue(doc, messages("site.title"), title.getOrElse(fallbackTitle) + messages("site.gov.uk"))
         }
 
         "display the correct page heading" in {
@@ -78,7 +79,7 @@ trait ViewBehaviours extends ViewSpecBase {
       val cancelId = "cancelLink"
       val doc = asDocument(view())
       assertRenderedById(doc, cancelId)
-      assert(doc.getElementById(cancelId).attr("href") == controllers.routes.AccountDetailsController.onPageLoad().url)
+      assert(doc.getElementById(cancelId).attr("href") == controllers.routes.AccountDetailsController.cancelJourney().url)
     }
   }
 

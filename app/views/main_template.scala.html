@@ -38,6 +38,8 @@
     }
 }
 
+
+
 @mainContentHeader = {
     @pageHeader.getOrElse(Html(""))
 }
@@ -46,7 +48,7 @@
     templateRenderer.renderDefaultTemplate(
       layouts.article(mainContent, includeGridWrapper, articleClasses),
         Map(
-            "pageTitle" -> title,
+            "pageTitle" -> (title + messages("site.gov.uk")),
             "mainContentHeader" -> mainContentHeader
         )
       )

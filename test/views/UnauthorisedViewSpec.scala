@@ -23,8 +23,10 @@ class UnauthorisedViewSpec extends ViewBehaviours {
 
   def view = () => unauthorised(frontendAppConfig)(fakeRequest, messages,templateRenderer)
 
+  val messageKeyPrefix = "unauthorised"
+
   "Unauthorised view" must {
 
-    behave like normalPage(view, "unauthorised")
+    behave like normalPage(view, messageKeyPrefix)
   }
 }
