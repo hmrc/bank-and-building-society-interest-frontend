@@ -9,11 +9,11 @@ Summary
 -----------
 
 Use this service to:
-*View all Bank and Building Society account details
-*View estimate details for interest paid to be available for current year
-*View actual interest paid to be available for previous year
-*Update information relating to the amount of interest paid 
-*Navigate to other services such as Tax Estimate Service, where further changes can be made.
+* View all Bank and Building Society account details
+* View estimate details for interest paid to be available for current year
+* View actual interest paid to be available for previous year
+* Update information relating to the amount of interest paid 
+* Navigate to other services such as Tax Estimate Service, where further changes can be made.
 
 Requirements
 ------------
