@@ -132,6 +132,14 @@ updateInterest.para4=Details of the interest you actually received for the tax y
 updateInterest.blank=Amount cannot be blank
 updateInterest.isCurrency=Enter valid amount
 updateInterest.wholeNumber=Amount cannot be in decimal
+updateInterest.checkYourAnswers.preHeading = Update interest
+
+checkYourAnswers = Check your answers
+checkYourAnswers.whatYouToldUs = What you told us
+checkYourAnswers.rowOne.answer = Updated the estimated interest
+checkYourAnswers.rowTwo = Your updated interest amount
+checkYourAnswers.change.label = Change
+checkYourAnswers.confirmText = By sending this update you are confirming that the details you are giving are correct.
 
 inPounds = in pounds.
 continue = Continue

@@ -25,12 +25,12 @@ case class UpdateInterestViewModelCheckAnswers(id: Int, interestAmount: String, 
   def journeyConfirmationLines(implicit messages: Messages): Seq[CheckYourAnswersConfirmationLine] = {
 
     val updateLine = CheckYourAnswersConfirmationLine(
-      Messages("tai.checkYourAnswers.whatYouToldUs"),
-      Messages("tai.bbsi.update.checkYourAnswers.rowOne.answer"),
+      Messages("checkYourAnswers.whatYouToldUs"),
+      Messages("checkYourAnswers.rowOne.answer"),
       controllers.routes.DecisionController.onPageLoad(CheckMode, id).url)
 
     val interestLine = CheckYourAnswersConfirmationLine(
-      Messages("tai.bbsi.update.checkYourAnswers.rowTwo"),
+      Messages("checkYourAnswers.rowTwo"),
       Money.pounds(BigDecimal(interestAmount)).toString().replace("&pound;", "\u00A3"),
       controllers.routes.UpdateInterestController.onPageLoad(CheckMode).url)
 

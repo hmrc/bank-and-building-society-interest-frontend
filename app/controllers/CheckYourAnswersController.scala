@@ -19,14 +19,18 @@ package controllers
 import com.google.inject.Inject
 import play.api.i18n.{I18nSupport, MessagesApi}
 import controllers.actions.{AuthAction, DataRequiredAction, DataRetrievalAction}
-import utils.{CheckYourAnswersHelper, Enumerable, JourneyConstants, Navigator}
+import utils._
 import viewmodels.{AnswerSection, BankAccountViewModel, UpdateInterestViewModelCheckAnswers}
 import views.html.check_your_answers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
+import identifiers.UpdateInterestId
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.renderer.TemplateRenderer
 import models.Mode
+import models.domain.AmountRequest
+import service.BBSIService
+import uk.gov.hmrc.domain.Nino
 
 import scala.concurrent.Future
 
@@ -36,21 +40,47 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
                                            navigator: Navigator,
                                            authenticate: AuthAction,
                                            getData: DataRetrievalAction,
-                                           requireData: DataRequiredAction)
+                                           requireData: DataRequiredAction,
+                                           bbsiService: BBSIService)
                                           (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport with JourneyConstants with Enumerable.Implicits{
 
   def onPageLoad() = (authenticate andThen getData andThen requireData).async {
     implicit request =>
       val updateInterest = request.userAnswers.updateInterest
-      val decisionAnswer = request.userAnswers.decision
       val bankAccountViewModel = dataCacheConnector.getEntry[BankAccountViewModel](request.externalId, BankAccountDetailsKey)
 
       bankAccountViewModel map {
-        case Some(BankAccountViewModel(id, _)) => {
-          val viewModel = UpdateInterestViewModelCheckAnswers(id, updateInterest.getOrElse(""), decisionAnswer.get.toString)
-          Ok(check_your_answers(appConfig, viewModel))
+        case Some(BankAccountViewModel(id, bankName)) => {
+          updateInterest match {
+            case Some(value) =>
+              val viewModel = UpdateInterestViewModelCheckAnswers(id, value, bankName)
+              Ok(check_your_answers(appConfig, viewModel))
+            case _ => NotFound
+          }
         }
         case _ => NotFound
+      }
+  }
+
+  def onSubmit() = (authenticate andThen getData andThen requireData).async {
+    implicit request =>
+
+      val nino = request.externalId
+
+      val updateInterest = request.userAnswers.updateInterest
+      val bankAccountViewModel = dataCacheConnector.getEntry[BankAccountViewModel](request.externalId, BankAccountDetailsKey)
+
+      bankAccountViewModel flatMap {
+        case Some(BankAccountViewModel(id, _)) => {
+          updateInterest match {
+            case Some(value) =>
+              bbsiService.updateBankAccountInterest(Nino(nino), id, AmountRequest(BigDecimal(FormHelpers.stripNumber(value)))) map {
+                _ => Redirect(controllers.routes.ConfirmationController.onPageLoad)
+              }
+            case _ => Future.successful(NotFound)
+          }
+        }
+        case _ => Future.successful(NotFound)
       }
   }
 }

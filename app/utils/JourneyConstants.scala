@@ -20,4 +20,5 @@ trait JourneyConstants {
   val DecisionKey = "decision"
   val BankAccountDetailsKey = "bankAccountDetails"
   val EnvelopeIdKey = "envelopeId"
+  val UpdateInterestAmountKey = "updateInterestAmount"
 }
