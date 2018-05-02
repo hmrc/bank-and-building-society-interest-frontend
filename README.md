@@ -1,7 +1,7 @@
 Tax Account for Individuals
 =============
 
-[![Build Status](https://travis-ci.org/hmrc/bank-and-building-society-interest-frontend.svg)](https://travis-ci.org/hmrc/bank-and-building-society-interest-frontend) [ ![Download](https://api.bintray.com/packages/hmrc/releases/bank-and-building-society-interest-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/bank-and-building-society-interest-frontend/_latestVersion)
+[![Apache-2.0 license](http://img.shields.io/badge/license-Apache-brightgreen.svg)](http://www.apache.org/licenses/LICENSE-2.0.html) [![Build Status](https://travis-ci.org/hmrc/bank-and-building-society-interest-frontend.svg)](https://travis-ci.org/hmrc/bank-and-building-society-interest-frontend) [ ![Download](https://api.bintray.com/packages/hmrc/releases/bank-and-building-society-interest-frontend/images/download.svg) ](https://bintray.com/hmrc/releases/bank-and-building-society-interest-frontend/_latestVersion)
 
 This service allows users to check their estimated taxable Bank and Building Society Interest, with the ability to update if incorrect.
 
