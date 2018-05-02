@@ -47,8 +47,6 @@ class DecisionViewSpec extends ViewBehaviours {
     behave like pageWithSubmitButton(createView,controllers.routes.DecisionController.onSubmit(NormalMode,1).url,messages("site.continue"))
   }
 
-
-
   "Decision view" when {
     "rendered" must {
       "contain radio buttons for the value" in {

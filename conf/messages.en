@@ -88,7 +88,7 @@ account.whatHappensNext.desc2=Details of the interest you actually received for 
 
 
 decision.checkYourAnswersLabel = decision
-decision.error.required = Please give an answer for decision
+decision.error.required = Choose one option
 
 ##BBSI decision
 decision.title=What do you want to tell us about your account with {0}
