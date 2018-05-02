@@ -18,7 +18,7 @@ package models
 
 import play.api.libs.json._
 
-case class CloseAccount (field1: String, field2: String)
+case class CloseAccount (accountClosedDay: String, accountClosedMonth: String, accountClosedYear: String)
 
 object CloseAccount {
   implicit val format = Json.format[CloseAccount]

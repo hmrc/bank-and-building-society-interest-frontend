@@ -23,7 +23,7 @@ import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def closeAccount: Option[AnswerRow] = userAnswers.closeAccount map {
-    x => AnswerRow("closeAccount.checkYourAnswersLabel", s"${x.field1} ${x.field2}", false, routes.CloseAccountController.onPageLoad(CheckMode).url)
+    x => AnswerRow("closeAccount.checkYourAnswersLabel", s"${x.accountClosedDay} ${x.accountClosedMonth} ${x.accountClosedYear}", false, routes.CloseAccountController.onPageLoad(CheckMode).url)
   }
 
   def decision: Option[AnswerRow] = userAnswers.decision map {

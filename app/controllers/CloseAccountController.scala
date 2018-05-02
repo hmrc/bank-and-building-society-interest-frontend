@@ -26,7 +26,6 @@ import identifiers.CloseAccountId
 import models.{CloseAccount, Mode}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
-import service.BBSIService
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.renderer.TemplateRenderer
 import utils.{JourneyConstants, Navigator, UserAnswers}
@@ -42,8 +41,7 @@ class CloseAccountController @Inject()(appConfig: FrontendAppConfig,
                                                   authenticate: AuthAction,
                                                   getData: DataRetrievalAction,
                                                   requireData: DataRequiredAction,
-                                                  formProvider: CloseAccountFormProvider,
-                                                  bbsiService: BBSIService)
+                                                  formProvider: CloseAccountFormProvider)
                                                   (implicit templateRenderer: TemplateRenderer)
                                                   extends FrontendController with I18nSupport with JourneyConstants {
 

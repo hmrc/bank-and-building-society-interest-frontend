@@ -25,10 +25,10 @@ class CloseAccountFormProviderSpec extends StringFieldBehaviours {
 
   ".field1" must {
 
-    val fieldName = "field1"
-    val requiredKey = "closeAccount.error.field1.required"
+    val fieldName = "accountClosedDay"
+    val requiredKey = "error.date.dayBlank"
     val lengthKey = "closeAccount.error.field1.length"
-    val maxLength = 100
+    val maxLength = 2
 
     behave like fieldThatBindsValidData(
       form,
@@ -52,10 +52,36 @@ class CloseAccountFormProviderSpec extends StringFieldBehaviours {
 
   ".field2" must {
 
-    val fieldName = "field2"
-    val requiredKey = "closeAccount.error.field2.required"
+    val fieldName = "accountClosedMonth"
+    val requiredKey = "error.date.monthBlank"
     val lengthKey = "closeAccount.error.field2.length"
-    val maxLength = 100
+    val maxLength = 2
+    behave like fieldThatBindsValidData(
+      form,
+      fieldName,
+      stringsWithMaxLength(maxLength)
+    )
+
+    behave like fieldWithMaxLength(
+      form,
+      fieldName,
+      maxLength = maxLength,
+      lengthError = FormError(fieldName, lengthKey, Seq(maxLength))
+    )
+
+    behave like mandatoryField(
+      form,
+      fieldName,
+      requiredError = FormError(fieldName, requiredKey)
+    )
+  }
+
+  ".field3" must {
+
+    val fieldName = "accountClosedYear"
+    val requiredKey = "error.date.yearBlank"
+    val lengthKey = "closeAccount.error.field3.length"
+    val maxLength = 4
 
     behave like fieldThatBindsValidData(
       form,

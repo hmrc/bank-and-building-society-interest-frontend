@@ -25,7 +25,7 @@ import controllers.actions._
 import play.api.test.Helpers._
 import forms.CloseAccountFormProvider
 import identifiers.CloseAccountId
-import models.{CloseAccount, NormalMode}
+import models.{CheckMode, CloseAccount, NormalMode}
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
 import service.BBSIService
@@ -42,35 +42,28 @@ class CloseAccountControllerSpec extends ControllerSpecBase with JourneyConstant
   val form = formProvider()
   val viewModel = BankAccountViewModel(1, "testName")
 
-  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap,
-                 bbsiService: BBSIService) =
+  def controller(dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap) =
     new CloseAccountController(frontendAppConfig, messagesApi, FakeDataCacheConnector, new FakeNavigator(desiredRoute = onwardRoute), FakeAuthAction,
-      dataRetrievalAction, new DataRequiredActionImpl, formProvider, bbsiService)
+      dataRetrievalAction, new DataRequiredActionImpl, formProvider)
 
   def viewAsString(form: Form[_] = form) = closeAccount(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer).toString
 
   "CloseAccount Controller" must {
 
     "return OK and the correct view for a GET" in {
-      val bbsiService = mock[BBSIService]
       val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(viewModel)))))
-      val result = controller(dataRetrievalAction, bbsiService).onPageLoad(NormalMode)(fakeRequest)
-
+      val result = controller(dataRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
       status(result) mustBe OK
       contentAsString(result) mustBe viewAsString()
     }
 
+    "populate the view correctly on a GET when a date has previously been entered" in {
 
-
-//    "populate the view correctly on a GET when the question has previously been answered" in {
-//
-//      val validData = Map(CloseAccountId.toString -> Json.toJson(CloseAccount("value 1", "value 2")))
-//      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
-//
-//      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
-//
-//      contentAsString(result) mustBe viewAsString(form.fill(CloseAccount("value 1", "value 2")))
-//    }
+      val validData = Map(CloseAccountId.toString -> Json.toJson(CloseAccount("01","10","2017")),BankAccountDetailsKey -> Json.toJson(viewModel))
+      val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+      val result = controller(getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+      contentAsString(result) mustBe viewAsString(form.fill(CloseAccount("01","10","2017")))
+    }
 
 
 //

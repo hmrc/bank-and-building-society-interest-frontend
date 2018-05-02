@@ -41,6 +41,18 @@
 
         @helpers.form(action = CloseAccountController.onSubmit(mode),'autoComplete -> "off") {
             @error_summary(form.errors)
+
+            @input_date(
+                id="accountClosed",
+                label=messages("closeAccount.dateLabel"),
+                example=messages("closeAccount.dateExampleLabel"),
+                legendClass="form-label-bold",
+                valueDay=form("accountClosedDay"),
+                valueMonth=form("accountClosedMonth"),
+                valueYear=form("accountClosedYear")
+            )
+
+            @submit_button(messages("continue"))
         }
         @cancel_link(url=controllers.routes.AccountDetailsController.onPageLoad)
 

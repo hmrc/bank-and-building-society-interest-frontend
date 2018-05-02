@@ -6,13 +6,15 @@ date.day = Day
 date.month = Month
 date.year = Year
 
+continue=Continue
+
 error.boolean = Please give an answer
 error.invalid_date = Give a correct date
-error.date.day_blank = Enter a day
+error.date.dayBlank = Please enter a day
 error.date.day_invalid = Give a correct day using numbers 1 to 31
-error.date.month_blank = Enter a month
+error.date.monthBlank = Please enter a month
 error.date.month_invalid = Give a correct month using numbers 1 to 12
-error.date.year_blank = Enter a year
+error.date.yearBlank = Please enter a year
 error.date.year_invalid = Give a correct year
 error.integer = Give an answer in whole numbers
 error.non_numeric = Give a value using only numbers
@@ -119,10 +121,6 @@ confirmation.back=Return to your account details
 ##BBSI closeAccount
 closeAccount.title=When did you close the account with {0}?
 closeAccount.preHeading=Account closed
-closeAccount.field1 = Field 1
-closeAccount.field2 = Field 2
+closeAccount.dateLabel=Enter the date you closed the account
+closeAccount.dateExampleLabel=For example, 31 3 1980
 closeAccount.checkYourAnswersLabel = closeAccount
-closeAccount.error.field1.required = Enter field1
-closeAccount.error.field2.required = Enter field2
-closeAccount.error.field1.length = field1 must be 100 characters or less
-closeAccount.error.field2.length = field2 must be 100 characters or less

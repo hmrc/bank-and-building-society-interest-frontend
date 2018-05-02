@@ -41,6 +41,6 @@ class CloseAccountViewSpec extends QuestionViewBehaviours[CloseAccount] {
     behave like pageWithPreHeading(createView, messages("closeAccount.preHeading"), Some(messages("This section is")))
     behave like pageWithBackLink(createView)
     behave like pageWithCancelLink(createView)
-
+    behave like pageWithSubmitButton(createView, controllers.routes.CloseAccountController.onSubmit(NormalMode).url, messages("continue"))
   }
 }
