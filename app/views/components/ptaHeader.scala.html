@@ -35,9 +35,9 @@
 <div class="grid-row">
   <div class="column-two-thirds">
 
-    @formForErrorSummary.map { f =>
-      @if(f.hasErrors) {
-      @errorSummary(Messages("decision.error.selectOption"), f, Seq("flush"))
+    @formForErrorSummary.map { form =>
+      @if(form.hasErrors) {
+      @errorSummary(Messages("decision.error.selectOption"), form, Seq("flush"))
         }
       }
 
