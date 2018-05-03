@@ -35,7 +35,7 @@ import scala.concurrent.Future
 
 class CloseAccountControllerSpec extends ControllerSpecBase with JourneyConstants {
 
-  def onwardRoute = routes.IndexController.onPageLoad()
+  def onwardRoute = routes.OverviewController.onPageLoad()
 
   val formProvider = new CloseAccountFormProvider()
   val form = formProvider()
