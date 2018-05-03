@@ -35,17 +35,17 @@ class Navigator @Inject()() extends JourneyConstants{
         routes.RemoveAccountController.onPageLoad()
       case Some(Close) =>
         routes.CloseAccountController.onPageLoad(mode)
-      case _ => routes.IndexController.onPageLoad()
+      case _ => routes.OverviewController.onPageLoad()
     }),
     CloseAccountId -> (_.closeAccount match {
         case Some(CloseAccount(day,month,year)) => {
           if(TaxYearResolver.fallsInThisTaxYear(new LocalDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)))){
-            routes.IndexController.onPageLoad()
+            routes.OverviewController.onPageLoad()
           }else{
             routes.CheckYourAnswersController.onPageLoad()
           }
         }
-        case None => routes.IndexController.onPageLoad()
+        case None => routes.OverviewController.onPageLoad()
     })
   )
 
@@ -53,7 +53,7 @@ class Navigator @Inject()() extends JourneyConstants{
 
   def nextPage(id: Identifier, mode: Mode): UserAnswers => Call = mode match {
     case NormalMode =>
-      routeMap(mode).getOrElse(id, _ => routes.IndexController.onPageLoad())
+      routeMap(mode).getOrElse(id, _ => routes.OverviewController.onPageLoad())
     case CheckMode =>
       editRouteMap.getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoad())
   }
