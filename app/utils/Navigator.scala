@@ -40,7 +40,7 @@ class Navigator @Inject()() extends JourneyConstants{
     CloseAccountId -> (_.closeAccount match {
         case Some(CloseAccount(day,month,year)) => {
           if(TaxYearResolver.fallsInThisTaxYear(new LocalDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)))){
-            routes.OverviewController.onPageLoad()
+            routes.ClosingInterestController.onPageLoad(mode)
           }else{
             routes.CheckYourAnswersController.onPageLoad()
           }

@@ -55,6 +55,13 @@ class NavigatorSpec extends SpecBase with MockitoSugar with JourneyConstants {
         when(mockUserAnswers.closeAccount).thenReturn(Some(CloseAccount("01","01",TaxYearResolver.currentTaxYear.toString)))
         navigator.nextPage(CloseAccountId,NormalMode)(mockUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad()
       }
+
+      "go to ClosingInterest for an account close date which is in the current tax year" in {
+        val mockUserAnswers = mock[UserAnswers]
+        val mode = NormalMode
+        when(mockUserAnswers.closeAccount).thenReturn(Some(CloseAccount("07","04",TaxYearResolver.currentTaxYear.toString)))
+        navigator.nextPage(CloseAccountId,mode)(mockUserAnswers) mustBe routes.ClosingInterestController.onPageLoad(mode)
+      }
     }
 
     "in Check mode" must {

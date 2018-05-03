@@ -21,10 +21,10 @@ import controllers.routes
 import forms.ClosingInterestFormProvider
 import views.behaviours.YesNoViewBehaviours
 import models.NormalMode
+import uk.gov.hmrc.time.TaxYearResolver
 import views.html.closingInterest
 
 class ClosingInterestViewSpec extends YesNoViewBehaviours {
-
   val messageKeyPrefix = "closingInterest"
 
   val form = new ClosingInterestFormProvider()()
@@ -35,8 +35,13 @@ class ClosingInterestViewSpec extends YesNoViewBehaviours {
 
   "ClosingInterest view" must {
 
-    behave like normalPage(createView, messageKeyPrefix)
-
+    behave like normalPage(createView,messageKeyPrefix,
+      Some(messages("closingInterest.title",TaxYearResolver.currentTaxYear.toString)),
+      Some(messages("closingInterest.title",TaxYearResolver.currentTaxYear.toString)))
+    behave like pageWithPreHeading(createView, messages("closeAccount.preHeading"), Some(messages("This section is")))
+    behave like pageWithBackLink(createView)
+    behave like pageWithCancelLink(createView)
     behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.ClosingInterestController.onSubmit(NormalMode).url)
+    behave like pageWithSubmitButton(createView, controllers.routes.ClosingInterestController.onSubmit(NormalMode).url, messages("continue"))
   }
 }

@@ -20,26 +20,36 @@
 @import models.Mode
 @import utils.FormHelpers
 @import uk.gov.hmrc.renderer.TemplateRenderer
+@import components._
+@import uk.gov.hmrc.time.TaxYearResolver
 
 @(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
 
+@header = @{
+    ptaHeader(
+        displayBackLink = true,
+        mainHeadingText = messages("closingInterest.title",TaxYearResolver.currentTaxYear.toString),
+        preHeadingText = messages("closeAccount.preHeading")
+    )
+}
+
 @main_template(
-    title = messages("closingInterest.title"),
+    title = messages("closingInterest.title",TaxYearResolver.currentTaxYear.toString),
+    pageHeader = Some(header),
     appConfig = appConfig,
     bodyClasses = None) {
 
     @helpers.form(action = ClosingInterestController.onSubmit(mode), 'autoComplete -> "off") {
 
-        @components.error_summary(form.errors)
+        @error_summary(form.errors)
 
-        @components.heading("closingInterest.heading")
-
-        @components.input_yes_no(
+        @input_yes_no(
             field = form("value"),
             label = messages("closingInterest.heading"),
             labelClass = Some("visually-hidden")
         )
 
-        @components.submit_button("")
+        @components.submit_button(messages("continue"))
     }
+    @cancel_link(url=controllers.routes.AccountDetailsController.cancelJourney)
 }
