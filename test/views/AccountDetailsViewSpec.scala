@@ -42,7 +42,7 @@ import views.html.account_details
 class AccountDetailsViewSpec extends BBSIViewSpec {
 
   "bbsi accounts view" should {
-    behave like pageWithTitle(messages("accountDetails.heading"))
+    behave like pageWithTitle(messages("accountDetails.heading") + messages("site.gov.uk"))
     behave like pageWithBackLink
     behave like pageWithCombinedHeader(messages("account.preHeading"),messages("accountDetails.heading"))
 

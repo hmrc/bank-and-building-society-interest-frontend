@@ -33,25 +33,31 @@
 }
 
 @main_template(
-    title = messages("decision.title"),
+    title = messages("decision.title", viewModel.bankName),
     pageHeader = Some(header),
     appConfig = appConfig,
     bodyClasses = None
 ) {
 
-    @helpers.form(action = DecisionController.onSubmit(mode, viewModel.id), 'autoComplete -> "off") {
+  <div class="grid-row">
+    <div class="column-two-thirds">
 
-        @components.error_summary(form.errors)
+      @helpers.form(action = DecisionController.onSubmit(mode, viewModel.id), 'autoComplete -> "off") {
 
-        @components.input_radio(
-            field = form("value"),
-            legend = messages("decision.heading"),
-            legendClass = Some("visually-hidden"),
-            inputs = Decision.options.toSeq
-        )
+          @components.error_summary(form.errors)
 
-        @components.submit_button(messages("site.save_and_continue"))
-    }
+          @components.input_radio(
+              field = form("value"),
+              legend = messages("decision.heading"),
+              legendClass = Some("visually-hidden"),
+              inputs = Decision.options.toSeq
+          )
 
-    @cancel_link(url=controllers.routes.AccountDetailsController.onPageLoad)
+          @components.submit_button(messages("site.continue"))
+      }
+
+      @cancel_link(url=controllers.routes.AccountDetailsController.cancelJourney)
+
+    </div>
+  </div>
 }

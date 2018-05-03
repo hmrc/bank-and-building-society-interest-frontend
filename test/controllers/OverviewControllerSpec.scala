@@ -26,20 +26,20 @@ import views.html.overview
 
 import scala.concurrent.Future
 
-class IndexControllerSpec extends ControllerSpecBase {
+class OverviewControllerSpec extends ControllerSpecBase {
 
   "Index Controller" must {
     "return 200 for a GET" in {
 
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
 
-      val result = new IndexController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
+      val result = new OverviewController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
       status(result) mustBe OK
     }
 
     "return the correct view for a GET" in {
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
-      val result = new IndexController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
+      val result = new OverviewController(frontendAppConfig, messagesApi, FakeAuthAction, bbsiService).onPageLoad()(fakeRequest)
       contentAsString(result) mustBe overview(untaxedInterest,frontendAppConfig)(fakeRequest, messages, templateRenderer).toString
     }
   }
