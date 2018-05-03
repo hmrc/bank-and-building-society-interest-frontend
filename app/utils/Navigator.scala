@@ -33,7 +33,7 @@ class Navigator @Inject()() {
         routes.RemoveAccountController.onPageLoad()
       case Some(Update) =>
         routes.UpdateInterestController.onPageLoad(mode)
-      case _ => routes.IndexController.onPageLoad()
+      case _ => routes.OverviewController.onPageLoad()
     }
       ),
     UpdateInterestId -> (_ => routes.CheckYourAnswersController.onPageLoad())
@@ -45,7 +45,7 @@ class Navigator @Inject()() {
 
   def nextPage(id: Identifier, mode: Mode): UserAnswers => Call = mode match {
     case NormalMode =>
-      routeMap.getOrElse(id, _ => routes.OverviewController.onPageLoad())
+      routeMap(mode).getOrElse(id , _ => routes.OverviewController.onPageLoad())
     case CheckMode =>
       editRouteMap.getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoad())
   }

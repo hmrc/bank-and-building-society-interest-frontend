@@ -17,20 +17,18 @@
 package controllers
 
 import com.google.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import controllers.actions.{AuthAction, DataRequiredAction, DataRetrievalAction}
-import utils._
-import viewmodels.{AnswerSection, BankAccountViewModel, UpdateInterestViewModelCheckAnswers}
-import views.html.check_your_answers
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
-import identifiers.UpdateInterestId
-import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import uk.gov.hmrc.renderer.TemplateRenderer
-import models.Mode
+import controllers.actions.{AuthAction, DataRequiredAction, DataRetrievalAction}
 import models.domain.AmountRequest
+import play.api.i18n.{I18nSupport, MessagesApi}
 import service.BBSIService
 import uk.gov.hmrc.domain.Nino
+import uk.gov.hmrc.play.bootstrap.controller.FrontendController
+import uk.gov.hmrc.renderer.TemplateRenderer
+import utils._
+import viewmodels.{BankAccountViewModel, UpdateInterestViewModelCheckAnswers}
+import views.html.check_your_answers
 
 import scala.concurrent.Future
 
