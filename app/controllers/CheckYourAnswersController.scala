@@ -17,26 +17,67 @@
 package controllers
 
 import com.google.inject.Inject
-import play.api.i18n.{I18nSupport, MessagesApi}
-import controllers.actions.{AuthAction, DataRequiredAction, DataRetrievalAction}
-import utils.CheckYourAnswersHelper
-import viewmodels.AnswerSection
-import views.html.check_your_answers
 import config.FrontendAppConfig
+import connectors.DataCacheConnector
+import controllers.actions.{AuthAction, DataRequiredAction, DataRetrievalAction}
+import models.domain.AmountRequest
+import play.api.i18n.{I18nSupport, MessagesApi}
+import service.BBSIService
+import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.renderer.TemplateRenderer
+import utils._
+import viewmodels.{BankAccountViewModel, UpdateInterestViewModelCheckAnswers}
+import views.html.check_your_answers
+
+import scala.concurrent.Future
 
 class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
                                            override val messagesApi: MessagesApi,
+                                           dataCacheConnector: DataCacheConnector,
+                                           navigator: Navigator,
                                            authenticate: AuthAction,
                                            getData: DataRetrievalAction,
-                                           requireData: DataRequiredAction)
-                                          (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
+                                           requireData: DataRequiredAction,
+                                           bbsiService: BBSIService)
+                                          (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport with JourneyConstants with Enumerable.Implicits{
 
-  def onPageLoad() = (authenticate andThen getData andThen requireData) {
+  def onPageLoad() = (authenticate andThen getData andThen requireData).async {
     implicit request =>
-      val checkYourAnswersHelper = new CheckYourAnswersHelper(request.userAnswers)
-      val sections = Seq(AnswerSection(None, Seq()))
-      Ok(check_your_answers(appConfig, sections))
+      val nino = request.externalId
+      val updateInterest = request.userAnswers.updateInterest
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
+        case Some(BankAccountViewModel(id, bankName)) => {
+          updateInterest match {
+            case Some(value) =>
+              val viewModel = UpdateInterestViewModelCheckAnswers(id, value, bankName)
+              Future.successful(Ok(check_your_answers(appConfig, viewModel)))
+            case _ => Future.successful(NotFound)
+          }
+        }
+        case _ => Future.successful(NotFound)
+      }
+  }
+
+  def onSubmit() = (authenticate andThen getData andThen requireData).async {
+    implicit request =>
+
+      val nino = request.externalId
+
+      val updateInterest = request.userAnswers.updateInterest
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
+        case Some(BankAccountViewModel(id, _)) => {
+          updateInterest match {
+            case Some(value) =>
+              bbsiService.updateBankAccountInterest(Nino(nino), id, AmountRequest(BigDecimal(FormHelpers.stripNumber(value)))) flatMap { _ =>
+                dataCacheConnector.flush(nino) map { _ =>
+                  Redirect(controllers.routes.ConfirmationController.onPageLoad)
+                }
+              }
+            case _ => Future.successful(NotFound)
+          }
+        }
+        case _ => Future.successful(NotFound)
+      }
   }
 }

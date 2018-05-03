@@ -14,30 +14,39 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.play.views.html._
 @import config.FrontendAppConfig
 @import viewmodels.{Section, AnswerSection, RepeaterAnswerSection}
 @import uk.gov.hmrc.renderer.TemplateRenderer
 @import components._
+@import uk.gov.hmrc.play.views.html.helpers._
 
-@(appConfig: FrontendAppConfig, answerSections: Seq[Section])(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+@(appConfig: FrontendAppConfig, viewModel: viewmodels.UpdateInterestViewModelCheckAnswers)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+
+@header = @{
+        ptaHeader(
+        displayBackLink = true,
+        mainHeadingText = Messages("checkYourAnswers"),
+        preHeadingText = Messages("updateInterest.checkYourAnswers.preHeading")
+        )
+}
 
 @main_template(
-    title = messages("checkYourAnswers.title"),
+    title = messages("checkYourAnswers"),
+    pageHeader = Some(header),
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @components.heading("checkYourAnswers.heading")</h1>
+                @checkYourAnswers(
+                title = Some(viewModel.bankName),
+                confirmationLines = viewModel.journeyConfirmationLines
+                )
 
-    <p>@messages("checkYourAnswers.guidance")</p>
+                <p class="subsection">@Messages("checkYourAnswers.confirmText")</p>
 
-    @for(section <- answerSections){
-        @{
-            section match {
-                case a: AnswerSection => components.answer_section(a)
-                case r: RepeaterAnswerSection => components.repeater_answer_section(r)
-            }
-        }
-    }
+                    @form(action = controllers.routes.CheckYourAnswersController.onSubmit) {
+                    @submit_button(messages("confirmAndSend"))
+                    }
 
-    @cancel_link(url=controllers.routes.AccountDetailsController.cancelJourney)
+                @cancel_link(controllers.routes.AccountDetailsController.cancelJourney)
 }

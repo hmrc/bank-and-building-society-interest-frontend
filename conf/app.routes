@@ -8,7 +8,8 @@ GET        /language/:lang                              controllers.LanguageSwit
 
 GET        /this-service-has-been-reset                 controllers.SessionExpiredController.onPageLoad
 
-GET        /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad
+GET        /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad()
+POST       /check-your-answers                          controllers.CheckYourAnswersController.onSubmit()
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
@@ -25,3 +26,8 @@ GET        /removeAccount                               controllers.RemoveAccoun
 POST       /removeAccount                               controllers.RemoveAccountController.onSubmit()
 
 GET        /confirmation                                controllers.ConfirmationController.onPageLoad()
+
+GET        /updateInterest                              controllers.UpdateInterestController.onPageLoad(mode: Mode = NormalMode)
+POST       /updateInterest                              controllers.UpdateInterestController.onSubmit(mode: Mode = NormalMode)
+GET        /changeUpdateInterest                        controllers.UpdateInterestController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeUpdateInterest                        controllers.UpdateInterestController.onSubmit(mode: Mode = CheckMode)

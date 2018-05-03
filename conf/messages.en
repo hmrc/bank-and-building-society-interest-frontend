@@ -18,7 +18,7 @@ error.integer = Give an answer in whole numbers
 error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
-error.summary.title = There’s been a problem
+error.summary.title = There is a problem
 error.summary.text = Check the following
 
 index.title = bank-and-building-society-interest-frontend
@@ -98,7 +98,7 @@ decision.title=What do you want to tell us about your account with {0}
 decision.heading=What do you want to tell us about your account with {0}
 decision.customGaTitle=What do you want to tell us about your account
 decision.preHeading=Update or remove account
-decision.error.selectOption=There’s been a problem
+decision.error.selectOption=There is a problem
 decision.update=I want to update the estimated amount of interest
 decision.close=This account is now closed
 decision.remove=I never had this account
@@ -118,3 +118,33 @@ confirmation.paraOne=We will check the information you sent.
 confirmation.paraTwo=If no further information is needed your records will be updated within 3 weeks and you will receive a confirmation.
 confirmation.paraThree=You do not need to call us. We will contact you if we have any questions.
 confirmation.back=Return to your account details
+
+updateInterest.title=Estimated interest from {0}
+updateInterest.preHeading = Update estimated interest
+updateInterest.checkYourAnswersLabel = updateInterest
+updateInterest.error.required = Enter updateInterest
+updateInterest.error.length = UpdateInterest must be 90 characters or less
+updateInterest.customGaTitle=Estimated interest from this account
+updateInterest.para1=For the tax year {0} to {1} we estimate you will be paid {2} interest on this account.
+updateInterest.para2=You can change this amount. It does not have to be completely accurate, just a rough estimate.
+updateInterest.para3=You may find it helpful to use an online ''compound interest calculator'' to work out your interest.
+updateInterest.textBox.title=Enter your estimate
+updateInterest.accordion.title=What happens if I enter the wrong amount?
+updateInterest.accordion.desc1=If the amount you enter is too high, you will pay too much tax. You will get a refund after the end of the tax year.
+updateInterest.accordion.desc2=If the amount you enter is too low, you will pay too little tax. You will have to pay any amount still due.
+updateInterest.para4=Details of the interest you actually received for the tax year April {0} to April {1} will be sent to us after {2}. We will use the actual figures to calculate how much Income Tax you should have paid in that year.
+updateInterest.blank=Amount cannot be blank
+updateInterest.isCurrency=Enter valid amount
+updateInterest.wholeNumber=Amount cannot be in decimal
+updateInterest.checkYourAnswers.preHeading = Update interest
+
+checkYourAnswers = Check your answers
+checkYourAnswers.whatYouToldUs = What you told us
+checkYourAnswers.rowOne.answer = Updated the estimated interest
+checkYourAnswers.rowTwo = Your updated interest amount
+checkYourAnswers.change.label = Change
+checkYourAnswers.confirmText = By sending this update you are confirming that the details you are giving are correct.
+
+inPounds = in pounds.
+continue = Continue
+

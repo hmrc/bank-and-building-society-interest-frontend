@@ -14,15 +14,6 @@
  * limitations under the License.
  */
 
-package utils
+package viewmodels
 
-import uk.gov.hmrc.http.cache.client.CacheMap
-import identifiers._
-import models._
-
-class UserAnswers(val cacheMap: CacheMap) extends Enumerable.Implicits {
-  def updateInterest: Option[String] = cacheMap.getEntry[String](UpdateInterestId.toString)
-
-  def decision: Option[Decision] = cacheMap.getEntry[Decision](DecisionId.toString)
-
-}
+case class CheckYourAnswersConfirmationLine(question: String, answer: String, changeUrl: String)

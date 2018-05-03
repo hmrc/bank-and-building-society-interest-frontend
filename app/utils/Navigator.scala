@@ -21,13 +21,22 @@ import javax.inject.{Inject, Singleton}
 import play.api.mvc.Call
 import controllers.routes
 import identifiers._
+import models.Decision.{Remove, Update}
 import models.{CheckMode, Mode, NormalMode}
 
 @Singleton
 class Navigator @Inject()() {
 
-  private val routeMap: Map[Identifier, UserAnswers => Call] = Map(
-    DecisionId -> (_ => routes.RemoveAccountController.onPageLoad())
+  private def routeMap(mode: Mode): Map[Identifier, UserAnswers => Call] = Map(
+    DecisionId -> (_.decision match {
+      case Some(Remove) =>
+        routes.RemoveAccountController.onPageLoad()
+      case Some(Update) =>
+        routes.UpdateInterestController.onPageLoad(mode)
+      case _ => routes.OverviewController.onPageLoad()
+    }
+      ),
+    UpdateInterestId -> (_ => routes.CheckYourAnswersController.onPageLoad())
   )
 
   private val editRouteMap: Map[Identifier, UserAnswers => Call] = Map(
@@ -36,7 +45,7 @@ class Navigator @Inject()() {
 
   def nextPage(id: Identifier, mode: Mode): UserAnswers => Call = mode match {
     case NormalMode =>
-      routeMap.getOrElse(id, _ => routes.OverviewController.onPageLoad())
+      routeMap(mode).getOrElse(id , _ => routes.OverviewController.onPageLoad())
     case CheckMode =>
       editRouteMap.getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoad())
   }

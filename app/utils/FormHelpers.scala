@@ -26,4 +26,10 @@ object FormHelpers {
       case Some(error) => error.message
     }
   }
+
+  def stripNumber(stringValue: String): String = {
+    val toRemove = Set[Char]('£', ',', ' ')
+    val newValue = stringValue.filterNot(toRemove)
+    newValue.takeWhile(_ != '.')
+  }
 }

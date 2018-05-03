@@ -106,4 +106,33 @@ trait ViewBehaviours extends ViewSpecBase {
       assert(doc.getElementsByTag("form").attr("action") == submitUrl)
     }
   }
+
+  def pageWithChangeLink(view: () => HtmlFormat.Appendable, id: Int, submitUrl: String) = {
+    val doc = asDocument(view())
+    s"have a page with change link on line $id" in {
+      assert(doc.getElementById(s"confirmation-line-$id-change-link").attr("href") == submitUrl)
+    }
+  }
+
+  def pageWithQuestionLine(view: () => HtmlFormat.Appendable, id: Int, text: String) = {
+    val doc = asDocument(view())
+    s"have a page with question on line $id" in {
+      assert(doc.getElementById(s"confirmation-line-$id-question").text() == text)
+    }
+  }
+
+  def pageWithAnswerLine(view: () => HtmlFormat.Appendable, id: Int, text: String) = {
+    val doc = asDocument(view())
+    s"have a page with answer on line $id" in {
+      assert(doc.getElementById(s"confirmation-line-$id-answer").text() == text)
+    }
+  }
+
+  def pageWithHeadingH2(view: () => HtmlFormat.Appendable,
+                        h2Text: String) = {
+    "render a header two" in {
+      val doc = asDocument(view())
+      assertPageHeaderTwo(doc, h2Text)
+    }
+  }
 }
