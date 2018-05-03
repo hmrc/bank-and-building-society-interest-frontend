@@ -16,6 +16,8 @@
 
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.renderer.TemplateRenderer
+@import uk.gov.hmrc.play.language.LanguageUtils
+@import uk.gov.hmrc.play.views.html.layouts
 
 @(title: String,
   appConfig: FrontendAppConfig,
@@ -28,7 +30,6 @@
   scriptElem: Option[Html] = None,
   pageHeader: Option[Html] = None)(mainContent: Html)(implicit request : Request[_], messages: Messages, templateRenderer: TemplateRenderer)
 
-@import uk.gov.hmrc.play.views.html.layouts
 
 @serviceInfoContent = {}
 
@@ -38,21 +39,35 @@
     }
 }
 
-
-
 @mainContentHeader = {
     @pageHeader.getOrElse(Html(""))
 }
 
+@isWelshActive = @{
+    LanguageUtils.getCurrentLang == Lang("cy")
+}
+
+@mustacheMap = @{
+    Map[String, Any](
+        "pageTitle" -> (title + messages("site.gov.uk")),
+        "mainContentHeader" -> mainContentHeader,
+        "linkElems" -> Map(
+            "url" -> controllers.routes.Assets.versioned("stylesheets/bankandbuildingsocietyinterestfrontend-app.css")
+        ),
+        "navTitle" -> Messages("Bank and building society interest"),
+        "showPropositionLinks" -> true,
+        "langSelector" -> true,
+        "enUrl" -> controllers.routes.LanguageSwitchController.switchToLanguage("english"),
+        "cyUrl" -> controllers.routes.LanguageSwitchController.switchToLanguage("cymraeg"),
+        "isWelsh" -> isWelshActive
+    )
+}
+
+
 @{
     templateRenderer.renderDefaultTemplate(
-      layouts.article(mainContent, includeGridWrapper, articleClasses),
-        Map(
-            "pageTitle" -> (title + messages("site.gov.uk")),
-            "mainContentHeader" -> mainContentHeader
-        )
-      )
+        layouts.article(mainContent, includeGridWrapper, articleClasses), mustacheMap
+    )
 }
 
 <script src='@routes.Assets.versioned("javascripts/bankandbuildingsocietyinterestfrontend-app.min.js")'> </script>
-
