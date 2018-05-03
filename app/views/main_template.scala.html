@@ -16,6 +16,7 @@
 
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.renderer.TemplateRenderer
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 
 @(title: String,
   appConfig: FrontendAppConfig,
@@ -38,7 +39,7 @@
     }
 }
 
-
+@helpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
 
 @mainContentHeader = {
     @pageHeader.getOrElse(Html(""))
@@ -49,7 +50,8 @@
       layouts.article(mainContent, includeGridWrapper, articleClasses),
         Map(
             "pageTitle" -> (title + messages("site.gov.uk")),
-            "mainContentHeader" -> mainContentHeader
+            "mainContentHeader" -> mainContentHeader,
+            "getHelpForm" -> helpForm
         )
       )
 }
