@@ -35,9 +35,11 @@
 <div class="grid-row">
   <div class="column-two-thirds">
 
-    @if(formForErrorSummary.isDefined) {
-      @errorSummary(Messages("decision.error.selectOption"), formForErrorSummary.get, Seq("flush"))
-    }
+    @formForErrorSummary.map { f =>
+      @if(f.hasErrors) {
+      @errorSummary(Messages("decision.error.selectOption"), f, Seq("flush"))
+        }
+      }
 
     <header class="page-heading">
       <h1 class="heading-xlarge">@{mainHeadingText}</h1>
