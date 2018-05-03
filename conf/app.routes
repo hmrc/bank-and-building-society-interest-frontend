@@ -30,3 +30,8 @@ GET        /closeAccount                                controllers.CloseAccount
 POST       /closeAccount                                controllers.CloseAccountController.onSubmit(mode: Mode = NormalMode)
 GET        /changeCloseAccount                          controllers.CloseAccountController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeCloseAccount                          controllers.CloseAccountController.onSubmit(mode: Mode = CheckMode)
+
+GET        /closingInterest                       controllers.ClosingInterestController.onPageLoad(mode: Mode = NormalMode)
+POST       /closingInterest                       controllers.ClosingInterestController.onSubmit(mode: Mode = NormalMode)
+GET        /changeClosingInterest                       controllers.ClosingInterestController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeClosingInterest                       controllers.ClosingInterestController.onSubmit(mode: Mode = CheckMode)
