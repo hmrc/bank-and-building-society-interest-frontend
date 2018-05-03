@@ -21,5 +21,5 @@ import play.api.libs.json.Json
 case class UpdateInterestViewModel(id: Int, interest: BigDecimal, bankName: String)
 
 object UpdateInterestViewModel {
-  implicit val formats = Json.format[BankAccountViewModel]
+  implicit val formats = Json.format[UpdateInterestViewModel]
 }

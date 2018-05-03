@@ -57,7 +57,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
     "display change links for Update Interest journey" when {
       behave like pageWithQuestionLine(createView, 1, messages("checkYourAnswers.whatYouToldUs"))
-      behave like pageWithQuestionLine(createView, 2, messages("Your updated interest amount"))
+      behave like pageWithQuestionLine(createView, 2, messages("checkYourAnswers.rowTwo"))
     }
 
     "display change links for Update Interest journey" when {

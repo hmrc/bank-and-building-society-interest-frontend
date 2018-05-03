@@ -75,5 +75,3 @@ class UpdateInterestFormProvider @Inject() extends FormErrorHelper {
     stringValue matches regex.r.toString()
   }
 }
-
-//("updateInterest.error.required")

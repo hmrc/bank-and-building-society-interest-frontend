@@ -46,18 +46,16 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
     implicit request =>
       val nino = request.externalId
       val updateInterest = request.userAnswers.updateInterest
-      val bankAccountViewModel = dataCacheConnector.getEntry[BankAccountViewModel](nino, BankAccountDetailsKey)
-
-      bankAccountViewModel map {
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
         case Some(BankAccountViewModel(id, bankName)) => {
           updateInterest match {
             case Some(value) =>
               val viewModel = UpdateInterestViewModelCheckAnswers(id, value, bankName)
-              Ok(check_your_answers(appConfig, viewModel))
-            case _ => NotFound
+              Future.successful(Ok(check_your_answers(appConfig, viewModel)))
+            case _ => Future.successful(NotFound)
           }
         }
-        case _ => NotFound
+        case _ => Future.successful(NotFound)
       }
   }
 
@@ -67,9 +65,7 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
       val nino = request.externalId
 
       val updateInterest = request.userAnswers.updateInterest
-      val bankAccountViewModel = dataCacheConnector.getEntry[BankAccountViewModel](nino, BankAccountDetailsKey)
-
-      bankAccountViewModel flatMap {
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
         case Some(BankAccountViewModel(id, _)) => {
           updateInterest match {
             case Some(value) =>

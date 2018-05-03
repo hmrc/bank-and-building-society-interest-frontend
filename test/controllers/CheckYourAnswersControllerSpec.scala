@@ -22,7 +22,7 @@ import controllers.actions.{DataRequiredActionImpl, DataRetrievalAction, FakeAut
 import identifiers.UpdateInterestId
 import org.mockito.Matchers.any
 import org.mockito.Mockito.when
-import play.api.libs.json.{JsNull, JsString}
+import play.api.libs.json.{JsNull, JsString, Json}
 import service.BBSIService
 import uk.gov.hmrc.http.cache.client.CacheMap
 import utils.{FakeNavigator, JourneyConstants}
@@ -51,26 +51,24 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase  with JourneyCon
   "Check Your Answers Controller" must {
     val bbsiService = mock[BBSIService]
     val mockDataCacheConnector = mock[DataCacheConnector]
-    val validData = Map(UpdateInterestId.toString -> JsString("3000"))
+    val validData = Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel), UpdateInterestId.toString -> JsString("3000"))
     val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
     "return 200 and the correct view for a GET" in {
-      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(Some(bankAccountViewModel)))
-      val result = controller(bbsiService = bbsiService, getRelevantData, dataCacheConnector = mockDataCacheConnector).onPageLoad()(fakeRequest)
+      val result = controller(bbsiService = bbsiService, getRelevantData).onPageLoad()(fakeRequest)
       status(result) mustBe OK
       contentAsString(result) mustBe check_your_answers(frontendAppConfig, viewModel)(fakeRequest, messages,templateRenderer).toString
     }
 
     "return Not Found when there is no Bank Account details present in cache" in {
-      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(None))
-      val result = controller(bbsiService = bbsiService, getRelevantData, dataCacheConnector = mockDataCacheConnector).onPageLoad()(fakeRequest)
+      val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(UpdateInterestId.toString -> JsString("3000")))))
+      val result = controller(bbsiService = bbsiService, getNoData).onPageLoad()(fakeRequest)
       status(result) mustBe NOT_FOUND
     }
 
     "return Not found when there is no interest amount present in cache" in {
-      val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map())))
-      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(Some(bankAccountViewModel)))
-      val result = controller(bbsiService = bbsiService, getNoData, dataCacheConnector = mockDataCacheConnector).onPageLoad()(fakeRequest)
+      val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel)))))
+      val result = controller(bbsiService = bbsiService, getNoData).onPageLoad()(fakeRequest)
       status(result) mustBe NOT_FOUND
     }
 
@@ -84,21 +82,20 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase  with JourneyCon
     "redirect to the next page when valid data is submitted" in {
       when(bbsiService.updateBankAccountInterest(any(), any(), any())(any())).thenReturn(Future.successful(EnvelopeIdKey))
       when(mockDataCacheConnector.flush(any())).thenReturn(Future.successful(true))
-      val result = controller(bbsiService = bbsiService, getRelevantData, dataCacheConnector = mockDataCacheConnector).onSubmit()(fakeRequest)
+      val result = controller(bbsiService = bbsiService, getRelevantData, mockDataCacheConnector).onSubmit()(fakeRequest)
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(controllers.routes.ConfirmationController.onPageLoad().url)
     }
 
     "return bad request on submit when no bank details is present in cache" in {
-      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(None))
-      val result = controller(bbsiService = bbsiService, getRelevantData, dataCacheConnector = mockDataCacheConnector).onSubmit()(fakeRequest)
+      val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(UpdateInterestId.toString -> JsString("3000")))))
+      val result = controller(bbsiService = bbsiService, getNoData).onSubmit()(fakeRequest)
       status(result) mustBe NOT_FOUND
     }
 
     "return bad request on submit when no interest amount is present in cache" in {
-      val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map())))
-      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(Some(bankAccountViewModel)))
-      val result = controller(bbsiService = bbsiService, getNoData, dataCacheConnector = mockDataCacheConnector).onSubmit()(fakeRequest)
+      val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel)))))
+      val result = controller(bbsiService = bbsiService, getNoData).onSubmit()(fakeRequest)
       status(result) mustBe NOT_FOUND
     }
   }

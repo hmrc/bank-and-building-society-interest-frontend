@@ -17,7 +17,7 @@
 package controllers
 
 import play.api.data.Form
-import play.api.libs.json.JsString
+import play.api.libs.json.{JsString, Json}
 import uk.gov.hmrc.http.cache.client.CacheMap
 import utils.{FakeNavigator, JourneyConstants}
 import connectors.{DataCacheConnector, FakeDataCacheConnector}
@@ -67,44 +67,43 @@ class UpdateInterestControllerSpec extends ControllerSpecBase with JourneyConsta
 
   "UpdateInterest Controller" must {
 
-    val mockDataCacheConnector = mock[DataCacheConnector]
     val bbsiService = mock[BBSIService]
 
     "return OK and the correct view for a GET" in {
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
-      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(Some(bankAccountViewModel)))
-      val result = controller(bbsiService = bbsiService, mockDataCacheConnector).onPageLoad(NormalMode)(fakeRequest)
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel)))))
+      val result = controller(bbsiService = bbsiService, dataRetrievalAction = dataRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
       status(result) mustBe OK
       contentAsString(result) mustBe viewAsString()
     }
 
     "return Not Found when there is no Bank Account with the matching id from cache" in {
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
-      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(Some(bankAccountViewModel1)))
-      val result = controller(bbsiService = bbsiService, mockDataCacheConnector).onPageLoad(NormalMode)(fakeRequest)
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel1)))))
+      val result = controller(bbsiService = bbsiService, dataRetrievalAction = dataRetrievalAction).onPageLoad(NormalMode)(fakeRequest)
       status(result) mustBe NOT_FOUND
     }
 
     "return Not found when there is no data present in cache" in {
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
-      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(None))
-      val result = controller(bbsiService = bbsiService, mockDataCacheConnector).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(bbsiService = bbsiService).onPageLoad(NormalMode)(fakeRequest)
       status(result) mustBe NOT_FOUND
     }
 
     "populate the view correctly on a GET when the question has previously been answered" in {
       val prePop = form.fill(testAnswer)
-      val validData = Map(UpdateInterestId.toString -> JsString(testAnswer))
+      val validData = Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel),
+        UpdateInterestId.toString -> JsString(testAnswer))
       val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
-      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(Some(bankAccountViewModel)))
-      val result = controller(bbsiService = bbsiService, mockDataCacheConnector, getRelevantData).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(bbsiService = bbsiService, dataRetrievalAction = getRelevantData).onPageLoad(NormalMode)(fakeRequest)
       contentAsString(result) mustBe viewAsString(prePop)
     }
 
     "redirect to the next page when valid data is submitted" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("updateInterest", 120.toString))
-      val result = controller(bbsiService = bbsiService).onSubmit(NormalMode)(postRequest)
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel)))))
+      val result = controller(bbsiService = bbsiService, dataRetrievalAction = dataRetrievalAction).onSubmit(NormalMode)(postRequest)
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(onwardRoute.url)
     }
@@ -113,21 +112,21 @@ class UpdateInterestControllerSpec extends ControllerSpecBase with JourneyConsta
       val postRequest = fakeRequest.withFormUrlEncodedBody(("updateInterest", ""))
       val boundForm = form.bind(Map("updateInterest" -> ""))
       when(bbsiService.untaxedInterest(any())(any())).thenReturn(Future.successful(untaxedInterest))
-      when(mockDataCacheConnector.getEntry[BankAccountViewModel](any(), any())(any())).thenReturn(Future.successful(Some(bankAccountViewModel)))
-      val result = controller(bbsiService = bbsiService, mockDataCacheConnector).onSubmit(NormalMode)(postRequest)
+      val dataRetrievalAction = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel)))))
+      val result = controller(bbsiService = bbsiService, dataRetrievalAction = dataRetrievalAction).onSubmit(NormalMode)(postRequest)
       status(result) mustBe BAD_REQUEST
       contentAsString(result) mustBe viewAsString(boundForm)
     }
 
     "redirect to Session Expired for a GET if no existing data is found" in {
-      val result = controller(bbsiService = bbsiService, mockDataCacheConnector, dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
+      val result = controller(bbsiService = bbsiService, dataRetrievalAction = dontGetAnyData).onPageLoad(NormalMode)(fakeRequest)
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
 
     "redirect to Session Expired for a POST if no existing data is found" in {
       val postRequest = fakeRequest.withFormUrlEncodedBody(("updateInterest", testAnswer))
-      val result = controller(bbsiService = bbsiService, mockDataCacheConnector, dontGetAnyData).onSubmit(NormalMode)(postRequest)
+      val result = controller(bbsiService = bbsiService, dataRetrievalAction = dontGetAnyData).onSubmit(NormalMode)(postRequest)
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }

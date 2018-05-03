@@ -56,20 +56,18 @@ class UpdateInterestController @Inject()(
         case None => form
         case Some(value) => form.fill(value)
       }
-
-      bbsiService.untaxedInterest(Nino(nino)) flatMap { untaxedInterest =>
-        val bankAccountViewModel = dataCacheConnector.getEntry[BankAccountViewModel](nino, BankAccountDetailsKey)
-        bankAccountViewModel map {
-          case Some(BankAccountViewModel(id , _))=> {
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
+        case Some(BankAccountViewModel(id, _)) => {
+          bbsiService.untaxedInterest(Nino(nino)) flatMap { untaxedInterest =>
             untaxedInterest.bankAccounts.find(_.id == id) match {
               case Some(bankAccount) =>
                 val viewModel = UpdateInterestViewModel(id, untaxedInterest.amount, bankAccount.bankName.getOrElse(""))
-                Ok(updateInterest(appConfig, preparedForm, mode, viewModel))
-              case _ => NotFound
+                Future.successful(Ok(updateInterest(appConfig, preparedForm, mode, viewModel)))
+              case None => Future.successful(NotFound)
             }
           }
-          case None => NotFound
         }
+          case None => Future.successful(NotFound)
       }
   }
 
@@ -78,10 +76,9 @@ class UpdateInterestController @Inject()(
       val nino = request.externalId
       form.bindFromRequest().fold(
         (formWithErrors: Form[_]) => {
-          bbsiService.untaxedInterest(Nino(nino)) flatMap { untaxedInterest =>
-            val bankAccountViewModel = dataCacheConnector.getEntry[BankAccountViewModel](nino, BankAccountDetailsKey)
-            bankAccountViewModel flatMap {
-              case Some(BankAccountViewModel(id, _)) => {
+          request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
+            case Some(BankAccountViewModel(id, _)) => {
+              bbsiService.untaxedInterest(Nino(nino)) flatMap { untaxedInterest =>
                 untaxedInterest.bankAccounts.find(_.id == id) match {
                   case Some(bankAccount) =>
                     val viewModel = UpdateInterestViewModel(id, untaxedInterest.amount, bankAccount.bankName.getOrElse(""))
@@ -89,13 +86,13 @@ class UpdateInterestController @Inject()(
                   case _ => Future.successful(NotFound)
                 }
               }
-              case Some(_) => throw new RuntimeException(s"Bank account does not contain ID for nino: [${nino}]")
-              case _ => Future.successful(NotFound)
             }
+            case Some(_) => throw new RuntimeException(s"Bank account does not contain ID for nino: [${nino}]")
+            case _ => Future.successful(NotFound)
           }
         },
-        (value) =>
-          dataCacheConnector.save[String](nino, UpdateInterestId.toString, value) map (cacheMap =>
+        (interestAmount) =>
+          dataCacheConnector.save[String](nino, UpdateInterestId.toString, interestAmount) map (cacheMap =>
             Redirect(navigator.nextPage(UpdateInterestId, mode)(new UserAnswers(cacheMap))))
       )
   }
