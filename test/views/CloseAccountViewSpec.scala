@@ -20,10 +20,10 @@ import forms.CloseAccountFormProvider
 import models.{CloseAccount, NormalMode}
 import play.api.data.Form
 import viewmodels.BankAccountViewModel
-import views.behaviours.QuestionViewBehaviours
+import views.behaviours.InputDateViewBehaviours
 import views.html.closeAccount
 
-class CloseAccountViewSpec extends QuestionViewBehaviours[CloseAccount] {
+class CloseAccountViewSpec extends InputDateViewBehaviours[CloseAccount] {
 
   val bankName = "testName"
   val messageKeyPrefix = "closeAccount"
@@ -41,6 +41,7 @@ class CloseAccountViewSpec extends QuestionViewBehaviours[CloseAccount] {
     behave like pageWithPreHeading(createView, messages("closeAccount.preHeading"), Some(messages("This section is")))
     behave like pageWithBackLink(createView)
     behave like pageWithCancelLink(createView)
+    behave like pageWithInputDate(createViewUsingForm,messageKeyPrefix,"","accountClosedDay","accountClosedMonth","accountClosedYear")
     behave like pageWithSubmitButton(createView, controllers.routes.CloseAccountController.onSubmit(NormalMode).url, messages("continue"))
   }
 }
