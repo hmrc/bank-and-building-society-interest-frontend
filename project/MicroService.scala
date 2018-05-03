@@ -36,7 +36,7 @@ trait MicroService {
         ".*BuildInfo.*;.*javascript.*;.*FrontendAuditConnector.*;.*Routes.*;.*GuiceInjector;.*DataCacheConnector;" +
         ".*ControllerConfiguration;.*LanguageSwitchController;.*FormHelpers.*;.*main_template.*;.*error_template.*;.*errorSummary.*",
       ScoverageKeys.coverageExcludedPackages := "config.*;Reverse.*",
-      ScoverageKeys.coverageMinimum := 80,
+      ScoverageKeys.coverageMinimum := 90,
       ScoverageKeys.coverageFailOnMinimum := true,
       ScoverageKeys.coverageHighlighting := true,
       parallelExecution in Test := false

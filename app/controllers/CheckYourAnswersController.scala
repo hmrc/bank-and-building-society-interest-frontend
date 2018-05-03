@@ -44,8 +44,9 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
 
   def onPageLoad() = (authenticate andThen getData andThen requireData).async {
     implicit request =>
+      val nino = request.externalId
       val updateInterest = request.userAnswers.updateInterest
-      val bankAccountViewModel = dataCacheConnector.getEntry[BankAccountViewModel](request.externalId, BankAccountDetailsKey)
+      val bankAccountViewModel = dataCacheConnector.getEntry[BankAccountViewModel](nino, BankAccountDetailsKey)
 
       bankAccountViewModel map {
         case Some(BankAccountViewModel(id, bankName)) => {
@@ -66,14 +67,16 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
       val nino = request.externalId
 
       val updateInterest = request.userAnswers.updateInterest
-      val bankAccountViewModel = dataCacheConnector.getEntry[BankAccountViewModel](request.externalId, BankAccountDetailsKey)
+      val bankAccountViewModel = dataCacheConnector.getEntry[BankAccountViewModel](nino, BankAccountDetailsKey)
 
       bankAccountViewModel flatMap {
         case Some(BankAccountViewModel(id, _)) => {
           updateInterest match {
             case Some(value) =>
-              bbsiService.updateBankAccountInterest(Nino(nino), id, AmountRequest(BigDecimal(FormHelpers.stripNumber(value)))) map {
-                _ => Redirect(controllers.routes.ConfirmationController.onPageLoad)
+              bbsiService.updateBankAccountInterest(Nino(nino), id, AmountRequest(BigDecimal(FormHelpers.stripNumber(value)))) flatMap { _ =>
+                dataCacheConnector.flush(nino) map { _ =>
+                  Redirect(controllers.routes.ConfirmationController.onPageLoad)
+                }
               }
             case _ => Future.successful(NotFound)
           }

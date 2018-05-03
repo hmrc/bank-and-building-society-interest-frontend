@@ -43,6 +43,8 @@ class UpdateInterestViewSpec extends StringViewBehaviours {
 
   def createViewUsingForm = (form: Form[String]) => updateInterest(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer)
 
+  def createViewUsingErrorForm = () => updateInterest(frontendAppConfig, form.bind(Map("updateInterest" -> "")), NormalMode, viewModel)(fakeRequest, messages, templateRenderer)
+
   "UpdateInterest view" must {
     behave like normalPage(createView, messageKeyPrefix, title = Some(messages("updateInterest.title", bankName)), heading = Some(messages("updateInterest.title", viewModel.bankName)))
     behave like pageWithBackLink(createView)
@@ -82,13 +84,8 @@ class UpdateInterestViewSpec extends StringViewBehaviours {
         TaxYear().end.getYear.toString,
         TaxYear().end.toString(dateFormat)))
     }
-    "display error message" when {
-      "untaxed interest is empty" in {
-
-        def createViewUsingForm = (form: Form[String]) => updateInterest(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer)
-
-//        doc(view) must haveErrorLinkWithText(messages("tai.bbsi.update.form.interest.blank"))
+      "display error link with text when untaxed interest is empty" when {
+        behave like pageWithText(createViewUsingErrorForm, messages("updateInterest.blank"))
       }
-    }
   }
 }
