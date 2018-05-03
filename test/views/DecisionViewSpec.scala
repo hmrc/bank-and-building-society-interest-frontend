@@ -40,13 +40,15 @@ class DecisionViewSpec extends ViewBehaviours {
   def createViewUsingForm = (form: Form[_]) => decision(frontendAppConfig, form, NormalMode, viewModel)(fakeRequest, messages, templateRenderer)
 
   "Decision view" must {
-    behave like normalPage(createView, messageKeyPrefix, heading = Some(messages("decision.heading",bankName)))
+    behave like normalPage(createView, messageKeyPrefix,
+      title = Some(messages("decision.title",bankName)),
+      heading = Some(messages("decision.heading",bankName))
+    )
     behave like pageWithBackLink(createView)
     behave like pageWithPreHeading(createView, messages("decision.preHeading"), thisSectionIs)
     behave like pageWithCancelLink(createView)
+    behave like pageWithSubmitButton(createView,controllers.routes.DecisionController.onSubmit(NormalMode,1).url,messages("site.continue"))
   }
-
-
 
   "Decision view" when {
     "rendered" must {

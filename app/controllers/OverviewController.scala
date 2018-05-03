@@ -27,11 +27,11 @@ import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.renderer.TemplateRenderer
 import views.html.overview
 
-class IndexController @Inject()(val appConfig: FrontendAppConfig,
-                                val messagesApi: MessagesApi,
-                                authenticate: AuthAction,
-                                bbsiService: BBSIService)
-                               (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
+class OverviewController @Inject()(val appConfig: FrontendAppConfig,
+                                   val messagesApi: MessagesApi,
+                                   authenticate: AuthAction,
+                                   bbsiService: BBSIService)
+                                  (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = authenticate.async {
     implicit request =>

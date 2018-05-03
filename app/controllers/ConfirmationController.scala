@@ -35,7 +35,7 @@ class ConfirmationController @Inject()(appConfig: FrontendAppConfig,
                                          requireData: DataRequiredAction)
                                          (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
 
-  def onPageLoad = (authenticate andThen getData andThen requireData) {
+  def onPageLoad = (authenticate) {
     implicit request =>
       Ok(confirmation(appConfig))
   }
