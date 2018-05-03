@@ -28,6 +28,7 @@
 
 @header = @{
     ptaHeader(
+        formForErrorSummary = Some(form),
         displayBackLink = true,
         mainHeadingText = messages("updateInterest.title", viewModel.bankName),
         preHeadingText = messages("updateInterest.preHeading")
@@ -50,8 +51,6 @@
 
                         @helpers.form(action = UpdateInterestController.onSubmit(mode), 'autoComplete -> "off") {
 
-
-                            @components.error_summary(form.errors)
                             <div class="section">
                                 @components.input_text(
                                 field = form("updateInterest"),

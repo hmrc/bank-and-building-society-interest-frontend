@@ -18,7 +18,7 @@ error.integer = Give an answer in whole numbers
 error.non_numeric = Give a value using only numbers
 error.number = Please enter a valid number
 error.required = Please enter a value
-error.summary.title = There’s been a problem
+error.summary.title = There is a problem
 error.summary.text = Check the following
 
 index.title = bank-and-building-society-interest-frontend
@@ -98,7 +98,7 @@ decision.title=What do you want to tell us about your account with {0}
 decision.heading=What do you want to tell us about your account with {0}
 decision.customGaTitle=What do you want to tell us about your account
 decision.preHeading=Update or remove account
-decision.error.selectOption=There’s been a problem
+decision.error.selectOption=There is a problem
 decision.update=I want to update the estimated amount of interest
 decision.close=This account is now closed
 decision.remove=I never had this account
