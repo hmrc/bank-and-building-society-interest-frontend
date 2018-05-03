@@ -30,7 +30,10 @@ class RemoveAccountViewSpec extends ViewBehaviours {
   def createView = () => removeAccount(frontendAppConfig, viewModel)(fakeRequest, messages, templateRenderer)
 
   "RemoveAccount view" must {
-    behave like normalPage(createView, messageKeyPrefix, heading = Some(messages("removeAccount.heading",bankName)))
+    behave like normalPage(createView, messageKeyPrefix,
+      title = Some(messages("removeAccount.title",bankName)),
+      heading = Some(messages("removeAccount.heading",bankName))
+    )
     behave like pageWithBackLink(createView)
     behave like pageWithPreHeading(createView, messages("removeAccount.preHeading"), Some(messages("This section is")))
     behave like pageWithCancelLink(createView)

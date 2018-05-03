@@ -36,6 +36,8 @@ package controllers
 import config.FrontendAppConfig
 import controllers.actions.AuthAction
 import javax.inject.Inject
+
+import connectors.DataCacheConnector
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent}
 import service.BBSIService
@@ -45,7 +47,8 @@ import uk.gov.hmrc.renderer.TemplateRenderer
 import views.html.account_details
 
 class AccountDetailsController @Inject()(val appConfig: FrontendAppConfig,
-                                         val messagesApi: MessagesApi,
+                                         override val messagesApi: MessagesApi,
+                                         dataCacheConnector: DataCacheConnector,
                                          authenticate: AuthAction,
                                          bbsiService: BBSIService)
                                         (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
@@ -54,6 +57,13 @@ class AccountDetailsController @Inject()(val appConfig: FrontendAppConfig,
     implicit request =>
       bbsiService.untaxedInterest(Nino(request.externalId)) map { untaxedInterest =>
         Ok(account_details(untaxedInterest, appConfig))
+      }
+  }
+
+  def cancelJourney: Action[AnyContent] = authenticate.async {
+    implicit request =>
+      dataCacheConnector.flush(request.externalId) map { _ =>
+        Redirect(controllers.routes.AccountDetailsController.onPageLoad)
       }
   }
 }

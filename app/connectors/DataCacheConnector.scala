@@ -84,6 +84,12 @@ class DataCacheConnectorImpl @Inject()(val sessionRepository: SessionRepository,
     }
   }
 
+  def flush(cacheId: String): Future[Boolean] = {
+    sessionRepository().flush(cacheId) map { writeResult =>
+      writeResult.ok
+    }
+  }
+
 }
 
 @ImplementedBy(classOf[DataCacheConnectorImpl])
@@ -101,5 +107,7 @@ trait DataCacheConnector {
   def removeFromCollection[A](cacheId: String, collectionKey: String, item: A)(implicit fmt: Format[A]): Future[CacheMap]
 
   def replaceInCollection[A](cacheId: String, collectionKey: String, index: Int, item: A)(implicit fmt: Format[A]): Future[CacheMap]
+
+  def flush(cacheId: String): Future[Boolean]
 
 }
