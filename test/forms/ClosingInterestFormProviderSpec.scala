@@ -26,20 +26,28 @@ class ClosingInterestFormProviderSpec extends BooleanFieldBehaviours {
 
   val form = new ClosingInterestFormProvider()()
 
-  ".value" must {
+  "closingBankAccountInterestChoice" must {
 
     val fieldName = "value"
 
-    behave like booleanField(
-      form,
-      fieldName,
-      invalidError = FormError(fieldName, invalidKey)
-    )
+//    behave like booleanField(
+//      form,
+//      fieldName,
+//      invalidError = FormError(fieldName, invalidKey)
+//    )
 
-    behave like mandatoryField(
-      form,
-      fieldName,
-      requiredError = FormError(fieldName, requiredKey)
-    )
+//    behave like mandatoryField(
+//      form,
+//      fieldName,
+//      requiredError = FormError(fieldName, requiredKey)
+//    )
   }
+
+
+  "closingInterestEntry" must {
+
+  }
+
+
+
 }

@@ -42,6 +42,6 @@ class CloseAccountViewSpec extends InputDateViewBehaviours[CloseAccount] {
     behave like pageWithBackLink(createView)
     behave like pageWithCancelLink(createView)
     behave like pageWithInputDate(createViewUsingForm,messageKeyPrefix,"","accountClosedDay","accountClosedMonth","accountClosedYear")
-    behave like pageWithSubmitButton(createView, controllers.routes.CloseAccountController.onSubmit(NormalMode).url, messages("continue"))
+    behave like pageWithSubmitButton(createView, controllers.routes.CloseAccountController.onSubmit(NormalMode).url, messages("site.continue"))
   }
 }

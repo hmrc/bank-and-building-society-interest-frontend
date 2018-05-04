@@ -21,3 +21,15 @@ trait JourneyConstants {
   val BankAccountDetailsKey = "bankAccountDetails"
   val EnvelopeIdKey = "envelopeId"
 }
+
+trait FormValuesConstants {
+  val YesValue = "Yes"
+  val NoValue = "No"
+  val YesNoChoice = "yesNoChoice"
+  val YesNoTextEntry = "yesNoTextEntry"
+}
+
+trait BankAccountClosingInterestConstants {
+  val ClosingInterestChoice = "closingInterestChoice"
+  val ClosingInterestEntry = "closingInterestEntry"
+}

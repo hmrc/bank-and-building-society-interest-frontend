@@ -16,13 +16,13 @@
 
 package utils
 
+import forms.BankAccountClosingInterestForm
 import uk.gov.hmrc.http.cache.client.CacheMap
 import identifiers._
 import models._
 
 class UserAnswers(val cacheMap: CacheMap) extends Enumerable.Implicits {
-  def closingInterest: Option[Boolean] = cacheMap.getEntry[Boolean](ClosingInterestId.toString)
-
+  def closingInterest: Option[BankAccountClosingInterestForm] = cacheMap.getEntry[BankAccountClosingInterestForm](ClosingInterestId.toString)
   def closeAccount: Option[CloseAccount] = cacheMap.getEntry[CloseAccount](CloseAccountId.toString)
   def decision: Option[Decision] = cacheMap.getEntry[Decision](DecisionId.toString)
 }

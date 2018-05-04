@@ -16,22 +16,21 @@
 
 package views
 
-import play.api.data.Form
-import controllers.routes
-import forms.ClosingInterestFormProvider
-import views.behaviours.YesNoViewBehaviours
+import forms.{BankAccountClosingInterestForm, ClosingInterestFormProvider}
 import models.NormalMode
+import play.api.data.Form
 import uk.gov.hmrc.time.TaxYearResolver
+import views.behaviours.{ViewBehaviours, YesNoViewBehaviours}
 import views.html.closingInterest
 
-class ClosingInterestViewSpec extends YesNoViewBehaviours {
+class ClosingInterestViewSpec extends ViewBehaviours {
   val messageKeyPrefix = "closingInterest"
 
   val form = new ClosingInterestFormProvider()()
 
   def createView = () => closingInterest(frontendAppConfig, form, NormalMode)(fakeRequest, messages, templateRenderer)
 
-  def createViewUsingForm = (form: Form[_]) => closingInterest(frontendAppConfig, form, NormalMode)(fakeRequest, messages, templateRenderer)
+  def createViewUsingForm = (form: Form[BankAccountClosingInterestForm]) => closingInterest(frontendAppConfig, form, NormalMode)(fakeRequest, messages, templateRenderer)
 
   "ClosingInterest view" must {
 
@@ -41,7 +40,7 @@ class ClosingInterestViewSpec extends YesNoViewBehaviours {
     behave like pageWithPreHeading(createView, messages("closeAccount.preHeading"), Some(messages("This section is")))
     behave like pageWithBackLink(createView)
     behave like pageWithCancelLink(createView)
-    behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.ClosingInterestController.onSubmit(NormalMode).url)
-    behave like pageWithSubmitButton(createView, controllers.routes.ClosingInterestController.onSubmit(NormalMode).url, messages("continue"))
+    //behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.ClosingInterestController.onSubmit(NormalMode).url)
+    behave like pageWithSubmitButton(createView, controllers.routes.ClosingInterestController.onSubmit(NormalMode).url, messages("site.continue"))
   }
 }

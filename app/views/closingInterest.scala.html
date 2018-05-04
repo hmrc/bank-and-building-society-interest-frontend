@@ -14,6 +14,7 @@
  * limitations under the License.
  *@
 
+@import uk.gov.hmrc.play.views.html.helpers.{form}
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.play.views.html._
 @import controllers.routes._
@@ -22,8 +23,10 @@
 @import uk.gov.hmrc.renderer.TemplateRenderer
 @import components._
 @import uk.gov.hmrc.time.TaxYearResolver
+@import forms.BankAccountClosingInterestForm
 
-@(appConfig: FrontendAppConfig, form: Form[_], mode: Mode)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+
+@(appConfig: FrontendAppConfig, closingInterestForm: Form[BankAccountClosingInterestForm], mode: Mode)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
 
 @header = @{
     ptaHeader(
@@ -39,17 +42,35 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
-    @helpers.form(action = ClosingInterestController.onSubmit(mode), 'autoComplete -> "off") {
+    @form(action = ClosingInterestController.onSubmit(mode), Symbol("data-dynamic-form") -> "true") {
 
-        @error_summary(form.errors)
+        @error_summary(closingInterestForm.errors)
 
-        @input_yes_no(
-            field = form("value"),
-            label = messages("closingInterest.heading"),
-            labelClass = Some("visually-hidden")
-        )
+        @{inputRadioGroupNewStyling(
+            field=closingInterestForm(BankAccountClosingInterestForm.ClosingInterestChoice),
+            radioOptions=Seq(("Yes" -> Messages("site.yes")), ("No" -> Messages("site.no")) ),
+            legend=Messages("tai.closeBankAccount.closingInterest.legend"),
+            legendHint=None,
+            ('_groupDivClass, "form-group" ),
+            ('_radioOption1WrapAttribute, "data-target=closingInterestEntry-container"),
+            ('_groupClass, "inline"),
+            ('_fieldsetAttributes, "id=closingInterestChoice" ),
+            ('_legendSpanClass, "visually-hidden"),
+            ('_radioOption1Attributes, Html("""data-journey-val="Yes"""") ),
+            ('_radioOption2Attributes, Html("""data-journey-val="No"""") )
+        )}
 
-        @components.submit_button(messages("continue"))
+        <div id="closingInterestEntry-container" class="@if(closingInterestForm(BankAccountClosingInterestForm.ClosingInterestChoice).value.getOrElse("") != BankAccountClosingInterestForm.YesValue){js-hidden} data-closingInterestEntry">
+            @input(
+                field=closingInterestForm(BankAccountClosingInterestForm.ClosingInterestEntry),
+                labelText = Messages("closingInterest.label"),
+                panel = true
+            )
+        </div>
+
+        @components.submit_button(messages("site.continue"))
     }
     @cancel_link(url=controllers.routes.AccountDetailsController.cancelJourney)
+
+
 }

@@ -18,15 +18,15 @@ package controllers
 
 import javax.inject.Inject
 
+import config.FrontendAppConfig
+import connectors.DataCacheConnector
+import controllers.actions._
+import forms.{BankAccountClosingInterestForm, ClosingInterestFormProvider}
+import identifiers.ClosingInterestId
+import models.Mode
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, MessagesApi}
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import connectors.DataCacheConnector
-import controllers.actions._
-import config.FrontendAppConfig
-import forms.ClosingInterestFormProvider
-import identifiers.ClosingInterestId
-import models.Mode
 import uk.gov.hmrc.renderer.TemplateRenderer
 import utils.{Navigator, UserAnswers}
 import views.html.closingInterest
@@ -43,7 +43,7 @@ class ClosingInterestController @Inject()(appConfig: FrontendAppConfig,
                                          formProvider: ClosingInterestFormProvider)
                                          (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport {
 
-  val form: Form[Boolean] = formProvider()
+  val form: Form[BankAccountClosingInterestForm] = formProvider()
 
   def onPageLoad(mode: Mode) = (authenticate andThen getData andThen requireData) {
     implicit request =>
@@ -57,10 +57,10 @@ class ClosingInterestController @Inject()(appConfig: FrontendAppConfig,
   def onSubmit(mode: Mode) = (authenticate andThen getData andThen requireData).async {
     implicit request =>
       form.bindFromRequest().fold(
-        (formWithErrors: Form[_]) =>
+        (formWithErrors: Form[BankAccountClosingInterestForm]) =>
           Future.successful(BadRequest(closingInterest(appConfig, formWithErrors, mode))),
         (value) =>
-          dataCacheConnector.save[Boolean](request.externalId, ClosingInterestId.toString, value).map(cacheMap =>
+          dataCacheConnector.save[BankAccountClosingInterestForm](request.externalId, ClosingInterestId.toString, value) map (cacheMap =>
             Redirect(navigator.nextPage(ClosingInterestId, mode)(new UserAnswers(cacheMap))))
       )
   }

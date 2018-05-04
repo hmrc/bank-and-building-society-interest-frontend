@@ -19,6 +19,7 @@ package utils
 import javax.inject.{Inject, Singleton}
 
 import controllers.routes
+import forms.BankAccountClosingInterestForm
 import identifiers._
 import models.Decision.{Close, Remove}
 import models.{CheckMode, CloseAccount, Mode, NormalMode}
@@ -27,7 +28,7 @@ import play.api.mvc.Call
 import uk.gov.hmrc.time.TaxYearResolver
 
 @Singleton
-class Navigator @Inject()() extends JourneyConstants{
+class Navigator @Inject()() extends JourneyConstants with FormValuesConstants {
 
   private def routeMap(mode: Mode): Map[Identifier, UserAnswers => Call] = Map(
     DecisionId -> ( _.decision match {
@@ -46,6 +47,10 @@ class Navigator @Inject()() extends JourneyConstants{
           }
         }
         case None => routes.OverviewController.onPageLoad()
+    }),
+    ClosingInterestId -> (_.closingInterest match {
+      case Some(BankAccountClosingInterestForm(_,_)) => routes.CheckYourAnswersController.onPageLoad()
+      case _ => routes.OverviewController.onPageLoad()
     })
   )
 

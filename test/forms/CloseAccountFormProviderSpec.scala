@@ -23,7 +23,7 @@ class CloseAccountFormProviderSpec extends StringFieldBehaviours {
 
   val form = new CloseAccountFormProvider()()
 
-  ".field1" must {
+  "accountClosedDay field" must {
 
     val fieldName = "accountClosedDay"
     val requiredKey = "error.date.dayBlank"
@@ -50,7 +50,7 @@ class CloseAccountFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".field2" must {
+  "accountClosedMonth field" must {
 
     val fieldName = "accountClosedMonth"
     val requiredKey = "error.date.monthBlank"
@@ -76,7 +76,7 @@ class CloseAccountFormProviderSpec extends StringFieldBehaviours {
     )
   }
 
-  ".field3" must {
+  "accountClosedYear field" must {
 
     val fieldName = "accountClosedYear"
     val requiredKey = "error.date.yearBlank"

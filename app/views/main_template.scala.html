@@ -44,15 +44,24 @@
     @pageHeader.getOrElse(Html(""))
 }
 
+@inlineScript = {
+
+    <script type="text/javascript">
+        var showHideContent = new GOVUK.ShowHideContent();
+        showHideContent.init();
+    </script>
+
+}
+
 @{
     templateRenderer.renderDefaultTemplate(
       layouts.article(mainContent, includeGridWrapper, articleClasses),
         Map(
             "pageTitle" -> (title + messages("site.gov.uk")),
-            "mainContentHeader" -> mainContentHeader
+            "mainContentHeader" -> mainContentHeader,
+            "inlineScript" -> inlineScript
         )
       )
 }
 
 <script src='@routes.Assets.versioned("javascripts/bankandbuildingsocietyinterestfrontend-app.min.js")'> </script>
-

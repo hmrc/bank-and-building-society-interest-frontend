@@ -18,6 +18,7 @@ package utils
 
 import base.SpecBase
 import controllers.routes
+import forms.BankAccountClosingInterestForm
 import identifiers._
 import models.Decision.{Close, Remove}
 import models._
@@ -61,6 +62,12 @@ class NavigatorSpec extends SpecBase with MockitoSugar with JourneyConstants {
         val mode = NormalMode
         when(mockUserAnswers.closeAccount).thenReturn(Some(CloseAccount("07","04",TaxYearResolver.currentTaxYear.toString)))
         navigator.nextPage(CloseAccountId,mode)(mockUserAnswers) mustBe routes.ClosingInterestController.onPageLoad(mode)
+      }
+
+      "go to CheckYourAnswers for the identifier yes" in {
+        val mockUserAnswers = mock[UserAnswers]
+        when(mockUserAnswers.closingInterest).thenReturn(Some(BankAccountClosingInterestForm(Some("Yes"),Some("100"))))
+        navigator.nextPage(ClosingInterestId,NormalMode)(mockUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoad()
       }
     }
 

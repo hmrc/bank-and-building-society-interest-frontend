@@ -23,6 +23,9 @@ error.required = Please enter a value
 error.summary.title = There’s been a problem
 error.summary.text = Check the following
 
+update.form.interest.isCurrency=Enter valid amount
+update.form.interest.wholeNumber=Amount cannot be in decimal
+
 index.title = bank-and-building-society-interest-frontend
 index.heading = bank-and-building-society-interest-frontend
 index.guidance = Welcome to your new frontend. Please see the README file for a guide to getting started.
@@ -132,5 +135,9 @@ closeAccount.checkYourAnswersLabel = closeAccount
 ##BBSI closingInterest
 closingInterest.title = Do you know how much interest you earned from this account since 6 April {0}?
 closingInterest.heading = Do you know how much interest you earned from this account since 6 April {0}?
+closingInterest.error.selectOption=Choose if amount of interest is known
+closingInterest.error.blank=Enter amount of interest
+closingInterest.label=Amount of interest
+
 closingInterest.checkYourAnswersLabel = closingInterest
 closingInterest.error.required = Please give an answer for closingInterest
