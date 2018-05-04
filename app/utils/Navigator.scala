@@ -26,6 +26,8 @@ import models.{CheckMode, CloseAccount, Mode, NormalMode}
 import org.joda.time.LocalDate
 import play.api.mvc.Call
 import uk.gov.hmrc.time.TaxYearResolver
+import models.Decision.{Remove, Update}
+import models.{CheckMode, Mode, NormalMode}
 
 @Singleton
 class Navigator @Inject()() extends JourneyConstants with FormValuesConstants {
@@ -34,10 +36,13 @@ class Navigator @Inject()() extends JourneyConstants with FormValuesConstants {
     DecisionId -> ( _.decision match {
       case Some(Remove) =>
         routes.RemoveAccountController.onPageLoad()
+      case Some(Update) =>
+        routes.UpdateInterestController.onPageLoad(mode)
       case Some(Close) =>
         routes.CloseAccountController.onPageLoad(mode)
       case _ => routes.OverviewController.onPageLoad()
     }),
+    UpdateInterestId -> (_ => routes.CheckYourAnswersController.onPageLoad()),
     CloseAccountId -> (_.closeAccount match {
         case Some(CloseAccount(day,month,year)) => {
           if(TaxYearResolver.fallsInThisTaxYear(new LocalDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)))){
@@ -58,7 +63,7 @@ class Navigator @Inject()() extends JourneyConstants with FormValuesConstants {
 
   def nextPage(id: Identifier, mode: Mode): UserAnswers => Call = mode match {
     case NormalMode =>
-      routeMap(mode).getOrElse(id, _ => routes.OverviewController.onPageLoad())
+      routeMap(mode).getOrElse(id , _ => routes.OverviewController.onPageLoad())
     case CheckMode =>
       editRouteMap.getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoad())
   }

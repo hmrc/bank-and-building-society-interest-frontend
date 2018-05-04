@@ -26,6 +26,7 @@
 
 @header = @{
     ptaHeader(
+        formForErrorSummary = Some(form),
         displayBackLink = true,
         mainHeadingText = messages("decision.heading", viewModel.bankName),
         preHeadingText = messages("decision.preHeading")
@@ -43,8 +44,6 @@
     <div class="column-two-thirds">
 
       @helpers.form(action = DecisionController.onSubmit(mode, viewModel.id), 'autoComplete -> "off") {
-
-          @components.error_summary(form.errors)
 
           @components.input_radio(
               field = form("value"),

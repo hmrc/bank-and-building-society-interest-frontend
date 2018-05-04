@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2018 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,25 +12,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package utils
-
-trait JourneyConstants {
-  val DecisionKey = "decision"
-  val BankAccountDetailsKey = "bankAccountDetails"
-  val EnvelopeIdKey = "envelopeId"
-  val UpdateInterestAmountKey = "updateInterestAmount"
-}
-
-trait FormValuesConstants {
-  val YesValue = "Yes"
-  val NoValue = "No"
-  val YesNoChoice = "yesNoChoice"
-  val YesNoTextEntry = "yesNoTextEntry"
-}
-
-trait BankAccountClosingInterestConstants {
-  val ClosingInterestChoice = "closingInterestChoice"
-  val ClosingInterestEntry = "closingInterestEntry"
-}
+@(title: String, summaryClass : Option[String]=None)(body: Html)
+<details>
+    <summary @if(summaryClass.isDefined){class='@summaryClass'}>@title</summary>
+    <div class="panel-indent">
+        @body
+    </div>
+</details>

@@ -27,6 +27,12 @@ object FormHelpers {
     }
   }
 
+  def stripNumber(stringValue: String): String = {
+    val toRemove = Set[Char]('£', ',', ' ')
+    val newValue = stringValue.filterNot(toRemove)
+    newValue.takeWhile(_ != '.')
+  }
+
   def isValidCurrency(stringValue: Option[String], isWholeNumRequired: Boolean = false): Boolean = {
     stringValue match {
       case (Some(value)) =>

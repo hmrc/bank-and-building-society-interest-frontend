@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package utils
+package viewmodels
 
-trait JourneyConstants {
-  val DecisionKey = "decision"
-  val BankAccountDetailsKey = "bankAccountDetails"
-  val EnvelopeIdKey = "envelopeId"
-  val UpdateInterestAmountKey = "updateInterestAmount"
-}
+import play.api.libs.json.Json
 
-trait FormValuesConstants {
-  val YesValue = "Yes"
-  val NoValue = "No"
-  val YesNoChoice = "yesNoChoice"
-  val YesNoTextEntry = "yesNoTextEntry"
-}
+case class UpdateInterestViewModel(id: Int, interest: BigDecimal, bankName: String)
 
-trait BankAccountClosingInterestConstants {
-  val ClosingInterestChoice = "closingInterestChoice"
-  val ClosingInterestEntry = "closingInterestEntry"
+object UpdateInterestViewModel {
+  implicit val formats = Json.format[UpdateInterestViewModel]
 }

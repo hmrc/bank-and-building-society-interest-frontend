@@ -14,23 +14,6 @@
  * limitations under the License.
  */
 
-package utils
+package viewmodels
 
-trait JourneyConstants {
-  val DecisionKey = "decision"
-  val BankAccountDetailsKey = "bankAccountDetails"
-  val EnvelopeIdKey = "envelopeId"
-  val UpdateInterestAmountKey = "updateInterestAmount"
-}
-
-trait FormValuesConstants {
-  val YesValue = "Yes"
-  val NoValue = "No"
-  val YesNoChoice = "yesNoChoice"
-  val YesNoTextEntry = "yesNoTextEntry"
-}
-
-trait BankAccountClosingInterestConstants {
-  val ClosingInterestChoice = "closingInterestChoice"
-  val ClosingInterestEntry = "closingInterestEntry"
-}
+case class CheckYourAnswersConfirmationLine(question: String, answer: String, changeUrl: String)

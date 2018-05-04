@@ -22,7 +22,7 @@ import utils.Enumerable
 
 trait Mappings extends Formatters with Constraints {
 
-  protected def text(errorKey: String = "error.required"): FieldMapping[String] =
+  protected def texts(errorKey: String = "error.required"): FieldMapping[String] =
     of(stringFormatter(errorKey))
 
   protected def int(requiredKey: String = "error.required",
