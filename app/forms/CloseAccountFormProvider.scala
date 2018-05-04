@@ -27,11 +27,11 @@ class CloseAccountFormProvider @Inject() extends Mappings {
 
    def apply(): Form[CloseAccount] = Form(
      mapping(
-      "accountClosedDay" -> text("error.date.dayBlank")
+      "accountClosedDay" -> texts("error.date.dayBlank")
         .verifying(maxLength(2, "closeAccount.error.field1.length")),
-      "accountClosedMonth" -> text("error.date.monthBlank")
+      "accountClosedMonth" -> texts("error.date.monthBlank")
         .verifying(maxLength(2, "closeAccount.error.field2.length")),
-      "accountClosedYear" -> text("error.date.yearBlank")
+      "accountClosedYear" -> texts("error.date.yearBlank")
         .verifying(maxLength(4, "closeAccount.error.field3.length"))
     )(CloseAccount.apply)(CloseAccount.unapply)
    )

@@ -21,13 +21,11 @@ import javax.inject.{Inject, Singleton}
 import controllers.routes
 import forms.BankAccountClosingInterestForm
 import identifiers._
-import models.Decision.{Close, Remove}
+import models.Decision.{Close, Remove, Update}
 import models.{CheckMode, CloseAccount, Mode, NormalMode}
 import org.joda.time.LocalDate
 import play.api.mvc.Call
 import uk.gov.hmrc.time.TaxYearResolver
-import models.Decision.{Remove, Update}
-import models.{CheckMode, Mode, NormalMode}
 
 @Singleton
 class Navigator @Inject()() extends JourneyConstants with FormValuesConstants {
