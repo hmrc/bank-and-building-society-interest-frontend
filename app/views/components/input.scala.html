@@ -1,0 +1,78 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@(
+        field: Field,
+        fieldErrorsEnabled: Boolean = true,
+        labelText: String = "",
+        hintText: String = "",
+        hintClass: String = "form-hint",
+        bold: Boolean = false,
+        classes: Seq[String] = Seq.empty,
+        panel: Boolean = false,
+        jsHidden: Boolean = false,
+        labelHidden: Boolean = false,
+        parentDateAttr: String = "",
+        attrType: String = "",
+        attrMin: String = "",
+        attrMax: String = "",
+        attrMinlength: String = "",
+        attrMaxlength: String = "",
+        attrPattern: String = "",
+        attrDescribedBy: String = "",
+        data: String = "",
+        isCurrency: Boolean = false
+)(implicit lang: Lang, m: Messages)
+
+<div class="form-group @if(fieldErrorsEnabled && field.hasErrors) {form-group-error}  @if(parentDateAttr) { form-group-@parentDateAttr} @if(panel) { panel-indent} @if(jsHidden) { js-hidden}" @if(data) {data-reveal="@data"}>
+    <label for="@field.id">
+        @if(labelText.nonEmpty) {
+            <span class="@if(labelHidden){visually-hidden}else{form-label @if(bold){form-label-bold}}">
+            @labelText
+            @if(isCurrency){
+                <span class="visually-hidden">@Messages("tai.inPounds")</span>
+            }
+            </span>
+        }
+        @if(hintText.nonEmpty) { <span class="@hintClass" id="@{ field.id }-hint">@hintText</span> }
+
+        @if(fieldErrorsEnabled && field.hasErrors) {
+            <span class="error-message">
+                @field.errors.map(_.message)
+            </span>
+        }
+    </label>
+    @if(isCurrency){
+        <span aria-hidden="true">£</span>
+    }
+        <input name="@field.name" class="form-control @if(fieldErrorsEnabled && field.hasErrors) { form-control-error} @if(attrType == "number") { input--no-spinner} @if(isCurrency){ form-control-currency}  @classes.mkString(" ")"
+        value="@field.value" id="@field.id"
+            @if(attrDescribedBy) { aria-describedby="@attrDescribedBy-hint" }
+            @if(attrType.nonEmpty) {
+                type="@attrType"
+                @if(attrType == "number"){
+                    step="1"
+                }
+            } else {
+                type="text"
+            }
+            @if(attrMin.nonEmpty) { min="@attrMin" }
+            @if(attrMax.nonEmpty) { max="@attrMax" }
+            @if(attrMinlength.nonEmpty) { minlength="@attrMinlength" }
+            @if(attrMaxlength.nonEmpty) { maxlength="@attrMaxlength" }
+            @if(attrPattern.nonEmpty) { pattern="@attrPattern" } />
+
+</div>

@@ -50,6 +50,14 @@
     LanguageUtils.getCurrentLang == Lang("cy")
 }
 
+@inlineScript = {
+
+    <script type="text/javascript">
+        var showHideContent = new GOVUK.ShowHideContent();
+        showHideContent.init();
+    </script>
+}
+
 @mustacheMap = @{
     Map[String, Any](
         "pageTitle" -> (title + messages("site.gov.uk")),
@@ -63,7 +71,8 @@
         "enUrl" -> controllers.routes.LanguageSwitchController.switchToLanguage("english"),
         "cyUrl" -> controllers.routes.LanguageSwitchController.switchToLanguage("cymraeg"),
         "isWelsh" -> isWelshActive,
-        "getHelpForm" -> helpForm
+        "getHelpForm" -> helpForm,
+        "inlineScript" -> inlineScript
     )
 }
 
@@ -73,5 +82,4 @@
         layouts.article(mainContent, includeGridWrapper, articleClasses), mustacheMap
     )
 }
-
 <script src='@routes.Assets.versioned("javascripts/bankandbuildingsocietyinterestfrontend-app.min.js")'> </script>

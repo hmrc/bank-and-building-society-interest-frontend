@@ -14,23 +14,12 @@
  * limitations under the License.
  */
 
-package utils
+package models
 
-trait JourneyConstants {
-  val DecisionKey = "decision"
-  val BankAccountDetailsKey = "bankAccountDetails"
-  val EnvelopeIdKey = "envelopeId"
-  val UpdateInterestAmountKey = "updateInterestAmount"
-}
+import play.api.libs.json._
 
-trait FormValuesConstants {
-  val YesValue = "Yes"
-  val NoValue = "No"
-  val YesNoChoice = "yesNoChoice"
-  val YesNoTextEntry = "yesNoTextEntry"
-}
+case class CloseAccount (accountClosedDay: String, accountClosedMonth: String, accountClosedYear: String)
 
-trait BankAccountClosingInterestConstants {
-  val ClosingInterestChoice = "closingInterestChoice"
-  val ClosingInterestEntry = "closingInterestEntry"
+object CloseAccount {
+  implicit val format = Json.format[CloseAccount]
 }

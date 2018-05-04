@@ -18,12 +18,20 @@ package utils
 
 import controllers.routes
 import models.CheckMode
-import viewmodels.{AnswerRow, RepeaterAnswerRow, RepeaterAnswerSection}
+import viewmodels.AnswerRow
 
 class CheckYourAnswersHelper(userAnswers: UserAnswers) {
 
   def updateInterest: Option[AnswerRow] = userAnswers.updateInterest map {
     x => AnswerRow("updateInterest.checkYourAnswersLabel", s"$x", false, routes.UpdateInterestController.onPageLoad(CheckMode).url)
+  }
+
+  def closingInterest: Option[AnswerRow] = userAnswers.closingInterest map {
+    x => AnswerRow("closingInterest.checkYourAnswersLabel", s"${x.closingBankAccountInterestChoice} ${x.closingInterestEntry}", true, routes.ClosingInterestController.onPageLoad(CheckMode).url)
+  }
+
+  def closeAccount: Option[AnswerRow] = userAnswers.closeAccount map {
+    x => AnswerRow("closeAccount.checkYourAnswersLabel", s"${x.accountClosedDay} ${x.accountClosedMonth} ${x.accountClosedYear}", false, routes.CloseAccountController.onPageLoad(CheckMode).url)
   }
 
   def decision: Option[AnswerRow] = userAnswers.decision map {
