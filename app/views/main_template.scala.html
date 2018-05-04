@@ -16,6 +16,7 @@
 
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.renderer.TemplateRenderer
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import uk.gov.hmrc.play.language.LanguageUtils
 @import uk.gov.hmrc.play.views.html.layouts
 
@@ -39,6 +40,8 @@
     }
 }
 
+@helpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
+
 @mainContentHeader = {
     @pageHeader.getOrElse(Html(""))
 }
@@ -59,7 +62,8 @@
         "langSelector" -> true,
         "enUrl" -> controllers.routes.LanguageSwitchController.switchToLanguage("english"),
         "cyUrl" -> controllers.routes.LanguageSwitchController.switchToLanguage("cymraeg"),
-        "isWelsh" -> isWelshActive
+        "isWelsh" -> isWelshActive,
+        "getHelpForm" -> helpForm
     )
 }
 
