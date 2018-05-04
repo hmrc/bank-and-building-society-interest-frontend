@@ -10,6 +10,8 @@ GET        /this-service-has-been-reset                 controllers.SessionExpir
 
 GET        /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad()
 POST       /check-your-answers                          controllers.CheckYourAnswersController.onSubmit()
+GET        /close/check-your-answers                    controllers.CheckYourAnswersController.onPageLoadClose()
+POST       /close/check-your-answers                    controllers.CheckYourAnswersController.onSubmitClose()
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 

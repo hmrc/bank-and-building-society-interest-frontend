@@ -48,16 +48,15 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase  with JourneyCon
   def controller(bbsiService: BBSIService, dataRetrievalAction: DataRetrievalAction = getEmptyCacheMap, dataCacheConnector: DataCacheConnector = FakeDataCacheConnector) =
     new CheckYourAnswersController(frontendAppConfig, messagesApi, dataCacheConnector, new FakeNavigator(desiredRoute = onwardRoute), FakeAuthAction, dataRetrievalAction, new DataRequiredActionImpl, bbsiService)
 
-  "Check Your Answers Controller" must {
+  "Check Your Answers Controller onPageLoad function" must {
     val bbsiService = mock[BBSIService]
-    val mockDataCacheConnector = mock[DataCacheConnector]
     val validData = Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel), UpdateInterestId.toString -> JsString("3000"))
     val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
     "return 200 and the correct view for a GET" in {
       val result = controller(bbsiService = bbsiService, getRelevantData).onPageLoad()(fakeRequest)
       status(result) mustBe OK
-      contentAsString(result) mustBe check_your_answers(frontendAppConfig, viewModel)(fakeRequest, messages,templateRenderer).toString
+      contentAsString(result) mustBe check_your_answers(frontendAppConfig, viewModel)(fakeRequest, messages, templateRenderer).toString
     }
 
     "return Not Found when there is no Bank Account details present in cache" in {
@@ -78,6 +77,12 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase  with JourneyCon
       status(result) mustBe SEE_OTHER
       redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
     }
+  }
+  "Check Your Answers Controller onSubmit function" must {
+    val bbsiService = mock[BBSIService]
+    val mockDataCacheConnector = mock[DataCacheConnector]
+    val validData = Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel), UpdateInterestId.toString -> JsString("3000"))
+    val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
 
     "redirect to the next page when valid data is submitted" in {
       when(bbsiService.updateBankAccountInterest(any(), any(), any())(any())).thenReturn(Future.successful(EnvelopeIdKey))
@@ -96,6 +101,63 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase  with JourneyCon
     "return bad request on submit when no interest amount is present in cache" in {
       val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel)))))
       val result = controller(bbsiService = bbsiService, getNoData).onSubmit()(fakeRequest)
+      status(result) mustBe NOT_FOUND
+    }
+  }
+
+  "Check Your Answers Controller onPageLoadClose function" must {
+    val bbsiService = mock[BBSIService]
+    val validData = Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel), UpdateInterestId.toString -> JsString("3000"))
+    val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+    "return 200 and the correct view for a GET" in {
+      val result = controller(bbsiService = bbsiService, getRelevantData).onPageLoadClose()(fakeRequest)
+      status(result) mustBe OK
+      contentAsString(result) mustBe check_your_answers(frontendAppConfig, viewModel)(fakeRequest, messages, templateRenderer).toString
+    }
+
+    "return Not Found when there is no Bank Account details present in cache" in {
+      val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(UpdateInterestId.toString -> JsString("3000")))))
+      val result = controller(bbsiService = bbsiService, getNoData).onPageLoadClose()(fakeRequest)
+      status(result) mustBe NOT_FOUND
+    }
+
+    "return Not found when there is no interest amount present in cache" in {
+      val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel)))))
+      val result = controller(bbsiService = bbsiService, getNoData).onPageLoadClose()(fakeRequest)
+      status(result) mustBe NOT_FOUND
+    }
+
+    "redirect to Session Expired for a GET if no existing data is found" in {
+      val result = controller(bbsiService = bbsiService, dontGetAnyData).onPageLoadClose()(fakeRequest)
+
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(routes.SessionExpiredController.onPageLoad().url)
+    }
+  }
+  "Check Your Answers Controller onSubmitClose function" must {
+    val bbsiService = mock[BBSIService]
+    val mockDataCacheConnector = mock[DataCacheConnector]
+    val validData = Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel), UpdateInterestId.toString -> JsString("3000"))
+    val getRelevantData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, validData)))
+
+    "redirect to the next page when valid data is submitted" in {
+      when(bbsiService.updateBankAccountInterest(any(), any(), any())(any())).thenReturn(Future.successful(EnvelopeIdKey))
+      when(mockDataCacheConnector.flush(any())).thenReturn(Future.successful(true))
+      val result = controller(bbsiService = bbsiService, getRelevantData, mockDataCacheConnector).onSubmitClose()(fakeRequest)
+      status(result) mustBe SEE_OTHER
+      redirectLocation(result) mustBe Some(controllers.routes.ConfirmationController.onPageLoad().url)
+    }
+
+    "return bad request on submit when no bank details is present in cache" in {
+      val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(UpdateInterestId.toString -> JsString("3000")))))
+      val result = controller(bbsiService = bbsiService, getNoData).onSubmitClose()(fakeRequest)
+      status(result) mustBe NOT_FOUND
+    }
+
+    "return bad request on submit when no interest amount is present in cache" in {
+      val getNoData = new FakeDataRetrievalAction(Some(CacheMap(cacheMapId, Map(BankAccountDetailsKey -> Json.toJson(bankAccountViewModel)))))
+      val result = controller(bbsiService = bbsiService, getNoData).onSubmitClose()(fakeRequest)
       status(result) mustBe NOT_FOUND
     }
   }
