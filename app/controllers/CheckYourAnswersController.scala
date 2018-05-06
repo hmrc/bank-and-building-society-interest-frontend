@@ -20,6 +20,9 @@ import com.google.inject.Inject
 import config.FrontendAppConfig
 import connectors.DataCacheConnector
 import controllers.actions.{AuthAction, DataRequiredAction, DataRetrievalAction}
+import forms.BankAccountClosingInterestForm
+import identifiers.{CloseAccountId, ClosingInterestId}
+import models.CloseAccount
 import models.domain.{AmountRequest, CloseAccountRequest}
 import org.joda.time.LocalDate
 import play.api.i18n.{I18nSupport, MessagesApi}
@@ -27,6 +30,7 @@ import service.BBSIService
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
 import uk.gov.hmrc.renderer.TemplateRenderer
+import uk.gov.hmrc.time.TaxYearResolver
 import utils._
 import viewmodels.{BankAccountViewModel, CloseBankAccountCheckAnswersViewModel, UpdateInterestViewModelCheckAnswers}
 import views.html.{check_your_answers, close_account_check_your_answers}
@@ -43,7 +47,6 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
                                            bbsiService: BBSIService)
                                           (implicit templateRenderer: TemplateRenderer) extends FrontendController with I18nSupport with JourneyConstants with Enumerable.Implicits{
 
-  val CloseAccountId = "closeAccount"
   def onPageLoad() = (authenticate andThen getData andThen requireData).async {
     implicit request =>
       val nino = request.externalId
@@ -86,17 +89,29 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
   def onPageLoadClose() = (authenticate andThen getData andThen requireData).async {
     implicit request =>
       val nino = request.externalId
-
-      val value = CloseBankAccountCheckAnswersViewModel(4, new LocalDate(2018, 4, 20).toString(), Some("HALIFAX"), Some("1234"))
-
-      dataCacheConnector.save[CloseBankAccountCheckAnswersViewModel](nino, CloseAccountId.toString, value)
-
-      request.userAnswers.cacheMap.getEntry[CloseBankAccountCheckAnswersViewModel](CloseAccountId) match {
-        case Some(CloseBankAccountCheckAnswersViewModel(id, closeBankAccountDate, closeBankAccountName, interestAmount)) => {
-          val viewModel = CloseBankAccountCheckAnswersViewModel(id, closeBankAccountDate, closeBankAccountName, interestAmount)
-          Future.successful(Ok(close_account_check_your_answers(appConfig, viewModel)))
-        }
-        case Some(_) => throw new RuntimeException(s"Bank account does not contain Id and Close Account Date ")
+      request.userAnswers.cacheMap.getEntry[BankAccountViewModel](BankAccountDetailsKey) match {
+        case Some(BankAccountViewModel(id, bankName)) =>
+          request.userAnswers.cacheMap.getEntry[CloseAccount](CloseAccountId.toString) match {
+            case Some(CloseAccount(day, month, year)) => {
+              val localDate = new LocalDate(year.toInt, month.toInt, day.toInt)
+              if(TaxYearResolver.fallsInThisTaxYear(localDate)) {
+                request.userAnswers.cacheMap.getEntry[BankAccountClosingInterestForm](ClosingInterestId.toString) match {
+                  case Some(BankAccountClosingInterestForm(_, closingInterestEntry)) => {
+                    val viewModel = CloseBankAccountCheckAnswersViewModel(id, localDate.toString(), Some(bankName), closingInterestEntry)
+                    dataCacheConnector.save[CloseBankAccountCheckAnswersViewModel](nino, CloseAccountAnswersKey, viewModel)
+                    Future.successful(Ok(close_account_check_your_answers(appConfig, viewModel)))
+                  }
+                  case _ => Future.successful(NotFound)
+                }
+              }
+              else {
+                val viewModel = CloseBankAccountCheckAnswersViewModel(id, localDate.toString(), Some(bankName), None)
+                dataCacheConnector.save[CloseBankAccountCheckAnswersViewModel](nino, CloseAccountAnswersKey, viewModel)
+                Future.successful(Ok(close_account_check_your_answers(appConfig, viewModel)))
+              }
+            }
+            case _ => Future.successful(NotFound)
+          }
         case _ => Future.successful(NotFound)
       }
   }
@@ -104,11 +119,11 @@ class CheckYourAnswersController @Inject()(appConfig: FrontendAppConfig,
   def onSubmitClose() = (authenticate andThen getData andThen requireData).async {
     implicit request =>
       val nino = request.externalId
-      request.userAnswers.cacheMap.getEntry[CloseBankAccountCheckAnswersViewModel](CloseAccountId) match {
+      request.userAnswers.cacheMap.getEntry[CloseBankAccountCheckAnswersViewModel](CloseAccountAnswersKey) match {
         case Some(CloseBankAccountCheckAnswersViewModel(id, closeBankAccountDate, _, interestAmount)) => {
           val amount = interestAmount match {
             case Some(value) => Some(BigDecimal(value))
-            case _ => Some(BigDecimal(""))
+            case _ => None
           }
           val viewModel = CloseAccountRequest(LocalDate.parse(closeBankAccountDate), amount)
           bbsiService.closeBankAccount(Nino(nino), id, viewModel) flatMap { _ =>

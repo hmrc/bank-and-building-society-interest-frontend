@@ -170,3 +170,4 @@ closingInterest.label=Amount of interest
 
 closingInterest.checkYourAnswersLabel = closingInterest
 closingInterest.error.required = Give an answer for closingInterest
+closeBankAccount.closingInterest.notKnown=I do not know

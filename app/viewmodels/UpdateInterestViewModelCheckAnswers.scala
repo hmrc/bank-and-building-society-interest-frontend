@@ -16,7 +16,7 @@
 
 package viewmodels
 
-import models.CheckMode
+import models.{CheckMode, NormalMode}
 import play.api.i18n.Messages
 import uk.gov.hmrc.play.views.formatting.Money
 
@@ -27,7 +27,7 @@ case class UpdateInterestViewModelCheckAnswers(id: Int, interestAmount: String, 
     val updateLine = CheckYourAnswersConfirmationLine(
       Messages("checkYourAnswers.whatYouToldUs"),
       Messages("checkYourAnswers.rowOne.answer"),
-      controllers.routes.DecisionController.onPageLoad(CheckMode, id).url)
+      controllers.routes.DecisionController.onPageLoad(NormalMode, id).url)
 
     val interestLine = CheckYourAnswersConfirmationLine(
       Messages("checkYourAnswers.rowTwo"),

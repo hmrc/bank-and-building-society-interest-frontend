@@ -16,7 +16,7 @@
 
 package viewmodels
 
-import models.CheckMode
+import models.{CheckMode, NormalMode}
 import org.joda.time.LocalDate
 import play.api.i18n.Messages
 import play.api.libs.json.Json
@@ -29,11 +29,11 @@ case class CloseBankAccountCheckAnswersViewModel(id: Int, closeBankAccountDate: 
     val confirmationLines = Seq(CheckYourAnswersConfirmationLine(
       Messages("checkYourAnswers.whatYouToldUs"),
       Messages("close.checkYourAnswers.rowOne.answer"),
-      controllers.routes.DecisionController.onPageLoad(CheckMode, id).url),
+      controllers.routes.DecisionController.onPageLoad(NormalMode, id).url),
       CheckYourAnswersConfirmationLine(
         Messages("close.checkYourAnswers.rowTwo.question"),
         Dates.formatDate(new LocalDate(closeBankAccountDate)),
-        controllers.routes.DecisionController.onPageLoad(CheckMode, id).url))
+        controllers.routes.CloseAccountController.onPageLoad(CheckMode).url))
 
     if (bankAccountClosedInCurrentTaxYear) {
       confirmationLines :+ CheckYourAnswersConfirmationLine(
@@ -41,7 +41,7 @@ case class CloseBankAccountCheckAnswersViewModel(id: Int, closeBankAccountDate: 
         interestAmount
           .map(interest => Money.pounds(BigDecimal(interest)).toString().trim.replace("&pound;", "\u00A3"))
           .getOrElse(Messages("closeBankAccount.closingInterest.notKnown")),
-        controllers.routes.DecisionController.onPageLoad(CheckMode, id).url)
+        controllers.routes.ClosingInterestController.onPageLoad(CheckMode).url)
     }
     else {
       confirmationLines
