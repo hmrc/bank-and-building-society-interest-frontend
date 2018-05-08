@@ -27,6 +27,7 @@
 
 @header = @{
     ptaHeader(
+        formForErrorSummary = Some(form),
         displayBackLink = true,
         mainHeadingText = messages("closeAccount.title", viewModel.bankName),
         preHeadingText = messages("closeAccount.preHeading")
@@ -40,7 +41,6 @@
     bodyClasses = None) {
 
         @helpers.form(action = CloseAccountController.onSubmit(mode),'autoComplete -> "off") {
-            @error_summary(form.errors)
 
             @input_date(
                 id="accountClosed",

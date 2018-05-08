@@ -58,7 +58,7 @@ class ClosingInterestFormProvider @Inject() extends FormErrorHelper with FormVal
   def nonEmptyText(requiredErrMsg : String): Constraint[String] = {
     Constraint[String]("required") {
       case textValue:String if notBlank(textValue) => Valid
-      case _ => Invalid(requiredErrMsg)
+      case _ => Invalid("closingInterest.error.blank")
     }
   }
 

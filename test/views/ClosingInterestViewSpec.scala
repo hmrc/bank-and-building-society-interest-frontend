@@ -20,10 +20,11 @@ import forms.{BankAccountClosingInterestForm, ClosingInterestFormProvider}
 import models.NormalMode
 import play.api.data.Form
 import uk.gov.hmrc.time.TaxYearResolver
-import views.behaviours.{ViewBehaviours, YesNoViewBehaviours}
+import utils.BankAccountClosingInterestConstants
+import views.behaviours.RadioGroupViewBehaviours
 import views.html.closingInterest
 
-class ClosingInterestViewSpec extends ViewBehaviours {
+class ClosingInterestViewSpec extends RadioGroupViewBehaviours[BankAccountClosingInterestForm] with BankAccountClosingInterestConstants {
   val messageKeyPrefix = "closingInterest"
 
   val form = new ClosingInterestFormProvider()()
@@ -40,7 +41,10 @@ class ClosingInterestViewSpec extends ViewBehaviours {
     behave like pageWithPreHeading(createView, messages("closeAccount.preHeading"), Some(messages("This section is")))
     behave like pageWithBackLink(createView)
     behave like pageWithCancelLink(createView)
-    //behave like yesNoPage(createViewUsingForm, messageKeyPrefix, routes.ClosingInterestController.onSubmit(NormalMode).url)
+    behave like pageWithYesNoRadioButton(createViewUsingForm,ClosingInterestChoice, s"$ClosingInterestChoice-yes", s"$ClosingInterestChoice-no",
+      messages("closingInterest.error.selectOption"))
+    behave like pageWithInputField(createViewUsingForm, ClosingInterestEntry,messages("closingInterest.error.blank"))
     behave like pageWithSubmitButton(createView, controllers.routes.ClosingInterestController.onSubmit(NormalMode).url, messages("site.continue"))
   }
+
 }
