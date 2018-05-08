@@ -47,6 +47,8 @@
 
       <h2 class="heading-medium">@messages("account.table.heading", TaxYear().year.toString, TaxYear().next.year.toString)</h2>
 
+
+
       <div class="govuk-check-your-answers govuk-check-your-answers--tax-summary section">
           @for(bankAccount <- untaxedInterest.bankAccounts.sortBy(- _.grossInterest)) {
           <div>
@@ -100,5 +102,6 @@
 
     </div>
   </div>
+
 
 }
