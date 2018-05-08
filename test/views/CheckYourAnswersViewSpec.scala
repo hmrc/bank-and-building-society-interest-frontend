@@ -27,7 +27,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
   val messageKeyPrefix = "checkYourAnswers"
 
   private val id = 1
-  private val interestAmount = "3,000"
+  private val interestAmount = "3000"
+  private val displayAmount = "3,000"
   private val bankName = "Test Name"
 
 
@@ -62,7 +63,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
     "display change links for Update Interest journey" when {
       behave like pageWithAnswerLine(createView, 1, messages("checkYourAnswers.rowOne.answer"))
-      behave like pageWithAnswerLine(createView, 2, "£" + viewModel.interestAmount)
+      behave like pageWithAnswerLine(createView, 2, "£" + displayAmount)
     }
   }
 

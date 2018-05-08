@@ -32,7 +32,7 @@ class CloseCheckAnswersViewSpec extends ViewBehaviours {
   val currentTaxYear = TaxYear().year
   val closeBankAccountDate = new LocalDate(currentTaxYear, 4, 4)
   val closeBankAccountName = "TEST NAME"
-  val interestAmount = "4,000"
+  val interestAmount = "4000"
 
   val viewModel = CloseBankAccountCheckAnswersViewModel(id, closeBankAccountDate.toString(), Some(closeBankAccountName), Some(interestAmount))
 
