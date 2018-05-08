@@ -19,44 +19,18 @@ package controllers
 import javax.inject.Inject
 
 import config.FrontendAppConfig
-import connectors.UserDetailsConnector
 import controllers.actions.AuthAction
 import play.api.i18n.{I18nSupport, MessagesApi}
-import play.api.mvc.Action
 import uk.gov.hmrc.play.bootstrap.controller.FrontendController
-import uk.gov.hmrc.play.frontend.auth.DelegationAwareActions
-import uk.gov.hmrc.renderer.TemplateRenderer
 
 class SignOutController @Inject()(val appConfig: FrontendAppConfig,
                                   val messagesApi: MessagesApi,
-                                  authenticate: AuthAction,) extends FrontendController with I18nSupport {
+                                  authenticate: AuthAction) extends FrontendController with I18nSupport {
 
-  def userDetailsConnector: UserDetailsConnector
-
-  def signOut = authenticate.async {
-    implicit user =>
-
-      val thing = user
-
-      val test = userDetailsConnector.userDetails(user.authContext)
-
-        test.map { x =>
-        if (x.hasVerifyAuthProvider) {
-          Redirect(appConfig.citizenAuthFrontendSignOutUrl)
-        } else {
-          Redirect(appConfig.companyAuthFrontendSignOutUrl)
-        }
-      }
-
-//    Redirect(appConfig.companyAuthFrontendSignOutUrl)
-  }
-
+  // TODO: Implement conditional sign out following the logic in TAI-FRONTEND
+  // New auth used in this project does not have the concept of auth context
+  // which is used in TAI-FRONTEND.
+  def signOut = ???
 
 }
 
-trait WithAuthorisedForTaiLite extends DelegationAwareActions {
-
-  def authorisedTest = {
-    AuthorisedFor(TaiRegime, TaiConfidenceLevelPredicate)
-  }
-}

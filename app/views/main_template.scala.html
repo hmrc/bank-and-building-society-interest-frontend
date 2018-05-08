@@ -43,8 +43,12 @@
     @pageHeader.getOrElse(Html(""))
 }
 
+@isWelshEnabled = @{
+  appConfig.languageTranslationEnabled
+}
+
 @isWelshActive = @{
-    LanguageUtils.getCurrentLang == Lang("cy")
+  LanguageUtils.getCurrentLang == Lang("cy")
 }
 
 @mustacheMap = @{

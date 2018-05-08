@@ -16,27 +16,9 @@
 
 package controllers
 
-import play.api.test.Helpers._
-
 class SignOutControllerSpec extends ControllerSpecBase {
 
   "signOut" should {
-    "redirects to the signout URL" in {
-      val controller = new SignOutController(frontendAppConfig, messagesApi)
 
-      val result = controller.signOut()(fakeRequest)
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result) mustEqual Some(frontendAppConfig.companyAuthFrontendSignOutUrl)
-    }
-
-    "redirect to citizen auth frontend if it is a Verify user" in {
-      val controller = new SignOutController(frontendAppConfig, messagesApi)
-
-      val result = controller.signOut()(fakeRequest)
-
-      status(result) mustEqual SEE_OTHER
-      redirectLocation(result) mustEqual Some(frontendAppConfig.citizenAuthFrontendSignOutUrl)
-    }
   }
 }
