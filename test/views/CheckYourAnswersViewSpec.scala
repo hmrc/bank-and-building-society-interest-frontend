@@ -27,7 +27,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
   val messageKeyPrefix = "checkYourAnswers"
 
   private val id = 1
-  private val interestAmount = "300"
+  private val interestAmount = "3,000"
   private val bankName = "Test Name"
 
 

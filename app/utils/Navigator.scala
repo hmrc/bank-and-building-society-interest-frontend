@@ -63,9 +63,9 @@ class Navigator @Inject()() extends JourneyConstants with FormValuesConstants {
     case (_, NormalMode) =>
       routeMap(mode).getOrElse(id , _ => routes.OverviewController.onPageLoad())
     case (ClosingInterestId, CheckMode) =>
-      editRouteMap.getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoadClose())
+      routeMap(mode).getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoadClose())
     case (CloseAccountId, CheckMode) =>
-      editRouteMap.getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoadClose())
+      routeMap(mode).getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoadClose())
     case (_, CheckMode) =>
       editRouteMap.getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoad())
   }
