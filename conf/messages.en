@@ -7,6 +7,7 @@ checkYourAnswers.guidance = Guidance for check your answers
 date.day = Day
 date.month = Month
 date.year = Year
+date.error.future=Date cannot be in the future
 
 error.boolean = Give an answer
 error.invalid_date = Give a correct date
@@ -161,6 +162,7 @@ closeAccount.title=When did you close the account with {0}?
 closeAccount.preHeading=Account closed
 closeAccount.dateLabel=Enter the date you closed the account
 closeAccount.dateExampleLabel=For example, 31 3 1980
+closeAccount.checkYourAnswersLabel = closeAccount
 
 ##BBSI closingInterest
 closingInterest.title = Do you know how much interest you earned from this account since 6 April {0}?

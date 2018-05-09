@@ -17,7 +17,9 @@
 package forms
 
 import forms.behaviours.StringFieldBehaviours
+import models.bbsi.TaxYear
 import play.api.data.FormError
+import play.api.libs.json.Json
 
 class CloseAccountFormProviderSpec extends StringFieldBehaviours {
 
@@ -101,5 +103,13 @@ class CloseAccountFormProviderSpec extends StringFieldBehaviours {
       fieldName,
       requiredError = FormError(fieldName, requiredKey)
     )
+  }
+
+  "closed date" must {
+    "not be in the future" in {
+      val futureDate = Json.obj("accountClosedDay" -> "01", "accountClosedMonth" -> "01","accountClosedYear" -> TaxYear().next.toString)
+      val validatedForm = form.bind(futureDate)
+      validatedForm.hasErrors shouldBe(true)
+    }
   }
 }

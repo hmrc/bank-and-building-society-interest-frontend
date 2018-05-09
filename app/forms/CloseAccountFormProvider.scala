@@ -22,6 +22,7 @@ import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.Forms._
 import models.CloseAccount
+import org.joda.time.LocalDate
 
 class CloseAccountFormProvider @Inject() extends Mappings {
 
@@ -33,6 +34,20 @@ class CloseAccountFormProvider @Inject() extends Mappings {
         .verifying(maxLength(2, "closeAccount.error.field2.length")),
       "accountClosedYear" -> texts("error.date.yearBlank")
         .verifying(maxLength(4, "closeAccount.error.field3.length"))
-    )(CloseAccount.apply)(CloseAccount.unapply)
+    )(CloseAccount.apply)(CloseAccount.unapply) verifying("date.error.future", fields => fields match {
+       case closeAccount => {
+         val closedDate = new LocalDate(closeAccount.accountClosedYear.toInt,
+                                        closeAccount.accountClosedMonth.toInt,
+                                        closeAccount.accountClosedDay.toInt)
+
+         !closedDate.isAfter(LocalDate.now()) match {
+           case(true) => true
+           case(false) => false
+         }
+       }
+     })
+
    )
+
+
  }
