@@ -169,5 +169,4 @@ closingInterest.error.blank=Enter amount of interest
 closingInterest.label=Amount of interest
 closingInterest.legend=Do you know how much interest you earned?
 closingInterest.checkYourAnswersLabel = closingInterest
-closingInterest.error.required = Give an answer for closingInterest
 closeBankAccount.closingInterest.notKnown=I do not know
