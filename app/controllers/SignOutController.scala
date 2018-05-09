@@ -27,9 +27,6 @@ class SignOutController @Inject()(val appConfig: FrontendAppConfig,
                                   val messagesApi: MessagesApi,
                                   authenticate: AuthAction) extends FrontendController with I18nSupport {
 
-  // TODO: Implement conditional sign out following the logic in TAI-FRONTEND
-  // New auth used in this project does not have the concept of auth context
-  // which is used in TAI-FRONTEND.
   def signOut = ???
 
 }

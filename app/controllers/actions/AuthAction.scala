@@ -38,10 +38,6 @@ class AuthActionImpl @Inject()(override val authConnector: AuthConnector,
   override def invokeBlock[A](request: Request[A], block: (AuthenticatedRequest[A]) => Future[Result]): Future[Result] = {
     implicit val hc: HeaderCarrier = HeaderCarrierConverter.fromHeadersAndSession(request.headers, Some(request.session))
 
-    // TODO: providerType can be found using the line below
-    // retrieve.Retrievals.credentials
-    // it can be then passed to the sign out controller or conditional sign out redirect
-
     authorised(ConfidenceLevel.L200 and CredentialStrength(CredentialStrength.strong) and AffinityGroup.Individual).retrieve(Retrievals.nino) {
       _.map {
         nino => block(AuthenticatedRequest(request, nino))
