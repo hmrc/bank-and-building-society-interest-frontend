@@ -19,26 +19,32 @@ confirmationLines : Seq[viewmodels.CheckYourAnswersConfirmationLine],
 gaEventAction: Option[String] = None,
 longQuestions: Boolean = false)(implicit m: Messages)
 
-@if(title.isDefined) { <h2 class="heading-medium section flush soft--top">@title.get.replace("&nbsp;", "\u00A0")</h2> }
+<div class="grid-row">
+  <div class="column-two-thirds">
 
-<ul role="list" class="govuk-check-your-answers @if(longQuestions) {cya-questions-long} else {cya-questions-short}" id="check-answers-summary">
-    @for((line, idx) <- confirmationLines zip (Stream from 1)) {
-    <li>
-        <div class="cya-question" id="confirmation-line-@{idx.toString}-question">
-            @line.question
-        </div>
-        <div class="cya-answer" id="confirmation-line-@{idx.toString}-answer">
-            @line.answer
-        </div>
-        <div class="cya-change">
-            @components.link(
-            id = Some("confirmation-line-" + idx.toString + "-change-link"),
-            url = line.changeUrl + "?edit=true",
-            copy=Messages("checkYourAnswers.change.label"),
-            altCopy=Some(Messages("checkYourAnswers.change.label") + " " + line.question.toLowerCase),
-            attributes = if(gaEventAction.isDefined) {Seq("data-journey-click" -> s"link - click:@gaEventAction.get:Change @line.question.toLowerCase")} else {Seq.empty}
-            )
-        </div>
-    </li>
-    }
-</ul>
+  @if(title.isDefined) { <h2 class="heading-medium section flush soft--top">@title.get.replace("&nbsp;", "\u00A0")</h2> }
+
+  <ul role="list" class="govuk-check-your-answers @if(longQuestions) {cya-questions-long} else {cya-questions-short}" id="check-answers-summary">
+      @for((line, idx) <- confirmationLines zip (Stream from 1)) {
+      <li>
+          <div class="cya-question" id="confirmation-line-@{idx.toString}-question">
+              @line.question
+          </div>
+          <div class="cya-answer" id="confirmation-line-@{idx.toString}-answer">
+              @line.answer
+          </div>
+          <div class="cya-change">
+              @components.link(
+              id = Some("confirmation-line-" + idx.toString + "-change-link"),
+              url = line.changeUrl + "?edit=true",
+              copy=Messages("checkYourAnswers.change.label"),
+              altCopy=Some(Messages("checkYourAnswers.change.label") + " " + line.question.toLowerCase),
+              attributes = if(gaEventAction.isDefined) {Seq("data-journey-click" -> s"link - click:@gaEventAction.get:Change @line.question.toLowerCase")} else {Seq.empty}
+              )
+          </div>
+      </li>
+      }
+  </ul>
+
+  </div>
+</div>

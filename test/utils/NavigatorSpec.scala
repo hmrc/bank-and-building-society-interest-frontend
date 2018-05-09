@@ -17,13 +17,16 @@
 package utils
 
 import base.SpecBase
+import controllers.routes
+import forms.BankAccountClosingInterestForm
+import identifiers._
+import models.Decision.{Close, Remove}
+import models._
 import org.mockito.Mockito._
 import org.scalatest.mockito.MockitoSugar
-import controllers.routes
-import identifiers._
-import models._
+import uk.gov.hmrc.time.TaxYearResolver
 
-class NavigatorSpec extends SpecBase with MockitoSugar {
+class NavigatorSpec extends SpecBase with MockitoSugar with JourneyConstants {
 
   val navigator = new Navigator
 
@@ -33,6 +36,38 @@ class NavigatorSpec extends SpecBase with MockitoSugar {
       "go to Index from an identifier that doesn't exist in the route map" in {
         case object UnknownIdentifier extends Identifier
         navigator.nextPage(UnknownIdentifier, NormalMode)(mock[UserAnswers]) mustBe routes.OverviewController.onPageLoad()
+      }
+
+      "go to RemoveAccount for the identifier remove in the route map" in {
+        val mockUserAnswers = mock[UserAnswers]
+        when(mockUserAnswers.decision).thenReturn(Some(Remove))
+        navigator.nextPage(DecisionId,NormalMode)(mockUserAnswers) mustBe routes.RemoveAccountController.onPageLoad()
+      }
+
+      "go to CloseAccount for the identifier close in the route map" in {
+        val mockUserAnswers = mock[UserAnswers]
+        val mode = NormalMode
+        when(mockUserAnswers.decision).thenReturn(Some(Close))
+        navigator.nextPage(DecisionId,mode)(mockUserAnswers) mustBe routes.CloseAccountController.onPageLoad(mode)
+      }
+
+      "go to CheckYourAnswers for an account close date which is previous to the current tax year" in {
+        val mockUserAnswers = mock[UserAnswers]
+        when(mockUserAnswers.closeAccount).thenReturn(Some(CloseAccount("01","01",TaxYearResolver.currentTaxYear.toString)))
+        navigator.nextPage(CloseAccountId,NormalMode)(mockUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoadClose()
+      }
+
+      "go to ClosingInterest for an account close date which is in the current tax year" in {
+        val mockUserAnswers = mock[UserAnswers]
+        val mode = NormalMode
+        when(mockUserAnswers.closeAccount).thenReturn(Some(CloseAccount("07","04",TaxYearResolver.currentTaxYear.toString)))
+        navigator.nextPage(CloseAccountId,mode)(mockUserAnswers) mustBe routes.ClosingInterestController.onPageLoad(mode)
+      }
+
+      "go to CheckYourAnswers for the identifier yes" in {
+        val mockUserAnswers = mock[UserAnswers]
+        when(mockUserAnswers.closingInterest).thenReturn(Some(BankAccountClosingInterestForm(Some("Yes"),Some("100"))))
+        navigator.nextPage(ClosingInterestId,NormalMode)(mockUserAnswers) mustBe routes.CheckYourAnswersController.onPageLoadClose()
       }
     }
 

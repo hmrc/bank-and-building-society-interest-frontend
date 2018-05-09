@@ -16,6 +16,7 @@
 
 @import config.FrontendAppConfig
 @import uk.gov.hmrc.renderer.TemplateRenderer
+@import uk.gov.hmrc.play.views.html.{helpers => uiHelpers}
 @import uk.gov.hmrc.play.language.LanguageUtils
 @import uk.gov.hmrc.play.views.html.layouts
 
@@ -39,6 +40,8 @@
     }
 }
 
+@helpForm = @{uiHelpers.reportAProblemLink(appConfig.reportAProblemPartialUrl, appConfig.reportAProblemNonJSUrl)}
+
 @mainContentHeader = {
     @pageHeader.getOrElse(Html(""))
 }
@@ -49,6 +52,14 @@
 
 @isWelshActive = @{
   LanguageUtils.getCurrentLang == Lang("cy")
+}
+
+@inlineScript = {
+
+    <script type="text/javascript">
+        var showHideContent = new GOVUK.ShowHideContent();
+        showHideContent.init();
+    </script>
 }
 
 @mustacheMap = @{
@@ -64,7 +75,9 @@
         "langSelector" -> true,
         "enUrl" -> controllers.routes.LanguageSwitchController.switchToLanguage("english"),
         "cyUrl" -> controllers.routes.LanguageSwitchController.switchToLanguage("cymraeg"),
-        "isWelsh" -> isWelshActive
+        "isWelsh" -> isWelshActive,
+        "getHelpForm" -> helpForm,
+        "inlineScript" -> inlineScript
     )
 }
 
@@ -74,5 +87,4 @@
         layouts.article(mainContent, includeGridWrapper, articleClasses), mustacheMap
     )
 }
-
 <script src='@routes.Assets.versioned("javascripts/bankandbuildingsocietyinterestfrontend-app.min.js")'> </script>

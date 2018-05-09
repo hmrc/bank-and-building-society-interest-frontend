@@ -10,6 +10,8 @@ GET        /this-service-has-been-reset                 controllers.SessionExpir
 
 GET        /check-your-answers                          controllers.CheckYourAnswersController.onPageLoad()
 POST       /check-your-answers                          controllers.CheckYourAnswersController.onSubmit()
+GET        /close/check-your-answers                    controllers.CheckYourAnswersController.onPageLoadClose()
+POST       /close/check-your-answers                    controllers.CheckYourAnswersController.onSubmitClose()
 
 GET        /unauthorised                                controllers.UnauthorisedController.onPageLoad
 
@@ -31,3 +33,13 @@ GET        /updateInterest                              controllers.UpdateIntere
 POST       /updateInterest                              controllers.UpdateInterestController.onSubmit(mode: Mode = NormalMode)
 GET        /changeUpdateInterest                        controllers.UpdateInterestController.onPageLoad(mode: Mode = CheckMode)
 POST       /changeUpdateInterest                        controllers.UpdateInterestController.onSubmit(mode: Mode = CheckMode)
+
+GET        /closeAccount                                controllers.CloseAccountController.onPageLoad(mode: Mode = NormalMode)
+POST       /closeAccount                                controllers.CloseAccountController.onSubmit(mode: Mode = NormalMode)
+GET        /changeCloseAccount                          controllers.CloseAccountController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeCloseAccount                          controllers.CloseAccountController.onSubmit(mode: Mode = CheckMode)
+
+GET        /closingInterest                             controllers.ClosingInterestController.onPageLoad(mode: Mode = NormalMode)
+POST       /closingInterest                             controllers.ClosingInterestController.onSubmit(mode: Mode = NormalMode)
+GET        /changeClosingInterest                       controllers.ClosingInterestController.onPageLoad(mode: Mode = CheckMode)
+POST       /changeClosingInterest                       controllers.ClosingInterestController.onSubmit(mode: Mode = CheckMode)
