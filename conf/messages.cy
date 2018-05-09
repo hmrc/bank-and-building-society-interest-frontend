@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 overview.heading=Llog a enillwyd o''ch cyfrifon: trosolwg
 overview.para1=Unwaith y flwyddyn, mae banciau a chymdeithasau adeiladu yn rhoi gwybod i ni am log a dalwyd i chi yn ystod y flwyddyn dreth ddiwethaf.
 overview.para2=Mae''r llog hwnnw''n rhan o''ch incwm felly efallai y bydd yn rhaid i chi dalu Treth Incwm arno.
@@ -52,13 +51,10 @@ site.continue=Yn eich blaen
 cancel=Canslo
 
 bank.and.building.society.interest=requires translation
-=======
+
 date.day = Diwrnod
 date.month = Mis
 date.year = Blwyddyn
-
-site.continue = Yn eich blaen
->>>>>>> BBSI-99: Translations for close account journey.
 
 ##BBSI decision
 decision.error.selectOption = Cywirwch y gwall(au) a amlygwyd isod
