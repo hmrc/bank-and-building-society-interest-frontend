@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 overview.heading=Llog a enillwyd o''ch cyfrifon: trosolwg
 overview.para1=Unwaith y flwyddyn, mae banciau a chymdeithasau adeiladu yn rhoi gwybod i ni am log a dalwyd i chi yn ystod y flwyddyn dreth ddiwethaf.
 overview.para2=Mae''r llog hwnnw''n rhan o''ch incwm felly efallai y bydd yn rhaid i chi dalu Treth Incwm arno.
@@ -51,12 +52,18 @@ site.continue=Yn eich blaen
 cancel=Canslo
 
 bank.and.building.society.interest=requires translation
+=======
+date.day = Diwrnod
+date.month = Mis
+date.year = Blwyddyn
+
+site.continue = Yn eich blaen
+>>>>>>> BBSI-99: Translations for close account journey.
 
 ##BBSI decision
 decision.error.selectOption = Cywirwch y gwall(au) a amlygwyd isod
 
 confirmAndSend = Cadarnhau ac anfon
-
 
 # Update Interest Journey
 updateInterest.title = Llog amcangyfrifedig o {0}
@@ -76,6 +83,9 @@ updateInterest.isCurrency = Rhowch swm dilys
 updateInterest.wholeNumber = Ni all y swm fod ar ffurf ddegol
 updateInterest.checkYourAnswers.preHeading = Diweddaru''r llog
 
+close.checkYourAnswers.rowOne.answer = Mae''r cyfrif hwn wedi cau erbyn hyn
+close.checkYourAnswers.rowTwo.question = Dyddiad y caewyd y cyfrif
+
 
 checkYourAnswers = Gwiriwch eich atebion
 checkYourAnswers.change.label = Newid
@@ -91,3 +101,14 @@ confirmation.paraOne = Byddwn yn gwirio''r wybodaeth a anfonwyd gennych.
 confirmation.paraTwo = Os nad oes angen rhagor o wybodaeth, bydd eich cofnodion yn cael eu diweddaru cyn pen 3 wythnos a byddwch yn cael cadarnhad.
 confirmation.paraThree = Does dim rhaid i chi ffonio ni. Byddwn yn cysylltu â chi os oes gennym gwestiynau.
 confirmation.back = Dychwelwch at fanylion eich cyfrif
+
+closeAccount.title=When did you close the account with {0}?
+closeAccount.preHeading=Account closed
+closeAccount.dateLabel=Enter the date you closed the account
+closeAccount.dateExampleLabel=Er enghraifft, 31 3 1980
+
+##BBSI closeAccount
+closeAccount.title = Pryd wnaethoch gau''r cyfrif gyda {0}?
+closeAccount.preHeading = Cyfrif wedi cau
+closeAccount.dateLabel = Rhowch y dyddiad y gwnaethoch gau''r cyfrif
+closeAccount.dateExampleLabel=Er enghraifft, 31 3 1980
