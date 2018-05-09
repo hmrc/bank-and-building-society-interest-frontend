@@ -71,6 +71,9 @@ class CloseAccountController @Inject()(appConfig: FrontendAppConfig,
             (formWithErrors: Form[_]) =>
               Future.successful(BadRequest(closeAccount(appConfig, formWithErrors, mode, bankAccountViewModel))),
             (value) => {
+
+
+
               dataCacheConnector.save[CloseAccount](request.externalId, CloseAccountId.toString, value) map (cacheMap =>
                 Redirect(navigator.nextPage(CloseAccountId, mode)(new UserAnswers(cacheMap))))
             }

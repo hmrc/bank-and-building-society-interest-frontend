@@ -5,6 +5,7 @@ checkYourAnswers.guidance = Guidance for check your answers
 date.day = Day
 date.month = Month
 date.year = Year
+date.error.future=Date cannot be in the future
 
 error.boolean = Give an answer
 error.invalid_date = Give a correct date
