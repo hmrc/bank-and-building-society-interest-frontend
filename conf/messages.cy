@@ -87,6 +87,12 @@ close.checkYourAnswers.rowOne.answer = Mae''r cyfrif hwn wedi cau erbyn hyn
 close.checkYourAnswers.rowTwo.question = Dyddiad y caewyd y cyfrif
 
 
+removeAccount.customGaTitle = Dydych chi erioed wedi cael y cyfrif hwn
+removeAccount.heading = Dydych chi erioed wedi cael y cyfrif hwn gyda {0}
+removeAccount.preHeading = Dileu cyfrif
+removeAccount.description = Bydd anfon y diweddariad hwn yn dileu''r cyfrif {0} o''ch cofnod.
+
+
 checkYourAnswers = Gwiriwch eich atebion
 checkYourAnswers.change.label = Newid
 checkYourAnswers.confirmText = Drwy anfon y diweddariad hwn, rydych yn cadarnhau bod y manylion yr ydych yn eu darparu''n gywir.
