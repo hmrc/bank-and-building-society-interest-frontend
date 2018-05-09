@@ -46,8 +46,20 @@
     @pageHeader.getOrElse(Html(""))
 }
 
+@isWelshEnabled = @{
+  appConfig.languageTranslationEnabled
+}
+
 @isWelshActive = @{
-    LanguageUtils.getCurrentLang == Lang("cy")
+  LanguageUtils.getCurrentLang == Lang("cy")
+}
+
+@inlineScript = {
+
+    <script type="text/javascript">
+        var showHideContent = new GOVUK.ShowHideContent();
+        showHideContent.init();
+    </script>
 }
 
 @inlineScript = {
@@ -65,7 +77,8 @@
         "linkElems" -> Map(
             "url" -> controllers.routes.Assets.versioned("stylesheets/bankandbuildingsocietyinterestfrontend-app.css")
         ),
-        "navTitle" -> Messages("Bank and building society interest"),
+        "signOutUrl" -> "test",
+        "navTitle" -> messages("bank.and.building.society.interest"),
         "showPropositionLinks" -> true,
         "langSelector" -> true,
         "enUrl" -> controllers.routes.LanguageSwitchController.switchToLanguage("english"),
