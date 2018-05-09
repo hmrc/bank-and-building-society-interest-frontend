@@ -147,6 +147,9 @@ checkYourAnswers.rowOne.answer = Updated the estimated interest
 checkYourAnswers.rowTwo = Your updated interest amount
 checkYourAnswers.change.label = Change
 checkYourAnswers.confirmText = By sending this update you are confirming that the details you are giving are correct.
+close.checkYourAnswers.rowOne.answer = This account is now closed
+close.checkYourAnswers.rowTwo.question=Date account closed
+close.checkYourAnswers.rowThree.question=Interest earned since 6 April {0}
 
 inPounds = in pounds.
 continue = Continue
@@ -165,3 +168,6 @@ closingInterest.error.selectOption=Choose if amount of interest is known
 closingInterest.error.blank=Enter amount of interest
 closingInterest.label=Amount of interest
 closingInterest.legend=Do you know how much interest you earned?
+closingInterest.checkYourAnswersLabel = closingInterest
+closingInterest.error.required = Give an answer for closingInterest
+closeBankAccount.closingInterest.notKnown=I do not know

@@ -16,7 +16,7 @@
 
 package views
 
-import models.CheckMode
+import models.{CheckMode, NormalMode}
 import play.api.data.Form
 import viewmodels.UpdateInterestViewModelCheckAnswers
 import views.behaviours.ViewBehaviours
@@ -27,7 +27,8 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
   val messageKeyPrefix = "checkYourAnswers"
 
   private val id = 1
-  private val interestAmount = "300"
+  private val interestAmount = "3000"
+  private val displayAmount = "3,000"
   private val bankName = "Test Name"
 
 
@@ -51,7 +52,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
     behave like pageWithHeadingH2(createView, viewModel.bankName)
 
     "display change links for Update Interest journey" when {
-      behave like pageWithChangeLink(createView, 1, controllers.routes.DecisionController.onPageLoad(CheckMode, id).url + "?edit=true")
+      behave like pageWithChangeLink(createView, 1, controllers.routes.DecisionController.onPageLoad(NormalMode, id).url + "?edit=true")
       behave like pageWithChangeLink(createView, 2, controllers.routes.UpdateInterestController.onPageLoad(CheckMode).url + "?edit=true")
     }
 
@@ -62,7 +63,7 @@ class CheckYourAnswersViewSpec extends ViewBehaviours {
 
     "display change links for Update Interest journey" when {
       behave like pageWithAnswerLine(createView, 1, messages("checkYourAnswers.rowOne.answer"))
-      behave like pageWithAnswerLine(createView, 2, "£" + viewModel.interestAmount)
+      behave like pageWithAnswerLine(createView, 2, "£" + displayAmount)
     }
   }
 

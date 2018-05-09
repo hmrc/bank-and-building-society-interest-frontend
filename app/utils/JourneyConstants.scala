@@ -21,6 +21,7 @@ trait JourneyConstants {
   val BankAccountDetailsKey = "bankAccountDetails"
   val EnvelopeIdKey = "envelopeId"
   val UpdateInterestAmountKey = "updateInterestAmount"
+  val CloseAccountAnswersKey = "CloseAccountAnswers"
 }
 
 trait FormValuesConstants {

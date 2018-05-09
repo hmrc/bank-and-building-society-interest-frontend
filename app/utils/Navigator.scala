@@ -46,23 +46,27 @@ class Navigator @Inject()() extends JourneyConstants with FormValuesConstants {
           if(TaxYearResolver.fallsInThisTaxYear(new LocalDate(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)))){
             routes.ClosingInterestController.onPageLoad(mode)
           }else{
-            routes.CheckYourAnswersController.onPageLoad()
+            routes.CheckYourAnswersController.onPageLoadClose()
           }
         }
         case None => routes.OverviewController.onPageLoad()
     }),
     ClosingInterestId -> (_.closingInterest match {
-      case Some(BankAccountClosingInterestForm(_,_)) => routes.CheckYourAnswersController.onPageLoad()
+      case Some(BankAccountClosingInterestForm(_,_)) => routes.CheckYourAnswersController.onPageLoadClose()
       case _ => routes.OverviewController.onPageLoad()
     })
   )
 
   private val editRouteMap: Map[Identifier, UserAnswers => Call] = Map()
 
-  def nextPage(id: Identifier, mode: Mode): UserAnswers => Call = mode match {
-    case NormalMode =>
+  def nextPage(id: Identifier, mode: Mode): UserAnswers => Call = (id, mode) match {
+    case (_, NormalMode) =>
       routeMap(mode).getOrElse(id , _ => routes.OverviewController.onPageLoad())
-    case CheckMode =>
+    case (ClosingInterestId, CheckMode) =>
+      routeMap(mode).getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoadClose())
+    case (CloseAccountId, CheckMode) =>
+      routeMap(mode).getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoadClose())
+    case (_, CheckMode) =>
       editRouteMap.getOrElse(id, _ => routes.CheckYourAnswersController.onPageLoad())
   }
 }
