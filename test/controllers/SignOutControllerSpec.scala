@@ -18,7 +18,4 @@ package controllers
 
 class SignOutControllerSpec extends ControllerSpecBase {
 
-  "signOut" should {
-
-  }
 }
