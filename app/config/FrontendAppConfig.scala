@@ -43,6 +43,11 @@ class FrontendAppConfig @Inject() (override val runModeConfiguration: Configurat
   lazy val loginUrl = loadConfig("urls.login")
   lazy val loginContinueUrl = loadConfig("urls.loginContinue")
 
+  lazy val companyAuthUrl = baseUrl("company-auth")
+  lazy val companyAuthFrontendSignOutUrl = s"$companyAuthUrl/gg/sign-out"
+  lazy val citizenAuthHost = baseUrl("citizen-auth")
+  lazy val citizenAuthFrontendSignOutUrl = s"$citizenAuthHost/ida/signout"
+
   lazy val languageTranslationEnabled = runModeConfiguration.getBoolean("microservice.services.features.welsh-translation").getOrElse(true)
   def languageMap: Map[String, Lang] = Map(
     "english" -> Lang("en"),
