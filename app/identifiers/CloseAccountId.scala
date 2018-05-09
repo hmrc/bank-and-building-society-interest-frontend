@@ -14,24 +14,8 @@
  * limitations under the License.
  */
 
-package utils
+package identifiers
 
-trait JourneyConstants {
-  val DecisionKey = "decision"
-  val BankAccountDetailsKey = "bankAccountDetails"
-  val EnvelopeIdKey = "envelopeId"
-  val UpdateInterestAmountKey = "updateInterestAmount"
-  val CloseAccountAnswersKey = "CloseAccountAnswers"
-}
-
-trait FormValuesConstants {
-  val YesValue = "Yes"
-  val NoValue = "No"
-  val YesNoChoice = "yesNoChoice"
-  val YesNoTextEntry = "yesNoTextEntry"
-}
-
-trait BankAccountClosingInterestConstants {
-  val ClosingInterestChoice = "closingInterestChoice"
-  val ClosingInterestEntry = "closingInterestEntry"
+case object CloseAccountId extends Identifier {
+  override def toString: String = "closeAccount"
 }

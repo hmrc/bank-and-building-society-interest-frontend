@@ -37,16 +37,18 @@
     appConfig = appConfig,
     bodyClasses = None) {
 
+
                 @checkYourAnswers(
-                title = Some(viewModel.bankName),
-                confirmationLines = viewModel.journeyConfirmationLines
+                  title = Some(viewModel.bankName),
+                  confirmationLines = viewModel.journeyConfirmationLines
                 )
 
                 <p class="subsection">@Messages("checkYourAnswers.confirmText")</p>
 
-                    @form(action = controllers.routes.CheckYourAnswersController.onSubmit) {
-                    @submit_button(messages("confirmAndSend"))
-                    }
+                @form(action = controllers.routes.CheckYourAnswersController.onSubmit) {
+                  @submit_button(messages("confirmAndSend"))
+                }
 
                 @cancel_link(controllers.routes.AccountDetailsController.cancelJourney)
+
 }

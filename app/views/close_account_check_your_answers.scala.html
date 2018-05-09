@@ -1,0 +1,52 @@
+@*
+ * Copyright 2018 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import uk.gov.hmrc.play.views.html._
+@import config.FrontendAppConfig
+@import viewmodels.{Section, AnswerSection, RepeaterAnswerSection}
+@import uk.gov.hmrc.renderer.TemplateRenderer
+@import components._
+@import uk.gov.hmrc.play.views.html.helpers._
+
+@(appConfig: FrontendAppConfig, viewModel: viewmodels.CloseBankAccountCheckAnswersViewModel)(implicit request: Request[_], messages: Messages, templateRenderer: TemplateRenderer)
+
+@header = @{
+ptaHeader(
+displayBackLink = true,
+mainHeadingText = Messages("checkYourAnswers"),
+preHeadingText = Messages("closeAccount.preHeading")
+)
+}
+
+@main_template(
+title = messages("checkYourAnswers"),
+pageHeader = Some(header),
+appConfig = appConfig,
+bodyClasses = None) {
+
+@checkYourAnswers(
+title = viewModel.closeBankAccountName,
+confirmationLines = viewModel.journeyConfirmationLines
+)
+
+<p class="subsection">@Messages("checkYourAnswers.confirmText")</p>
+
+@form(action = controllers.routes.CheckYourAnswersController.onSubmitClose) {
+@submit_button(messages("confirmAndSend"))
+}
+
+@cancel_link(controllers.routes.AccountDetailsController.cancelJourney)
+}
